@@ -1,0 +1,547 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>Apache Kafka</title>
+<!-- 2015-05-11 月 11:35 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<meta  name="author" content="佐々木　悠人" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  pre.src-sh:before    { content: 'sh'; }
+  pre.src-bash:before  { content: 'sh'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-R:before     { content: 'R'; }
+  pre.src-perl:before  { content: 'Perl'; }
+  pre.src-java:before  { content: 'Java'; }
+  pre.src-sql:before   { content: 'SQL'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.right  { text-align: center;  }
+  th.left   { text-align: center;   }
+  th.center { text-align: center; }
+  td.right  { text-align: right;  }
+  td.left   { text-align: left;   }
+  td.center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara:nth-child(2) { display: inline; }
+  .footpara { display: block; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  /*]]>*/-->
+</style>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Apache Kafka</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">1. はじめよう</a>
+<ul>
+<li><a href="#sec-1-1">1.1. 導入</a>
+<ul>
+<li><a href="#sec-1-1-1">1.1.1. トピックとログ</a></li>
+<li><a href="#sec-1-1-2">1.1.2. 分散</a></li>
+<li><a href="#sec-1-1-3">1.1.3. プロデューサ</a></li>
+<li><a href="#sec-1-1-4">1.1.4. コンシューマ</a></li>
+<li><a href="#sec-1-1-5">1.1.5. 保証</a></li>
+</ul>
+</li>
+<li><a href="#sec-1-2">1.2. ユースケース</a>
+<ul>
+<li><a href="#sec-1-2-1">1.2.1. メッセージング</a></li>
+<li><a href="#sec-1-2-2">1.2.2. Web サイトのアクティビティトラッキング</a></li>
+<li><a href="#sec-1-2-3">1.2.3. メトリクス</a></li>
+<li><a href="#sec-1-2-4">1.2.4. ログ集約</a></li>
+<li><a href="#sec-1-2-5">1.2.5. ストリーム処理</a></li>
+<li><a href="#sec-1-2-6">1.2.6. イベントソーシング</a></li>
+<li><a href="#sec-1-2-7">1.2.7. コミットログ</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> はじめよう</h2>
+<div class="outline-text-2" id="text-1">
+</div><div id="outline-container-sec-1-1" class="outline-3">
+<h3 id="sec-1-1"><span class="section-number-3">1.1</span> 導入</h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+Kafka は分散し、分割され、複製されるコミットログサービスです。
+メッセージングシステムの機能を提供しますが、その設計は独特なものです。
+</p>
+
+<p>
+つまり、どういうことでしょう？
+</p>
+
+<p>
+はじめに、基本的なメッセージングの用語を確認しておきましょう:
+</p>
+
+<ul class="org-ul">
+<li>Kafka は <i>トピック</i> と呼ばれるカテゴリ毎にメッセージのフィードを保持しています
+</li>
+<li>Kafka のトピックに対してメッセージを発行するプロセスを <i>プロデューサ</i> と呼びます
+</li>
+<li>複数のトピックを購読し、発行されたメッセージのフィードを処理するプロセスを <i>コンシューマ</i> と呼びます
+</li>
+<li>Kafka はひとつ以上の <i>ブローカ</i> と呼ばれるサーバで構成されるクラスタとして動作します
+</li>
+</ul>
+
+<p>
+すなわち以下の図のように、高レベルな視点ではプロデューサ群がネットワーク上で Kafka クラスタにメッセージを送信し、
+そのメッセージを順次コンシューマ群に向けて提供する、というように動作します:
+</p>
+
+
+<div class="figure">
+<p><img src="images/producer_consumer.png" alt="producer_consumer.png" />
+</p>
+</div>
+
+<p>
+クライアントとサーバ間の通信はシンプルかつ高性能で、言語に依存しない <a href="https://cwiki.apache.org/confluence/display/KAFKA/A+Guide+To+The+Kafka+Protocol">TCP protocol</a> で行なわれます。
+提供されるのは Java の Kafka クライアントですが、 <a href="https://cwiki.apache.org/confluence/display/KAFKA/Clients">多くの言語で</a> 利用することが出来ます。
+</p>
+</div>
+
+<div id="outline-container-sec-1-1-1" class="outline-4">
+<h4 id="sec-1-1-1"><span class="section-number-4">1.1.1</span> トピックとログ</h4>
+<div class="outline-text-4" id="text-1-1-1">
+<p>
+まず最初に、 Kafka が提供する高レベルな抽象概念である「トピック」について見ていきましょう。
+</p>
+
+<p>
+トピックはカテゴリ、あるいはフィードの名前であり、メッセージはトピックに対して発行されます。
+以下の図のように、Kafka クラスタはトピックごとにログを分割して保持しています:
+</p>
+
+
+<div class="figure">
+<p><img src="images/log_anatomy.png" alt="log_anatomy.png" />
+</p>
+</div>
+
+<p>
+各パーティションは不変で順序があるメッセージ列で、メッセージは断続的に追記されます。
+このメッセージ列を「コミットログ」と呼びます。
+メッセージには、格納されたパーティションごとに「オフセット」と呼ばれるユニークな通し番号が付与されます。
+このオフセットにより、パーティション内のメッセージを一意に特定することができます。
+</p>
+
+<p>
+Kafka クラスタは、コンシュームされたかどうかに拘わらず、発行されたすべてのメッセージを保存しています。
+保持する期間は設定で変更可能です。
+例えばログ保存期間が2日間に設定されている場合、あるメッセージが発行されてから2日間はコンシューム可能ですが、
+それ以降は容量確保のために破棄されます。
+Kafkaの性能はデータサイズに関しては実質定数のため、大量のデータを保存することは問題ありません。
+</p>
+
+<p>
+実は、コンシューマ毎に保存されているメタデータというのは、ログ内のコンシューマの位置情報だけです。
+これは「オフセット」と呼ばれます。
+オフセットはコンシューマにより制御されます————通常はメッセージを読み進めるのに応じて順番にオフセットを進めますが、
+オフセットの制御は実際のところコンシューマが行なうため、任意の順序でコンシュームすることが出来ます。
+例えば、コンシューマは昔のオフセットにリセットして再処理を行なうことが出来ます。
+</p>
+
+<p>
+以上の機能の組合せにより、Kafkaのコンシューマはとても安価であると言えます————コンシューマはクラスタへの参加・離脱を、
+そのクラスタや、クラスタに所属する他のコンシューマに大きな影響を与えることなく行なうことができる、ということです。
+例えば、任意のトピックについて、付属のコマンドラインツールで「tail」操作を行なうことが出来ますが、
+これは既存のコンシューマのコンシューム状況を変えることなく行なうことが可能です。
+</p>
+
+<p>
+パーティションは様々な目的で提供されています。
+第一に、ログを一台のサーバに収まりきらないサイズにまでスケールすることを可能にする目的です。
+個々のパーティションについては、それを格納するサーバに収まるように調整する必要がありますが、
+トピックは複数のパーティションに分割されるため、トピックのデータ量は無制限です。
+第二に、パーティションは並行処理の単位としても利用されます————詳細は後述します。
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-1-1-2" class="outline-4">
+<h4 id="sec-1-1-2"><span class="section-number-4">1.1.2</span> 分散</h4>
+<div class="outline-text-4" id="text-1-1-2">
+<p>
+ログのパーティションは Kafka クラスタ内のサーバ上で分散して保持されており、
+各サーバはパーティションを共有するためのデータとリクエストを処理します。
+耐障害性のために、各パーティションを複数のサーバに複製することも出来ます。
+複製するサーバ数は設定で変更可能です。
+</p>
+
+<p>
+各パーティションは「リーダ」となる一つのサーバと、0以上の「フォロワ」サーバを持ちます。
+リーダは担当のパーティションへの全ての読み書きリクエストを処理します。
+対してフォロワは、リーダの複製を受動的に行ないます。
+リーダに障害が発生した場合、フォロワのどれかが自動的に新たなリーダとなります。
+各サーバはクラスタ内の負荷が均等になるように、自身のパーティションのうちいくつかのリーダとなり、
+その他のパーティションのフォロワともなります。
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-1-1-3" class="outline-4">
+<h4 id="sec-1-1-3"><span class="section-number-4">1.1.3</span> プロデューサ</h4>
+<div class="outline-text-4" id="text-1-1-3">
+<p>
+プロデューサは自身の選択したトピックに対してデータを発行します。
+プロデューサはどのメッセージをトピック内のどのパーティションに割り当てるかを選択する責務があります。
+これは負荷分散のためにラウンドロビン方式で選択することも出来ますし、
+何らかの意味的な分割関数を利用することも出来ます(例えばメッセージの特定のキーを元に分割するなど)。
+パーティションの利用に関する詳細は後述します。
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-1-1-4" class="outline-4">
+<h4 id="sec-1-1-4"><span class="section-number-4">1.1.4</span> コンシューマ</h4>
+<div class="outline-text-4" id="text-1-1-4">
+<p>
+伝統的なメッセージングのモデルは <a href="http://en.wikipedia.org/wiki/Message_queue">キューイング</a> と <a href="http://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern">出版・購読型</a> の二つです。
+キューを用いる方法では、コンシューマプールがひとつのサーバからメッセージを取得することができ、
+各メッセージはコンシューマのいずれか一つに渡ります。
+一方の出版・購読型モデルでは、メッセージは全てのコンシューマにブロードキャストされます。
+Kafka はその両方を一般化するコンシューマの抽象概念を提供しています。
+それが「コンシューマグループ」です。
+</p>
+
+<p>
+コンシューマは自分自身にコンシューマグループ名をラベル付けしており、
+トピックに発行される各メッセージは、そのトピックを購読している各コンシューマグループそれぞれの、
+ある一つのコンシューマインスタンスに対して屆けられます。
+コンシューマインスタンスは異なるプロセス、あるいは異なるサーバ上で稼動させることが出来ます。
+</p>
+
+<p>
+全てのコンシューマインスタンスが同一のコンシューマグループに属しているならば、
+コンシューマ上で負荷分散される伝統的なキューイングモデルのように動きます。
+</p>
+
+<p>
+全てのコンシューマインスタンスがそれぞれ異なるコンシューマグループに属しているならば、
+出版・購読型モデルのように動き、メッセージは全てのコンシューマにブロードキャストされることになります。
+</p>
+
+<p>
+しかしより一般には、トピックは「論理的な購読者」を表す少数のコンシューマグループを持つことになるでしょう。
+各グループはスケーラビリティと耐障害性のため、複数のコンシューマインスタンスで構成されます。
+これは購読者が単一のプロセスではなく、コンシューマのクラスタとなっている出版・購読型モデルそのものです。
+</p>
+
+
+<div class="figure">
+<p><img src="images/consumer-groups.png" alt="consumer-groups.png" />
+</p>
+<p><span class="figure-number">Figure 3:</span> 4つのパーティション(P0-P3)をホスティングする2つのサーバで構成されるKafka クラスタ、及び2つのコンシューマグループ。グループAは2つ、Bは4つのインスタンスを持っている。</p>
+</div>
+
+<p>
+また、Kafkaは伝統的なメッセージングシステムと比べてより強力な順序保証を提供しています。
+</p>
+
+<p>
+伝統的なキューはメッセージを順番にサーバ上に保存しています。
+複数のコンシューマがそのキューからコンシュームした場合、
+サーバは保存されている順番にメッセージを取り出すでしょう。
+しかし、サーバがメッセージを順番に取り出したところで、
+コンシューマへのメッセージの配信は非同期に行われるため、
+異なるコンシューマ間のメッセージ到達順序は狂う可能性があります。
+つまり、コンシューマを並列に動かすような状況では、メッセージの順序は失われる、ということです。
+メッセージングシステムはしばしば「排他的コンシューマ」という概念を利用して問題を回避しようとします。
+ひとつのキューに対してただひとつプロセスのみコンシューム可能とする、というものです。
+しかしこれは当然、並列処理は出来ません。
+</p>
+
+<p>
+Kafka はもっと上手いことやっています。
+トピック内の並列性(これはつまり、パーティションのことです)という概念を利用することで、
+Kafkaはコンシューマプロセスプール上の順序保証と負荷分散の両方を提供することが出来ます。
+これは、各パーティションがグループ内のただ一つのコンシューマにのみコンシュームされるように、
+トピック内のパーティションをコンシューマグループ内のコンシューマに割り当てることで実現されています。
+これによって、パーティションを読むのはある特定コンシューマだけであることと、順序通りコンシュームすることが保証されます。
+多くのパーティションがある為、これでもコンシューマインスタンス間の負荷は分散します。
+ただし、パーティション数以上のコンシューマインスタンスは存在し得ないことに注意してください。
+</p>
+
+<p>
+Kafka はトピック内のパーティションの <i>中の</i> メッセージ順序しか保証しません。
+異なるパーティション間の順序は保証されません。
+ほとんどのアプリケーションは、パーティション毎の順序とキー毎の分割機能との組み合わせで十分でしょう。
+もし、全メッセージの順序が必要な場合は、パーティションひとつだけからなるトピックを使うことで実現出来ますが、
+この場合コンシューマプロセスもただ一つのみになります。
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-1-1-5" class="outline-4">
+<h4 id="sec-1-1-5"><span class="section-number-4">1.1.5</span> 保証</h4>
+<div class="outline-text-4" id="text-1-1-5">
+<p>
+高レベルな視点では Kafka は以下の保証を提供します:
+</p>
+
+<ul class="org-ul">
+<li>プロデューサから特定のトピックパーティションへと送られたメッセージは、送られた順に追記されます。
+つまり、メッセージ <code>M1</code> と <code>M2</code> が同じプロデューサから送られ、かつ <code>M1</code> が最初に送られていた場合、
+<code>M1</code> は <code>M2</code> よりも小さいオフセットを持ち、 <code>M2</code> よりも先にログに現れます。
+</li>
+<li>コンシューマインスタンスはログに保存されている順番にメッセージを読みます。
+</li>
+<li>レプリケーションファクタ <code>N</code> に設定されたトピックは、 <code>N-1</code> 個までのサーバ障害については、
+メッセージのロスト無く稼動することが出来ます。
+</li>
+</ul>
+
+<p>
+これらの保証のより詳細については、本ドキュメントの設計セクションで述べられています。
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-1-2" class="outline-3">
+<h3 id="sec-1-2"><span class="section-number-3">1.2</span> ユースケース</h3>
+<div class="outline-text-3" id="text-1-2">
+<p>
+Apache Kafka のユースケースをいくつか紹介します。
+これらの分野についての数多くの取り組みの概要が <a href="http://engineering.linkedin.com/distributed-systems/log-what-every-software-engineer-should-know-about-real-time-datas-unifying">このブログ記事</a> にまとめられています。
+</p>
+</div>
+
+<div id="outline-container-sec-1-2-1" class="outline-4">
+<h4 id="sec-1-2-1"><span class="section-number-4">1.2.1</span> メッセージング</h4>
+<div class="outline-text-4" id="text-1-2-1">
+<p>
+Kafka は伝統的なメッセージブローカの代替として使うことが出来ます。
+メッセージブローカを利用する理由は様々です————
+データ生成と処理を疎結合にする為、未処理のメッセージをバッファするため、等。
+ほとんどのメッセージングシステムと比較して、
+Kafka はより良いスループット、組込みのパーティショニング、複製、耐障害性を備えており、
+大規模メッセージ処理アプリケーションの良いソリューションとなります。
+</p>
+
+<p>
+経験上、メッセージングは比較的低いスループットで、しかしエンドツーエンドの低いレイテンシを要求し、
+また、Kafka が提供する強い堅牢性に関する保証に依存するという場合が多いです。
+</p>
+
+<p>
+このドメインでは、 <a href="http://activemq.apache.org/">ActiveMQ</a> や <a href="http://activemq.apache.org/">ActiveMQ</a> のような伝統的なメッセージングシステムと Kafka を比較することが出来ます。
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-1-2-2" class="outline-4">
+<h4 id="sec-1-2-2"><span class="section-number-4">1.2.2</span> Web サイトのアクティビティトラッキング</h4>
+<div class="outline-text-4" id="text-1-2-2">
+<p>
+ユーザ動向追跡パイプラインを、リアルタイムな Pub-Sub フィードの集合として再構築する、というのが Kafka の元々のユースケースでした。
+つまり、サイトアクティビティ(ページビュー、検索等のユーザが取り得る行動)はアクティビティの種別毎にトピック分けされて、
+中央に集められるということです。
+これらのフィードは幅広いユースケースで利用することが出来ます。
+リアルタイム処理やリアルタイム監視のために使われたり、
+オフラインでの処理やレポートで利用するために Hadoop やオフラインのデータウェアハウジングシステムへ保存するために使われたりします。
+</p>
+
+<p>
+アクティビティトラッキングは各ユーザのページビューごとに大量のアクティビティメッセージが生成されるため、
+しばしば超大容量のログを扱うことになります。
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-1-2-3" class="outline-4">
+<h4 id="sec-1-2-3"><span class="section-number-4">1.2.3</span> メトリクス</h4>
+<div class="outline-text-4" id="text-1-2-3">
+<p>
+Kafka は運用監視データとしても使われることがあります。
+この場合は、運用データの中央フィードを生成するため、分散したアプリケーションの統計を集約するのに用いられます。
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-1-2-4" class="outline-4">
+<h4 id="sec-1-2-4"><span class="section-number-4">1.2.4</span> ログ集約</h4>
+<div class="outline-text-4" id="text-1-2-4">
+<p>
+ログ集約ソリューションの代替として Kafka を利用する場合も多いです。
+典型的なログ集約では、物理ログファイルをサーバから収集し、
+ファイルサーバや HDFS のような中央ストレージに配置して処理されます。
+Kafka はファイルの詳細について抽象化し、
+また、ログやイベントデータをメッセージストリームとしてきれいに抽象化しています。
+これにより、より低レイテンシで処理でき、また複数のデータソースや分散データ処理への対応が容易になります。
+Scribe や Flume といったログ集約システムと比較して、
+Kafka や同等のパフォーマンスと、複製によるより強い堅牢性保証、
+及びエンドツーエンドのより低いレイテンシを提供します。
+</p>
+</div>
+</div>
+
+
+<div id="outline-container-sec-1-2-5" class="outline-4">
+<h4 id="sec-1-2-5"><span class="section-number-4">1.2.5</span> ストリーム処理</h4>
+<div class="outline-text-4" id="text-1-2-5">
+<p>
+多くのユーザは段階的なデータ処理をすることになります。
+データは生データのトピックからコンシュームされ、集約され、肉付けされ、
+あるいはさらなるコンシュームの為に新たな Kafka トピックへの変換されます。
+例えば記事レコメンドの処理フローは次のようなものになるでしょう:
+まず、RSS フィードから記事をクロールし、「記事」トピックに発行します。
+続いて、内容を正規化したり重複を除いて、「クリーンな記事内容」トピックに発行します。
+最後に、記事内容とユーザのマッチングを行ないます。
+このような処理のフローは、個々のトピックから始まるリアルタイムデータフローのグラフを形成します。
+<a href="https://storm.apache.org/">Storm</a> や <a href="http://samza.apache.org/">Samza</a> はこのような類の変換を行なうための有名なフレームワークです。
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-1-2-6" class="outline-4">
+<h4 id="sec-1-2-6"><span class="section-number-4">1.2.6</span> イベントソーシング</h4>
+<div class="outline-text-4" id="text-1-2-6">
+<p>
+<a href="http://martinfowler.com/eaaDev/EventSourcing.html">イベントソーシング</a> はアプリケーション設計手法のひとつで、
+状態の変更が時系列順のレコード列として記録されるというものです。
+Kafka は超巨大なログデータを扱えるため、
+この手法で構築されたアプリケーションの優れたバックエンドとして利用することが出来ます。
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-1-2-7" class="outline-4">
+<h4 id="sec-1-2-7"><span class="section-number-4">1.2.7</span> コミットログ</h4>
+<div class="outline-text-4" id="text-1-2-7">
+<p>
+Kafka を分散システムのための外部コミットログとして使うこともできます。
+ノード間でデータを複製したり、障害ノードの復旧のための再同期機構として、このログを利用することが出来ます。
+Kafka の <a href="http://kafka.apache.org/documentation.html#compaction">ログコンパクション</a> 機能もこの用途に適しています。
+この用途では、Kafka と <a href="http://zookeeper.apache.org/bookkeeper/">Apache BookKeeper</a> プロジェクトは似ています。
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: 佐々木　悠人</p>
+<p class="date">Created: 2015-05-11 月 11:35</p>
+<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.4.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>
