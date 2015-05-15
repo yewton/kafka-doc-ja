@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 <title>Apache Kafka</title>
-<!-- 2015-05-15 金 21:29 -->
+<!-- 2015-05-15 金 23:03 -->
 <meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta  name="generator" content="Org-mode" />
 <meta  name="author" content="yewton" />
@@ -92,8 +92,6 @@
 <link rel="stylesheet" type="text/css" href="../org-html-themes/styles/readtheorg/css/readtheorg.css"/>
 <script src="js/jquery.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
-<script type="text/javascript" src="../org-html-themes/styles/lib/js/jquery.stickytableheaders.min.js"></script>
-<script type="text/javascript" src="../org-html-themes/styles/readtheorg/js/readtheorg.js"></script>
 <link href="css/src-block-theme.css" rel="stylesheet">
 <script type="text/javascript">
 /*
@@ -151,44 +149,11 @@ for the JavaScript code in this tag.
 <ul>
 <li><a href="#sec-1">1. はじめよう</a>
 <ul>
-<li><a href="#sec-1-1">1.1. 導入</a>
-<ul>
-<li><a href="#sec-1-1-1">トピックとログ</a></li>
-<li><a href="#sec-1-1-2">分散</a></li>
-<li><a href="#sec-1-1-3">プロデューサ</a></li>
-<li><a href="#sec-1-1-4">コンシューマ</a></li>
-<li><a href="#sec-1-1-5">保証</a></li>
-</ul>
-</li>
-<li><a href="#sec-1-2">1.2. ユースケース</a>
-<ul>
-<li><a href="#sec-1-2-1">メッセージング</a></li>
-<li><a href="#sec-1-2-2">Web サイトのアクティビティトラッキング</a></li>
-<li><a href="#sec-1-2-3">メトリクス</a></li>
-<li><a href="#sec-1-2-4">ログ集約</a></li>
-<li><a href="#sec-1-2-5">ストリーム処理</a></li>
-<li><a href="#sec-1-2-6">イベントソーシング</a></li>
-<li><a href="#sec-1-2-7">コミットログ</a></li>
-</ul>
-</li>
-<li><a href="#sec-1-3">1.3. クイックスタート</a>
-<ul>
-<li><a href="#sec-1-3-1">ステップ 1: コードのダウンロード</a></li>
-<li><a href="#sec-1-3-2">ステップ 2: サーバの起動</a></li>
-<li><a href="#sec-1-3-3">ステップ 3: トピックの作成</a></li>
-<li><a href="#sec-1-3-4">ステップ 4: メッセージを送ってみる</a></li>
-<li><a href="#sec-1-3-5">ステップ 5: コンシューマを起動する</a></li>
-<li><a href="#sec-1-3-6">ステップ 6: マルチブローカクラスタを立ち上げる</a></li>
-</ul>
-</li>
+<li><a href="#sec-1-1">1.1. 導入</a></li>
+<li><a href="#sec-1-2">1.2. ユースケース</a></li>
+<li><a href="#sec-1-3">1.3. クイックスタート</a></li>
 <li><a href="#sec-1-4">1.4. Ecosystem</a></li>
-<li><a href="#sec-1-5">1.5. Upgrading From Previous Versions</a>
-<ul>
-<li><a href="#sec-1-5-1">Upgrading from 0.8.1 to 0.8.2.0</a></li>
-<li><a href="#sec-1-5-2">Upgrading from 0.8.0 to 0.8.1</a></li>
-<li><a href="#sec-1-5-3">Upgrading from 0.7</a></li>
-</ul>
-</li>
+<li><a href="#sec-1-5">1.5. Upgrading From Previous Versions</a></li>
 </ul>
 </li>
 <li><a href="#sec-2">2. API</a>
@@ -197,6 +162,14 @@ for the JavaScript code in this tag.
 <li><a href="#sec-2-2">2.2. High Level Consumer API</a></li>
 <li><a href="#sec-2-3">2.3. Simple Consumer API</a></li>
 <li><a href="#sec-2-4">2.4. Kafka Hadoop Consumer API</a></li>
+</ul>
+</li>
+<li><a href="#sec-3">3. Configuration</a>
+<ul>
+<li><a href="#sec-3-1">3.1. Broker Configs</a></li>
+<li><a href="#sec-3-2">3.2. Consumer Configs</a></li>
+<li><a href="#sec-3-3">3.3. Producer Configs</a></li>
+<li><a href="#sec-3-4">3.4. New Producer Configs</a></li>
 </ul>
 </li>
 </ul>
@@ -1081,10 +1054,3981 @@ Usage information on the hadoop consumer can be found <a href="https://github.co
 </div>
 </div>
 </div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3"><span class="section-number-2">3</span> Configuration</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+Kafka uses key-value pairs in the <a href="http://en.wikipedia.org/wiki/.properties">property file format</a> for configuration. These values can be supplied either from a file or programmatically.
+</p>
+</div>
+
+<div id="outline-container-sec-3-1" class="outline-3">
+<h3 id="sec-3-1"><span class="section-number-3">3.1</span> Broker Configs</h3>
+<div class="outline-text-3" id="text-3-1">
+<p>
+The essential configurations are the following:
+</p>
+
+<ul class="org-ul">
+<li><code>broker.id</code>
+</li>
+<li><code>log.dirs</code>
+</li>
+<li><code>zookeeper.connect</code>
+</li>
+</ul>
+</div>
+
+
+<div id="outline-container-sec-3-1-1" class="outline-4">
+<h4 id="sec-3-1-1">Top-level configuration</h4>
+<div class="outline-text-4" id="text-3-1-1">
+<p>
+Topic-level configurations and defaults are discussed in more detail <a href="#topic-config">below</a>.
+</p>
+</div>
+
+<ul class="org-ul"><li><a id="sec-3-1-1-1" name="sec-3-1-1-1"></a>broker.id<br  /><div class="outline-text-5" id="text-3-1-1-1">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">&#xa0;</td>
+</tr>
+</tbody>
+</table>
+<p>
+Each broker is uniquely identified by a non-negative integer id. This id serves as the broker's "name" and allows the broker to be moved to a different host/port without confusing consumers. You can choose any number you like so long as it is unique.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-2" name="sec-3-1-1-2"></a>log.dirs<br  /><div class="outline-text-5" id="text-3-1-1-2">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">/tmp/kafka-logs</td>
+</tr>
+</tbody>
+</table>
+<p>
+A comma-separated list of one or more directories in which Kafka data is stored. Each new partition that is created will be placed in the directory which currently has the fewest partitions.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-3" name="sec-3-1-1-3"></a>port<br  /><div class="outline-text-5" id="text-3-1-1-3">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">9092</td>
+</tr>
+</tbody>
+</table>
+<p>
+The port on which the server accepts client connections.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-4" name="sec-3-1-1-4"></a>zookeeper.connect<br  /><div class="outline-text-5" id="text-3-1-1-4">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">null</td>
+</tr>
+</tbody>
+</table>
+<p>
+Specifies the ZooKeeper connection string in the form hostname:port, where hostname and port are the host and port for a node in your ZooKeeper cluster. To allow connecting through other ZooKeeper nodes when that host is down you can also specify multiple hosts in the form <code>hostname1:port1,hostname2:port2,hostname3:port3</code>.
+</p>
+
+<p>
+ZooKeeper also allows you to add a "chroot" path which will make all kafka data for this cluster appear under a particular path. This is a way to setup multiple Kafka clusters or other applications on the same ZooKeeper cluster. To do this give a connection string in the form <code>hostname1:port1,hostname2:port2,hostname3:port3/chroot/path</code> which would put all this cluster's data under the path <code>/chroot/path</code>. Note that you must create this path yourself prior to starting the broker and consumers must use the same connection string.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-5" name="sec-3-1-1-5"></a>message.max.bytes<br  /><div class="outline-text-5" id="text-3-1-1-5">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">1000000</td>
+</tr>
+</tbody>
+</table>
+<p>
+The maximum size of a message that the server can receive. It is important that this property be in sync with the maximum fetch size your consumers use or else an unruly producer will be able to publish messages too large for consumers to consume.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-6" name="sec-3-1-1-6"></a>num.network.threads<br  /><div class="outline-text-5" id="text-3-1-1-6">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">3</td>
+</tr>
+</tbody>
+</table>
+<p>
+The number of network threads that the server uses for handling network requests. You probably don't need to change this.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-7" name="sec-3-1-1-7"></a>num.io.threads<br  /><div class="outline-text-5" id="text-3-1-1-7">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">8</td>
+</tr>
+</tbody>
+</table>
+<p>
+The number of I/O threads that the server uses for executing requests. You should have at least as many threads as you have disks.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-8" name="sec-3-1-1-8"></a>background.threads<br  /><div class="outline-text-5" id="text-3-1-1-8">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">10</td>
+</tr>
+</tbody>
+</table>
+<p>
+The number of threads to use for various background processing tasks such as file deletion. You should not need to change this.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-9" name="sec-3-1-1-9"></a>queued.max.requests<br  /><div class="outline-text-5" id="text-3-1-1-9">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">500</td>
+</tr>
+</tbody>
+</table>
+<p>
+The number of requests that can be queued up for processing by the I/O threads before the network threads stop reading in new requests.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-10" name="sec-3-1-1-10"></a>host.name<br  /><div class="outline-text-5" id="text-3-1-1-10">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">null</td>
+</tr>
+</tbody>
+</table>
+<p>
+Hostname of broker. If this is set, it will only bind to this address. If this is not set, it will bind to all interfaces, and publish one to ZK.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-11" name="sec-3-1-1-11"></a>advertised.host.name<br  /><div class="outline-text-5" id="text-3-1-1-11">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">null</td>
+</tr>
+</tbody>
+</table>
+<p>
+If this is set this is the hostname that will be given out to producers, consumers, and other brokers to connect to.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-12" name="sec-3-1-1-12"></a>advertised.port<br  /><div class="outline-text-5" id="text-3-1-1-12">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">null</td>
+</tr>
+</tbody>
+</table>
+<p>
+The port to give out to producers, consumers, and other brokers to use in establishing connections. This only needs to be set if this port is different from the port the server should bind to.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-13" name="sec-3-1-1-13"></a>socket.send.buffer.bytes<br  /><div class="outline-text-5" id="text-3-1-1-13">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">100 * 1024</td>
+</tr>
+</tbody>
+</table>
+<p>
+The SO<sub>SNDBUFF</sub> buffer the server prefers for socket connections.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-14" name="sec-3-1-1-14"></a>socket.receive.buffer.bytes<br  /><div class="outline-text-5" id="text-3-1-1-14">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">100 * 1024</td>
+</tr>
+</tbody>
+</table>
+<p>
+The SO<sub>RCVBUFF</sub> buffer the server prefers for socket connections.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-15" name="sec-3-1-1-15"></a>socket.request.max.bytes<br  /><div class="outline-text-5" id="text-3-1-1-15">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">100 * 1024 * 1024</td>
+</tr>
+</tbody>
+</table>
+<p>
+The maximum request size the server will allow. This prevents the server from running out of memory and should be smaller than the Java heap size.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-16" name="sec-3-1-1-16"></a>num.partitions<br  /><div class="outline-text-5" id="text-3-1-1-16">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">1</td>
+</tr>
+</tbody>
+</table>
+<p>
+The default number of partitions per topic if a partition count isn't given at topic creation time.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-17" name="sec-3-1-1-17"></a>log.segment.bytes<br  /><div class="outline-text-5" id="text-3-1-1-17">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">1024 * 1024 * 1024</td>
+</tr>
+</tbody>
+</table>
+<p>
+The log for a topic partition is stored as a directory of segment files. This setting controls the size to which a segment file will grow before a new segment is rolled over in the log. This setting can be overridden on a per-topic basis (see the per-topic configuration section).
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-18" name="sec-3-1-1-18"></a>log.roll.{ms,hours}<br  /><div class="outline-text-5" id="text-3-1-1-18">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">24 * 7 hours</td>
+</tr>
+</tbody>
+</table>
+<p>
+This setting will force Kafka to roll a new log segment even if the log.segment.bytes size has not been reached. This setting can be overridden on a per-topic basis (see the per-topic configuration section).
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-19" name="sec-3-1-1-19"></a>log.cleanup.policy<br  /><div class="outline-text-5" id="text-3-1-1-19">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">delete</td>
+</tr>
+</tbody>
+</table>
+<p>
+This can take either the value delete or compact. If delete is set, log segments will be deleted when they reach the size or time limits set. If compact is set log compaction will be used to clean out obsolete records. This setting can be overridden on a per-topic basis (see the per-topic configuration section).
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-20" name="sec-3-1-1-20"></a>log.retention.{ms,minutes,hours}<br  /><div class="outline-text-5" id="text-3-1-1-20">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">7 days</td>
+</tr>
+</tbody>
+</table>
+<p>
+The amount of time to keep a log segment before it is deleted, i.e. the default data retention window for all topics. Note that if both log.retention.minutes and log.retention.bytes are both set we delete a segment when either limit is exceeded. This setting can be overridden on a per-topic basis (see the per-topic configuration section).
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-21" name="sec-3-1-1-21"></a>log.retention.bytes<br  /><div class="outline-text-5" id="text-3-1-1-21">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">-1</td>
+</tr>
+</tbody>
+</table>
+<p>
+The amount of data to retain in the log for each topic-partitions. Note that this is the limit per-partition so multiply by the number of partitions to get the total data retained for the topic. Also note that if both log.retention.hours and log.retention.bytes are both set we delete a segment when either limit is exceeded. This setting can be overridden on a per-topic basis (see the per-topic configuration section).
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-22" name="sec-3-1-1-22"></a>log.retention.check.interval.ms<br  /><div class="outline-text-5" id="text-3-1-1-22">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">5 minutes</td>
+</tr>
+</tbody>
+</table>
+<p>
+The period with which we check whether any log segment is eligible for deletion to meet the retention policies.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-23" name="sec-3-1-1-23"></a>log.cleaner.enable<br  /><div class="outline-text-5" id="text-3-1-1-23">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">false</td>
+</tr>
+</tbody>
+</table>
+<p>
+This configuration must be set to true for log compaction to run.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-24" name="sec-3-1-1-24"></a>log.cleaner.threads<br  /><div class="outline-text-5" id="text-3-1-1-24">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">1</td>
+</tr>
+</tbody>
+</table>
+<p>
+The number of threads to use for cleaning logs in log compaction.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-25" name="sec-3-1-1-25"></a>log.cleaner.io.max.bytes.per.second<br  /><div class="outline-text-5" id="text-3-1-1-25">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">Double.MaxValue</td>
+</tr>
+</tbody>
+</table>
+<p>
+The maximum amount of I/O the log cleaner can do while performing log compaction. This setting allows setting a limit for the cleaner to avoid impacting live request serving.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-26" name="sec-3-1-1-26"></a>log.cleaner.dedupe.buffer.size<br  /><div class="outline-text-5" id="text-3-1-1-26">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">500*1024*1024</td>
+</tr>
+</tbody>
+</table>
+<p>
+The size of the buffer the log cleaner uses for indexing and deduplicating logs during cleaning. Larger is better provided you have sufficient memory.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-27" name="sec-3-1-1-27"></a>log.cleaner.io.buffer.size<br  /><div class="outline-text-5" id="text-3-1-1-27">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">512*1024</td>
+</tr>
+</tbody>
+</table>
+<p>
+The size of the I/O chunk used during log cleaning. You probably don't need to change this.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-28" name="sec-3-1-1-28"></a>log.cleaner.io.buffer.load.factor<br  /><div class="outline-text-5" id="text-3-1-1-28">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">0.9</td>
+</tr>
+</tbody>
+</table>
+<p>
+The load factor of the hash table used in log cleaning. You probably don't need to change this.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-29" name="sec-3-1-1-29"></a>log.cleaner.backoff.ms<br  /><div class="outline-text-5" id="text-3-1-1-29">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">15000</td>
+</tr>
+</tbody>
+</table>
+<p>
+The interval between checks to see if any logs need cleaning.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-30" name="sec-3-1-1-30"></a>log.cleaner.min.cleanable.ratio<br  /><div class="outline-text-5" id="text-3-1-1-30">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">0.5</td>
+</tr>
+</tbody>
+</table>
+<p>
+This configuration controls how frequently the log compactor will attempt to clean the log (assuming log compaction is enabled). By default we will avoid cleaning a log where more than 50% of the log has been compacted. This ratio bounds the maximum space wasted in the log by duplicates (at 50% at most 50% of the log could be duplicates). A higher ratio will mean fewer, more efficient cleanings but will mean more wasted space in the log. This setting can be overridden on a per-topic basis (see the per-topic configuration section).
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-31" name="sec-3-1-1-31"></a>log.cleaner.delete.retention.ms<br  /><div class="outline-text-5" id="text-3-1-1-31">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">1 day</td>
+</tr>
+</tbody>
+</table>
+<p>
+The amount of time to retain delete tombstone markers for log compacted topics. This setting also gives a bound on the time in which a consumer must complete a read if they begin from offset 0 to ensure that they get a valid snapshot of the final stage (otherwise delete tombstones may be collected before they complete their scan). This setting can be overridden on a per-topic basis (see the per-topic configuration section).
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-32" name="sec-3-1-1-32"></a>log.index.size.max.bytes<br  /><div class="outline-text-5" id="text-3-1-1-32">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">10 * 1024 * 1024</td>
+</tr>
+</tbody>
+</table>
+<p>
+The maximum size in bytes we allow for the offset index for each log segment. Note that we will always pre-allocate a sparse file with this much space and shrink it down when the log rolls. If the index fills up we will roll a new log segment even if we haven't reached the log.segment.bytes limit. This setting can be overridden on a per-topic basis (see the per-topic configuration section).
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-33" name="sec-3-1-1-33"></a>log.index.interval.bytes<br  /><div class="outline-text-5" id="text-3-1-1-33">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">4096</td>
+</tr>
+</tbody>
+</table>
+<p>
+The byte interval at which we add an entry to the offset index. When executing a fetch request the server must do a linear scan for up to this many bytes to find the correct position in the log to begin and end the fetch. So setting this value to be larger will mean larger index files (and a bit more memory usage) but less scanning. However the server will never add more than one index entry per log append (even if more than log.index.interval worth of messages are appended). In general you probably don't need to mess with this value.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-34" name="sec-3-1-1-34"></a>log.flush.interval.messages<br  /><div class="outline-text-5" id="text-3-1-1-34">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">Long.MaxValue</td>
+</tr>
+</tbody>
+</table>
+<p>
+The number of messages written to a log partition before we force an fsync on the log. Setting this lower will sync data to disk more often but will have a major impact on performance. We generally recommend that people make use of replication for durability rather than depending on single-server fsync, however this setting can be used to be extra certain.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-35" name="sec-3-1-1-35"></a>log.flush.scheduler.interval.ms<br  /><div class="outline-text-5" id="text-3-1-1-35">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">Long.MaxValue</td>
+</tr>
+</tbody>
+</table>
+<p>
+The frequency in ms that the log flusher checks whether any log is eligible to be flushed to disk.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-36" name="sec-3-1-1-36"></a>log.flush.interval.ms<br  /><div class="outline-text-5" id="text-3-1-1-36">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">Long.MaxValue</td>
+</tr>
+</tbody>
+</table>
+<p>
+The maximum time between fsync calls on the log. If used in conjuction with log.flush.interval.messages the log will be flushed when either criteria is met.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-37" name="sec-3-1-1-37"></a>log.delete.delay.ms<br  /><div class="outline-text-5" id="text-3-1-1-37">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">60000</td>
+</tr>
+</tbody>
+</table>
+<p>
+The period of time we hold log files around after they are removed from the in-memory segment index. This period of time allows any in-progress reads to complete uninterrupted without locking. You generally don't need to change this.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-38" name="sec-3-1-1-38"></a>log.flush.offset.checkpoint.interval.ms<br  /><div class="outline-text-5" id="text-3-1-1-38">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">60000</td>
+</tr>
+</tbody>
+</table>
+<p>
+The frequency with which we checkpoint the last flush point for logs for recovery. You should not need to change this.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-39" name="sec-3-1-1-39"></a>log.segment.delete.delay.ms<br  /><div class="outline-text-5" id="text-3-1-1-39">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">60000</td>
+</tr>
+</tbody>
+</table>
+<p>
+the amount of time to wait before deleting a file from the filesystem.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-40" name="sec-3-1-1-40"></a>auto.create.topics.enable<br  /><div class="outline-text-5" id="text-3-1-1-40">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">true</td>
+</tr>
+</tbody>
+</table>
+<p>
+Enable auto creation of topic on the server. If this is set to true then attempts to produce data or fetch metadata for a non-existent topic will automatically create it with the default replication factor and number of partitions.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-41" name="sec-3-1-1-41"></a>controller.socket.timeout.ms<br  /><div class="outline-text-5" id="text-3-1-1-41">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">30000</td>
+</tr>
+</tbody>
+</table>
+<p>
+The socket timeout for commands from the partition management controller to the replicas.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-42" name="sec-3-1-1-42"></a>controller.message.queue.size<br  /><div class="outline-text-5" id="text-3-1-1-42">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">Int.MaxValue</td>
+</tr>
+</tbody>
+</table>
+<p>
+The buffer size for controller-to-broker-channels
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-43" name="sec-3-1-1-43"></a>default.replication.factor<br  /><div class="outline-text-5" id="text-3-1-1-43">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">1</td>
+</tr>
+</tbody>
+</table>
+<p>
+The default replication factor for automatically created topics.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-44" name="sec-3-1-1-44"></a>replica.lag.time.max.ms<br  /><div class="outline-text-5" id="text-3-1-1-44">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">10000</td>
+</tr>
+</tbody>
+</table>
+<p>
+If a follower hasn't sent any fetch requests for this window of time, the leader will remove the follower from ISR (in-sync replicas) and treat it as dead.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-45" name="sec-3-1-1-45"></a>replica.lag.max.messages<br  /><div class="outline-text-5" id="text-3-1-1-45">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">4000</td>
+</tr>
+</tbody>
+</table>
+<p>
+If a replica falls more than this many messages behind the leader, the leader will remove the follower from ISR and treat it as dead.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-46" name="sec-3-1-1-46"></a>replica.socket.timeout.ms<br  /><div class="outline-text-5" id="text-3-1-1-46">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">30 * 1000</td>
+</tr>
+</tbody>
+</table>
+<p>
+The socket timeout for network requests to the leader for replicating data.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-47" name="sec-3-1-1-47"></a>replica.socket.receive.buffer.bytes<br  /><div class="outline-text-5" id="text-3-1-1-47">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">64 * 1024</td>
+</tr>
+</tbody>
+</table>
+<p>
+The socket receive buffer for network requests to the leader for replicating data.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-48" name="sec-3-1-1-48"></a>replica.fetch.max.bytes<br  /><div class="outline-text-5" id="text-3-1-1-48">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">1024 * 1024</td>
+</tr>
+</tbody>
+</table>
+<p>
+The number of byes of messages to attempt to fetch for each partition in the fetch requests the replicas send to the leader.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-49" name="sec-3-1-1-49"></a>replica.fetch.wait.max.ms<br  /><div class="outline-text-5" id="text-3-1-1-49">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">500</td>
+</tr>
+</tbody>
+</table>
+<p>
+The maximum amount of time to wait time for data to arrive on the leader in the fetch requests sent by the replicas to the leader.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-50" name="sec-3-1-1-50"></a>replica.fetch.min.bytes<br  /><div class="outline-text-5" id="text-3-1-1-50">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">1</td>
+</tr>
+</tbody>
+</table>
+<p>
+Minimum bytes expected for each fetch response for the fetch requests from the replica to the leader. If not enough bytes, wait up to replica.fetch.wait.max.ms for this many bytes to arrive.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-51" name="sec-3-1-1-51"></a>num.replica.fetchers<br  /><div class="outline-text-5" id="text-3-1-1-51">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">1</td>
+</tr>
+</tbody>
+</table>
+<p>
+Number of threads used to replicate messages from leaders. Increasing this value can increase the degree of I/O parallelism in the follower broker.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-52" name="sec-3-1-1-52"></a>replica.high.watermark.checkpoint.interval.ms<br  /><div class="outline-text-5" id="text-3-1-1-52">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">5000</td>
+</tr>
+</tbody>
+</table>
+<p>
+The frequency with which each replica saves its high watermark to disk to handle recovery.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-53" name="sec-3-1-1-53"></a>fetch.purgatory.purge.interval.requests<br  /><div class="outline-text-5" id="text-3-1-1-53">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">1000</td>
+</tr>
+</tbody>
+</table>
+<p>
+The purge interval (in number of requests) of the fetch request purgatory.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-54" name="sec-3-1-1-54"></a>producer.purgatory.purge.interval.requests<br  /><div class="outline-text-5" id="text-3-1-1-54">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">1000</td>
+</tr>
+</tbody>
+</table>
+<p>
+The purge interval (in number of requests) of the producer request purgatory.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-55" name="sec-3-1-1-55"></a>zookeeper.session.timeout.ms<br  /><div class="outline-text-5" id="text-3-1-1-55">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">6000</td>
+</tr>
+</tbody>
+</table>
+<p>
+ZooKeeper session timeout. If the server fails to heartbeat to ZooKeeper within this period of time it is considered dead. If you set this too low the server may be falsely considered dead; if you set it too high it may take too long to recognize a truly dead server.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-56" name="sec-3-1-1-56"></a>zookeeper.connection.timeout.ms<br  /><div class="outline-text-5" id="text-3-1-1-56">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">6000</td>
+</tr>
+</tbody>
+</table>
+<p>
+The maximum amount of time that the client waits to establish a connection to zookeeper.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-57" name="sec-3-1-1-57"></a>zookeeper.sync.time.ms<br  /><div class="outline-text-5" id="text-3-1-1-57">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">2000</td>
+</tr>
+</tbody>
+</table>
+<p>
+How far a ZK follower can be behind a ZK leader.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-58" name="sec-3-1-1-58"></a>controlled.shutdown.enable<br  /><div class="outline-text-5" id="text-3-1-1-58">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">true</td>
+</tr>
+</tbody>
+</table>
+<p>
+Enable controlled shutdown of the broker. If enabled, the broker will move all leaders on it to some other brokers before shutting itself down. This reduces the unavailability window during shutdown.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-59" name="sec-3-1-1-59"></a>controlled.shutdown.max.retries<br  /><div class="outline-text-5" id="text-3-1-1-59">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">3</td>
+</tr>
+</tbody>
+</table>
+<p>
+Number of retries to complete the controlled shutdown successfully before executing an unclean shutdown.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-60" name="sec-3-1-1-60"></a>controlled.shutdown.retry.backoff.ms<br  /><div class="outline-text-5" id="text-3-1-1-60">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">5000</td>
+</tr>
+</tbody>
+</table>
+<p>
+Backoff time between shutdown retries.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-61" name="sec-3-1-1-61"></a>auto.leader.rebalance.enable<br  /><div class="outline-text-5" id="text-3-1-1-61">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">true</td>
+</tr>
+</tbody>
+</table>
+<p>
+If this is enabled the controller will automatically try to balance leadership for partitions among the brokers by periodically returning leadership to the "preferred" replica for each partition if it is available.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-62" name="sec-3-1-1-62"></a>leader.imbalance.per.broker.percentage<br  /><div class="outline-text-5" id="text-3-1-1-62">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">10</td>
+</tr>
+</tbody>
+</table>
+<p>
+The percentage of leader imbalance allowed per broker. The controller will rebalance leadership if this ratio goes above the configured value per broker.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-63" name="sec-3-1-1-63"></a>leader.imbalance.check.interval.seconds<br  /><div class="outline-text-5" id="text-3-1-1-63">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">300</td>
+</tr>
+</tbody>
+</table>
+<p>
+The frequency with which to check for leader imbalance.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-64" name="sec-3-1-1-64"></a>offset.metadata.max.bytes<br  /><div class="outline-text-5" id="text-3-1-1-64">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">4096</td>
+</tr>
+</tbody>
+</table>
+<p>
+The maximum amount of metadata to allow clients to save with their offsets.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-65" name="sec-3-1-1-65"></a>max.connections.per.ip<br  /><div class="outline-text-5" id="text-3-1-1-65">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">Int.MaxValue</td>
+</tr>
+</tbody>
+</table>
+<p>
+The maximum number of connections that a broker allows from each ip address.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-66" name="sec-3-1-1-66"></a>max.connections.per.ip.overrides<br  /><div class="outline-text-5" id="text-3-1-1-66">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">&#xa0;</td>
+</tr>
+</tbody>
+</table>
+<p>
+Per-ip or hostname overrides to the default maximum number of connections.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-67" name="sec-3-1-1-67"></a>connections.max.idle.ms<br  /><div class="outline-text-5" id="text-3-1-1-67">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">600000</td>
+</tr>
+</tbody>
+</table>
+<p>
+Idle connections timeout: the server socket processor threads close the connections that idle more than this.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-68" name="sec-3-1-1-68"></a>log.roll.jitter.{ms,hours}<br  /><div class="outline-text-5" id="text-3-1-1-68">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">0</td>
+</tr>
+</tbody>
+</table>
+<p>
+The maximum jitter to subtract from logRollTimeMillis.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-69" name="sec-3-1-1-69"></a>num.recovery.threads.per.data.dir<br  /><div class="outline-text-5" id="text-3-1-1-69">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">1</td>
+</tr>
+</tbody>
+</table>
+<p>
+The number of threads per data directory to be used for log recovery at startup and flushing at shutdown.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-70" name="sec-3-1-1-70"></a>unclean.leader.election.enable<br  /><div class="outline-text-5" id="text-3-1-1-70">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">true</td>
+</tr>
+</tbody>
+</table>
+<p>
+Indicates whether to enable replicas not in the ISR set to be elected as leader as a last resort, even though doing so may result in data loss.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-71" name="sec-3-1-1-71"></a>delete.topic.enable<br  /><div class="outline-text-5" id="text-3-1-1-71">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">false</td>
+</tr>
+</tbody>
+</table>
+<p>
+Enable delete topic.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-72" name="sec-3-1-1-72"></a>offsets.topic.num.partitions<br  /><div class="outline-text-5" id="text-3-1-1-72">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">50</td>
+</tr>
+</tbody>
+</table>
+<p>
+The number of partitions for the offset commit topic. Since changing this after deployment is currently unsupported, we recommend using a higher setting for production (e.g., 100-200).
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-73" name="sec-3-1-1-73"></a>offsets.topic.retention.minutes<br  /><div class="outline-text-5" id="text-3-1-1-73">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">1440</td>
+</tr>
+</tbody>
+</table>
+<p>
+Offsets that are older than this age will be marked for deletion. The actual purge will occur when the log cleaner compacts the offsets topic.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-74" name="sec-3-1-1-74"></a>offsets.retention.check.interval.ms<br  /><div class="outline-text-5" id="text-3-1-1-74">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">600000</td>
+</tr>
+</tbody>
+</table>
+<p>
+The frequency at which the offset manager checks for stale offsets.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-75" name="sec-3-1-1-75"></a>offsets.topic.replication.factor<br  /><div class="outline-text-5" id="text-3-1-1-75">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">3</td>
+</tr>
+</tbody>
+</table>
+<p>
+The replication factor for the offset commit topic. A higher setting (e.g., three or four) is recommended in order to ensure higher availability. If the offsets topic is created when fewer brokers than the replication factor then the offsets topic will be created with fewer replicas.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-76" name="sec-3-1-1-76"></a>offsets.topic.segment.bytes<br  /><div class="outline-text-5" id="text-3-1-1-76">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">104857600</td>
+</tr>
+</tbody>
+</table>
+<p>
+Segment size for the offsets topic. Since it uses a compacted topic, this should be kept relatively low in order to facilitate faster log compaction and loads.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-77" name="sec-3-1-1-77"></a>offsets.load.buffer.size<br  /><div class="outline-text-5" id="text-3-1-1-77">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">5242880</td>
+</tr>
+</tbody>
+</table>
+<p>
+An offset load occurs when a broker becomes the offset manager for a set of consumer groups (i.e., when it becomes a leader for an offsets topic partition). This setting corresponds to the batch size (in bytes) to use when reading from the offsets segments when loading offsets into the offset manager's cache.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-78" name="sec-3-1-1-78"></a>offsets.commit.required.acks<br  /><div class="outline-text-5" id="text-3-1-1-78">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">-1</td>
+</tr>
+</tbody>
+</table>
+<p>
+The number of acknowledgements that are required before the offset commit can be accepted. This is similar to the producer's acknowledgement setting. In general, the default should not be overridden.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-1-79" name="sec-3-1-1-79"></a>offsets.commit.timeout.ms<br  /><div class="outline-text-5" id="text-3-1-1-79">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">5000</td>
+</tr>
+</tbody>
+</table>
+<p>
+The offset commit will be delayed until this timeout or the required number of replicas have received the offset commit. This is similar to the producer request timeout.
+</p>
+</div>
+</li></ul>
+</div>
+
+<div id="outline-container-topic-config" class="outline-4">
+<h4 id="topic-config"><a id="sec-3-1-2" name="sec-3-1-2"></a>Topic-level configuration</h4>
+<div class="outline-text-4" id="text-topic-config">
+
+<p>
+Configurations pertinent to topics have both a global default as well an optional per-topic override.
+If no per-topic configuration is given the global default is used.
+The override can be set at topic creation time by giving one or more <code>--config</code> options.
+This example creates a topic named <i>my-topic</i> with a custom max message size and flush rate:
+</p>
+
+<pre class="example">
+&gt; bin/kafka-topics.sh --zookeeper localhost:2181 --create --topic my-topic --partitions 1
+       --replication-factor 1 --config max.message.bytes=64000 --config flush.messages=1
+</pre>
+
+<p>
+Overrides can also be changed or set later using the alter topic command. This example updates the max message size for <i>my-topic</i>:
+</p>
+
+<pre class="example">
+&gt; bin/kafka-topics.sh --zookeeper localhost:2181 --alter --topic my-topic
+   --config max.message.bytes=128000
+</pre>
+
+<p>
+To remove an override you can do
+</p>
+
+<pre class="example">
+&gt; bin/kafka-topics.sh --zookeeper localhost:2181 --alter --topic my-topic
+   --deleteConfig max.message.bytes
+</pre>
+
+
+<p>
+The following are the topic-level configurations. The server's default configuration for this property is given under the Server Default Property heading, setting this default in the server config allows you to change the default given to topics that have no override specified.
+</p>
+</div>
+
+
+<ul class="org-ul"><li><a id="sec-3-1-2-1" name="sec-3-1-2-1"></a>cleanup.policy<br  /><div class="outline-text-5" id="text-3-1-2-1">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">delete</td>
+</tr>
+
+<tr>
+<td class="left">Server Default Property</td>
+<td class="left">log.cleanup.policy</td>
+</tr>
+</tbody>
+</table>
+<p>
+A string that is either "delete" or "compact". This string designates the retention policy to use on old log segments. The default policy ("delete") will discard old segments when their retention time or size limit has been reached. The "compact" setting will enable log compaction on the topic.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-2-2" name="sec-3-1-2-2"></a>delete.retention.ms<br  /><div class="outline-text-5" id="text-3-1-2-2">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">86400000 (24 hours)</td>
+</tr>
+
+<tr>
+<td class="left">Server Default Property</td>
+<td class="left">log.cleaner.delete.retention.ms</td>
+</tr>
+</tbody>
+</table>
+<p>
+The amount of time to retain delete tombstone markers for log compacted topics. This setting also gives a bound on the time in which a consumer must complete a read if they begin from offset 0 to ensure that they get a valid snapshot of the final stage (otherwise delete tombstones may be collected before they complete their scan).
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-2-3" name="sec-3-1-2-3"></a>flush.messages<br  /><div class="outline-text-5" id="text-3-1-2-3">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">None</td>
+</tr>
+
+<tr>
+<td class="left">Server Default Property</td>
+<td class="left">log.flush.interval.messages</td>
+</tr>
+</tbody>
+</table>
+<p>
+This setting allows specifying an interval at which we will force an fsync of data written to the log. For example if this was set to 1 we would fsync after every message; if it were 5 we would fsync after every five messages. In general we recommend you not set this and use replication for durability and allow the operating system's background flush capabilities as it is more efficient. This setting can be overridden on a per-topic basis (see the per-topic configuration section).
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-2-4" name="sec-3-1-2-4"></a>flush.ms<br  /><div class="outline-text-5" id="text-3-1-2-4">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">None</td>
+</tr>
+
+<tr>
+<td class="left">Server Default Property</td>
+<td class="left">log.flush.interval.ms</td>
+</tr>
+</tbody>
+</table>
+<p>
+This setting allows specifying a time interval at which we will force an fsync of data written to the log. For example if this was set to 1000 we would fsync after 1000 ms had passed. In general we recommend you not set this and use replication for durability and allow the operating system's background flush capabilities as it is more efficient.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-2-5" name="sec-3-1-2-5"></a>index.interval.bytes<br  /><div class="outline-text-5" id="text-3-1-2-5">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">4096</td>
+</tr>
+
+<tr>
+<td class="left">Server Default Property</td>
+<td class="right">log.index.interval.bytes</td>
+</tr>
+</tbody>
+</table>
+<p>
+This setting controls how frequently Kafka adds an index entry to it's offset index. The default setting ensures that we index a message roughly every 4096 bytes. More indexing allows reads to jump closer to the exact position in the log but makes the index larger. You probably don't need to change this.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-2-6" name="sec-3-1-2-6"></a>max.message.bytes<br  /><div class="outline-text-5" id="text-3-1-2-6">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">1,000,000</td>
+</tr>
+
+<tr>
+<td class="left">Server Default Property</td>
+<td class="left">message.max.bytes</td>
+</tr>
+</tbody>
+</table>
+<p>
+This is largest message size Kafka will allow to be appended to this topic. Note that if you increase this size you must also increase your consumer's fetch size so they can fetch messages this large.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-2-7" name="sec-3-1-2-7"></a>min.cleanable.dirty.ratio<br  /><div class="outline-text-5" id="text-3-1-2-7">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">0.5</td>
+</tr>
+
+<tr>
+<td class="left">Server Default Property</td>
+<td class="right">log.cleaner.min.cleanable.ratio</td>
+</tr>
+</tbody>
+</table>
+<p>
+This configuration controls how frequently the log compactor will attempt to clean the log (assuming log compaction is enabled). By default we will avoid cleaning a log where more than 50% of the log has been compacted. This ratio bounds the maximum space wasted in the log by duplicates (at 50% at most 50% of the log could be duplicates). A higher ratio will mean fewer, more efficient cleanings but will mean more wasted space in the log.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-2-8" name="sec-3-1-2-8"></a>min.insync.replicas<br  /><div class="outline-text-5" id="text-3-1-2-8">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">1</td>
+</tr>
+
+<tr>
+<td class="left">Server Default Property</td>
+<td class="right">min.insync.replicas</td>
+</tr>
+</tbody>
+</table>
+<p>
+When a producer sets request.required.acks to -1, min.insync.replicas specifies the minimum number of replicas that must acknowledge a write for the write to be considered successful. If this minimum cannot be met, then the producer will raise an exception (either NotEnoughReplicas or NotEnoughReplicasAfterAppend).
+</p>
+
+<p>
+When used together, min.insync.replicas and request.required.acks allow you to enforce greater durability guarantees. A typical scenario would be to create a topic with a replication factor of 3, set min.insync.replicas to 2, and produce with request.required.acks of -1. This will ensure that the producer raises an exception if a majority of replicas do not receive a write.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-2-9" name="sec-3-1-2-9"></a>retention.bytes<br  /><div class="outline-text-5" id="text-3-1-2-9">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">None</td>
+</tr>
+
+<tr>
+<td class="left">Server Default Property</td>
+<td class="left">log.retention.bytes</td>
+</tr>
+</tbody>
+</table>
+<p>
+This configuration controls the maximum size a log can grow to before we will discard old log segments to free up space if we are using the "delete" retention policy. By default there is no size limit only a time limit.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-2-10" name="sec-3-1-2-10"></a>retention.ms<br  /><div class="outline-text-5" id="text-3-1-2-10">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">7 days</td>
+</tr>
+
+<tr>
+<td class="left">Server Default Property</td>
+<td class="left">log.retention.minutes</td>
+</tr>
+</tbody>
+</table>
+<p>
+This configuration controls the maximum time we will retain a log before we will discard old log segments to free up space if we are using the "delete" retention policy. This represents an SLA on how soon consumers must read their data.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-2-11" name="sec-3-1-2-11"></a>segment.bytes<br  /><div class="outline-text-5" id="text-3-1-2-11">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">1 GB</td>
+</tr>
+
+<tr>
+<td class="left">Server Default Property</td>
+<td class="left">log.segment.bytes</td>
+</tr>
+</tbody>
+</table>
+<p>
+This configuration controls the segment file size for the log. Retention and cleaning is always done a file at a time so a larger segment size means fewer files but less granular control over retention.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-2-12" name="sec-3-1-2-12"></a>segment.index.bytes<br  /><div class="outline-text-5" id="text-3-1-2-12">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">10 MB</td>
+</tr>
+
+<tr>
+<td class="left">Server Default Property</td>
+<td class="left">log.index.size.max.bytes</td>
+</tr>
+</tbody>
+</table>
+<p>
+This configuration controls the size of the index that maps offsets to file positions. We preallocate this index file and shrink it only after log rolls. You generally should not need to change this setting.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-2-13" name="sec-3-1-2-13"></a>segment.ms<br  /><div class="outline-text-5" id="text-3-1-2-13">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">7 days</td>
+</tr>
+
+<tr>
+<td class="left">Server Default Property</td>
+<td class="left">log.roll.hours</td>
+</tr>
+</tbody>
+</table>
+<p>
+This configuration controls the period of time after which Kafka will force the log to roll even if the segment file isn't full to ensure that retention can delete or compact old data.
+</p>
+</div>
+</li>
+<li><a id="sec-3-1-2-14" name="sec-3-1-2-14"></a>segment.jitter.ms<br  /><div class="outline-text-5" id="text-3-1-2-14">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">0</td>
+</tr>
+
+<tr>
+<td class="left">Server Default Property</td>
+<td class="right">log.roll.jitter.{ms,hours}</td>
+</tr>
+</tbody>
+</table>
+<p>
+The maximum jitter to subtract from logRollTimeMillis.
+</p>
+</div>
+</li></ul>
+</div>
+</div>
+
+<div id="outline-container-sec-3-2" class="outline-3">
+<h3 id="sec-3-2"><span class="section-number-3">3.2</span> Consumer Configs</h3>
+<div class="outline-text-3" id="text-3-2">
+<p>
+The essential consumer configurations are the following:
+</p>
+
+<ul class="org-ul">
+<li><code>group.id</code>
+</li>
+<li><code>zookeeper.connect</code>
+</li>
+</ul>
+
+<p>
+More details about consumer configuration can be found in the scala class <code>kafka.consumer.ConsumerConfig</code>.
+</p>
+</div>
+
+<div id="outline-container-sec-3-2-1" class="outline-4">
+<h4 id="sec-3-2-1">group.id</h4>
+<div class="outline-text-4" id="text-3-2-1">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">&#xa0;</td>
+</tr>
+</tbody>
+</table>
+<p>
+A string that uniquely identifies the group of consumer processes to which this consumer belongs. By setting the same group id multiple processes indicate that they are all part of the same consumer group.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-2-2" class="outline-4">
+<h4 id="sec-3-2-2">zookeeper.connect</h4>
+<div class="outline-text-4" id="text-3-2-2">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">&#xa0;</td>
+</tr>
+</tbody>
+</table>
+<p>
+Specifies the ZooKeeper connection string in the form <code>hostname:port</code> where host and port are the host and port of a ZooKeeper server. To allow connecting through other ZooKeeper nodes when that ZooKeeper machine is down you can also specify multiple hosts in the form <code>hostname1:port1,hostname2:port2,hostname3:port3</code>. The server may also have a ZooKeeper chroot path as part of it's ZooKeeper connection string which puts its data under some path in the global ZooKeeper namespace. If so the consumer should use the same chroot path in its connection string. For example to give a chroot path of <code>/chroot/path</code> you would give the connection string as <code>hostname1:port1,hostname2:port2,hostname3:port3/chroot/path</code>.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-2-3" class="outline-4">
+<h4 id="sec-3-2-3">consumer.id</h4>
+<div class="outline-text-4" id="text-3-2-3">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">null</td>
+</tr>
+</tbody>
+</table>
+<p>
+Generated automatically if not set.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-2-4" class="outline-4">
+<h4 id="sec-3-2-4">socket.timeout.ms</h4>
+<div class="outline-text-4" id="text-3-2-4">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">30 * 1000</td>
+</tr>
+</tbody>
+</table>
+<p>
+The socket timeout for network requests. The actual timeout set will be max.fetch.wait + socket.timeout.ms.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-2-5" class="outline-4">
+<h4 id="sec-3-2-5">socket.receive.buffer.bytes</h4>
+<div class="outline-text-4" id="text-3-2-5">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">64 * 1024</td>
+</tr>
+</tbody>
+</table>
+<p>
+The socket receive buffer for network requests
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-2-6" class="outline-4">
+<h4 id="sec-3-2-6">fetch.message.max.bytes</h4>
+<div class="outline-text-4" id="text-3-2-6">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">1024 * 1024</td>
+</tr>
+</tbody>
+</table>
+<p>
+The number of byes of messages to attempt to fetch for each topic-partition in each fetch request. These bytes will be read into memory for each partition, so this helps control the memory used by the consumer. The fetch request size must be at least as large as the maximum message size the server allows or else it is possible for the producer to send messages larger than the consumer can fetch.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-2-7" class="outline-4">
+<h4 id="sec-3-2-7">num.consumer.fetchers</h4>
+<div class="outline-text-4" id="text-3-2-7">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">1</td>
+</tr>
+</tbody>
+</table>
+<p>
+The number fetcher threads used to fetch data.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-2-8" class="outline-4">
+<h4 id="sec-3-2-8">auto.commit.enable</h4>
+<div class="outline-text-4" id="text-3-2-8">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">true</td>
+</tr>
+</tbody>
+</table>
+<p>
+If true, periodically commit to ZooKeeper the offset of messages already fetched by the consumer. This committed offset will be used when the process fails as the position from which the new consumer will begin.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-2-9" class="outline-4">
+<h4 id="sec-3-2-9">auto.commit.interval.ms</h4>
+<div class="outline-text-4" id="text-3-2-9">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">60 * 1000</td>
+</tr>
+</tbody>
+</table>
+<p>
+The frequency in ms that the consumer offsets are committed to zookeeper.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-2-10" class="outline-4">
+<h4 id="sec-3-2-10">queued.max.message.chunks</h4>
+<div class="outline-text-4" id="text-3-2-10">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">2</td>
+</tr>
+</tbody>
+</table>
+<p>
+Max number of message chunks buffered for consumption. Each chunk can be up to fetch.message.max.bytes.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-2-11" class="outline-4">
+<h4 id="sec-3-2-11">rebalance.max.retries</h4>
+<div class="outline-text-4" id="text-3-2-11">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">4</td>
+</tr>
+</tbody>
+</table>
+<p>
+When a new consumer joins a consumer group the set of consumers attempt to "rebalance" the load to assign partitions to each consumer. If the set of consumers changes while this assignment is taking place the rebalance will fail and retry. This setting controls the maximum number of attempts before giving up.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-2-12" class="outline-4">
+<h4 id="sec-3-2-12">fetch.min.bytes</h4>
+<div class="outline-text-4" id="text-3-2-12">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">1</td>
+</tr>
+</tbody>
+</table>
+<p>
+The minimum amount of data the server should return for a fetch request. If insufficient data is available the request will wait for that much data to accumulate before answering the request.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-2-13" class="outline-4">
+<h4 id="sec-3-2-13">fetch.wait.max.ms</h4>
+<div class="outline-text-4" id="text-3-2-13">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">100</td>
+</tr>
+</tbody>
+</table>
+<p>
+The maximum amount of time the server will block before answering the fetch request if there isn't sufficient data to immediately satisfy fetch.min.bytes
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-2-14" class="outline-4">
+<h4 id="sec-3-2-14">rebalance.backoff.ms</h4>
+<div class="outline-text-4" id="text-3-2-14">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">2000</td>
+</tr>
+</tbody>
+</table>
+<p>
+Backoff time between retries during rebalance.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-2-15" class="outline-4">
+<h4 id="sec-3-2-15">refresh.leader.backoff.ms</h4>
+<div class="outline-text-4" id="text-3-2-15">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">200</td>
+</tr>
+</tbody>
+</table>
+<p>
+Backoff time to wait before trying to determine the leader of a partition that has just lost its leader.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-2-16" class="outline-4">
+<h4 id="sec-3-2-16">auto.offset.reset</h4>
+<div class="outline-text-4" id="text-3-2-16">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">largest</td>
+</tr>
+</tbody>
+</table>
+<p>
+What to do when there is no initial offset in ZooKeeper or if an offset is out of range:
+</p>
+
+<dl class="org-dl">
+<dt> smallest </dt><dd>automatically reset the offset to the smallest offset
+</dd>
+<dt> largest </dt><dd>automatically reset the offset to the largest offset
+</dd>
+<dt> anything else </dt><dd>throw exception to the consumer
+</dd>
+</dl>
+</div>
+</div>
+
+<div id="outline-container-sec-3-2-17" class="outline-4">
+<h4 id="sec-3-2-17">consumer.timeout.ms</h4>
+<div class="outline-text-4" id="text-3-2-17">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">-1</td>
+</tr>
+</tbody>
+</table>
+<p>
+Throw a timeout exception to the consumer if no message is available for consumption after the specified interval
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-2-18" class="outline-4">
+<h4 id="sec-3-2-18">exclude.internal.topics</h4>
+<div class="outline-text-4" id="text-3-2-18">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">true</td>
+</tr>
+</tbody>
+</table>
+<p>
+Whether messages from internal topics (such as offsets) should be exposed to the consumer.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-2-19" class="outline-4">
+<h4 id="sec-3-2-19">partition.assignment.strategy</h4>
+<div class="outline-text-4" id="text-3-2-19">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">range</td>
+</tr>
+</tbody>
+</table>
+<p>
+Select a strategy for assigning partitions to consumer streams. Possible values: range, roundrobin.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-2-20" class="outline-4">
+<h4 id="sec-3-2-20">client.id</h4>
+<div class="outline-text-4" id="text-3-2-20">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">group id value</td>
+</tr>
+</tbody>
+</table>
+<p>
+The client id is a user-specified string sent in each request to help trace calls. It should logically identify the application making the request.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-2-21" class="outline-4">
+<h4 id="sec-3-2-21">zookeeper.session.timeout.ms</h4>
+<div class="outline-text-4" id="text-3-2-21">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">6000</td>
+</tr>
+</tbody>
+</table>
+<p>
+ZooKeeper session timeout. If the consumer fails to heartbeat to ZooKeeper for this period of time it is considered dead and a rebalance will occur.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-2-22" class="outline-4">
+<h4 id="sec-3-2-22">zookeeper.connection.timeout.ms</h4>
+<div class="outline-text-4" id="text-3-2-22">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">6000</td>
+</tr>
+</tbody>
+</table>
+<p>
+The max time that the client waits while establishing a connection to zookeeper.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-2-23" class="outline-4">
+<h4 id="sec-3-2-23">zookeeper.sync.time.ms</h4>
+<div class="outline-text-4" id="text-3-2-23">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">2000</td>
+</tr>
+</tbody>
+</table>
+<p>
+How far a ZK follower can be behind a ZK leader
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-2-24" class="outline-4">
+<h4 id="sec-3-2-24">offsets.storage</h4>
+<div class="outline-text-4" id="text-3-2-24">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">zookeeper</td>
+</tr>
+</tbody>
+</table>
+<p>
+Select where offsets should be stored (zookeeper or kafka).
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-2-25" class="outline-4">
+<h4 id="sec-3-2-25">offsets.channel.backoff.ms</h4>
+<div class="outline-text-4" id="text-3-2-25">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">1000</td>
+</tr>
+</tbody>
+</table>
+<p>
+The backoff period when reconnecting the offsets channel or retrying failed offset fetch/commit requests.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-2-26" class="outline-4">
+<h4 id="sec-3-2-26">offsets.channel.socket.timeout.ms</h4>
+<div class="outline-text-4" id="text-3-2-26">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">10000</td>
+</tr>
+</tbody>
+</table>
+<p>
+Socket timeout when reading responses for offset fetch/commit requests. This timeout is also used for ConsumerMetadata requests that are used to query for the offset manager.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-2-27" class="outline-4">
+<h4 id="sec-3-2-27">offsets.commit.max.retries</h4>
+<div class="outline-text-4" id="text-3-2-27">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">5</td>
+</tr>
+</tbody>
+</table>
+<p>
+Retry the offset commit up to this many times on failure. This retry count only applies to offset commits during shut-down. It does not apply to commits originating from the auto-commit thread. It also does not apply to attempts to query for the offset coordinator before committing offsets. i.e., if a consumer metadata request fails for any reason, it will be retried and that retry does not count toward this limit.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-2-28" class="outline-4">
+<h4 id="sec-3-2-28">dual.commit.enabled</h4>
+<div class="outline-text-4" id="text-3-2-28">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">true</td>
+</tr>
+</tbody>
+</table>
+<p>
+If you are using "kafka" as offsets.storage, you can dual commit offsets to ZooKeeper (in addition to Kafka). This is required during migration from zookeeper-based offset storage to kafka-based offset storage. With respect to any given consumer group, it is safe to turn this off after all instances within that group have been migrated to the new version that commits offsets to the broker (instead of directly to ZooKeeper).
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-2-29" class="outline-4">
+<h4 id="sec-3-2-29">partition.assignment.strategy</h4>
+<div class="outline-text-4" id="text-3-2-29">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">range</td>
+</tr>
+</tbody>
+</table>
+<p>
+Select between the "range" or "roundrobin" strategy for assigning partitions to consumer streams.
+</p>
+
+<p>
+The round-robin partition assignor lays out all the available partitions and all the available consumer threads. It then proceeds to do a round-robin assignment from partition to consumer thread. If the subscriptions of all consumer instances are identical, then the partitions will be uniformly distributed. (i.e., the partition ownership counts will be within a delta of exactly one across all consumer threads.) Round-robin assignment is permitted only if: (a) Every topic has the same number of streams within a consumer instance (b) The set of subscribed topics is identical for every consumer instance within the group.
+</p>
+
+<p>
+Range partitioning works on a per-topic basis. For each topic, we lay out the available partitions in numeric order and the consumer threads in lexicographic order. We then divide the number of partitions by the total number of consumer streams (threads) to determine the number of partitions to assign to each consumer. If it does not evenly divide, then the first few consumers will have one extra partition.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-3-3" class="outline-3">
+<h3 id="sec-3-3"><span class="section-number-3">3.3</span> Producer Configs</h3>
+<div class="outline-text-3" id="text-3-3">
+<p>
+Essential configuration properties for the producer include:
+</p>
+
+<ul class="org-ul">
+<li><code>metadata.broker.list</code>
+</li>
+<li><code>request.required.acks</code>
+</li>
+<li><code>producer.type</code>
+</li>
+<li><code>serializer.class</code>
+</li>
+</ul>
+
+<p>
+More details about producer configuration can be found in the scala class <code>kafka.producer.ProducerConfig</code>.
+</p>
+</div>
+
+<div id="outline-container-sec-3-3-1" class="outline-4">
+<h4 id="sec-3-3-1">metadata.broker.list</h4>
+<div class="outline-text-4" id="text-3-3-1">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">&#xa0;</td>
+</tr>
+</tbody>
+</table>
+<p>
+This is for bootstrapping and the producer will only use it for getting metadata (topics, partitions and replicas). The socket connections for sending the actual data will be established based on the broker information returned in the metadata. The format is <code>host1:port1,host2:port2</code>, and the list can be a subset of brokers or a VIP pointing to a subset of brokers.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3-3-2" class="outline-4">
+<h4 id="sec-3-3-2">request.required.acks</h4>
+<div class="outline-text-4" id="text-3-3-2">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">0</td>
+</tr>
+</tbody>
+</table>
+<p>
+This value controls when a produce request is considered completed. Specifically, how many other brokers must have committed the data to their log and acknowledged this to the leader? Typical values are
+</p>
+
+<ul class="org-ul">
+<li>0, which means that the producer never waits for an acknowledgement from the broker (the same behavior as 0.7).
+This option provides the lowest latency but the weakest durability guarantees (some data will be lost when a server fails).
+</li>
+<li>1, which means that the producer gets an acknowledgement after the leader replica has received the data. 
+This option provides better durability as the client waits until the server acknowledges the request as successful (only messages that were written to the now-dead leader but not yet replicated will be lost).
+</li>
+<li>-1, The producer gets an acknowledgement after all in-sync replicas have received the data.
+This option provides the greatest level of durability.
+However, it does not completely eliminate the risk of message loss because the number of in sync replicas may, in rare cases, shrink to 1.
+If you want to ensure that some minimum number of replicas (typically a majority) receive a write, then you must set the topic-level min.insync.replicas setting.
+Please read the Replication section of the design documentation for a more in-depth discussion.
+</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-sec-3-3-3" class="outline-4">
+<h4 id="sec-3-3-3">request.timeout.ms</h4>
+<div class="outline-text-4" id="text-3-3-3">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">10000</td>
+</tr>
+</tbody>
+</table>
+<p>
+The amount of time the broker will wait trying to meet the request.required.acks requirement before sending back an error to the client.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-3-4" class="outline-4">
+<h4 id="sec-3-3-4">producer.type</h4>
+<div class="outline-text-4" id="text-3-3-4">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">sync</td>
+</tr>
+</tbody>
+</table>
+<p>
+This parameter specifies whether the messages are sent asynchronously in a background thread. Valid values are (1) async for asynchronous send and (2) sync for synchronous send. By setting the producer to async we allow batching together of requests (which is great for throughput) but open the possibility of a failure of the client machine dropping unsent data.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-3-5" class="outline-4">
+<h4 id="sec-3-3-5">serializer.class</h4>
+<div class="outline-text-4" id="text-3-3-5">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">kafka.serializer.DefaultEncoder</td>
+</tr>
+</tbody>
+</table>
+<p>
+The serializer class for messages. The default encoder takes a byte[] and returns the same byte[].
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-3-6" class="outline-4">
+<h4 id="sec-3-3-6">key.serializer.class</h4>
+<div class="outline-text-4" id="text-3-3-6">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">&#xa0;</td>
+</tr>
+</tbody>
+</table>
+<p>
+The serializer class for keys (defaults to the same as for messages if nothing is given).
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-3-7" class="outline-4">
+<h4 id="sec-3-3-7">partitioner.class</h4>
+<div class="outline-text-4" id="text-3-3-7">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">kafka.producer.DefaultPartitioner</td>
+</tr>
+</tbody>
+</table>
+<p>
+The partitioner class for partitioning messages amongst sub-topics. The default partitioner is based on the hash of the key.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-3-8" class="outline-4">
+<h4 id="sec-3-3-8">compression.codec</h4>
+<div class="outline-text-4" id="text-3-3-8">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">none</td>
+</tr>
+</tbody>
+</table>
+<p>
+This parameter allows you to specify the compression codec for all data generated by this producer. Valid values are "none", "gzip" and "snappy".
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-3-9" class="outline-4">
+<h4 id="sec-3-3-9">compressed.topics</h4>
+<div class="outline-text-4" id="text-3-3-9">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">null</td>
+</tr>
+</tbody>
+</table>
+<p>
+This parameter allows you to set whether compression should be turned on for particular topics. If the compression codec is anything other than NoCompressionCodec, enable compression only for specified topics if any. If the list of compressed topics is empty, then enable the specified compression codec for all topics. If the compression codec is NoCompressionCodec, compression is disabled for all topics
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-3-10" class="outline-4">
+<h4 id="sec-3-3-10">message.send.max.retries</h4>
+<div class="outline-text-4" id="text-3-3-10">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">3</td>
+</tr>
+</tbody>
+</table>
+<p>
+This property will cause the producer to automatically retry a failed send request. This property specifies the number of retries when such failures occur. Note that setting a non-zero value here can lead to duplicates in the case of network errors that cause a message to be sent but the acknowledgement to be lost.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-3-11" class="outline-4">
+<h4 id="sec-3-3-11">retry.backoff.ms</h4>
+<div class="outline-text-4" id="text-3-3-11">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">100</td>
+</tr>
+</tbody>
+</table>
+<p>
+Before each retry, the producer refreshes the metadata of relevant topics to see if a new leader has been elected. Since leader election takes a bit of time, this property specifies the amount of time that the producer waits before refreshing the metadata.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-3-12" class="outline-4">
+<h4 id="sec-3-3-12">topic.metadata.refresh.interval.ms</h4>
+<div class="outline-text-4" id="text-3-3-12">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">600 * 1000</td>
+</tr>
+</tbody>
+</table>
+<p>
+The producer generally refreshes the topic metadata from brokers when there is a failure (partition missing, leader not available&#x2026;). It will also poll regularly (default: every 10min so 600000ms). If you set this to a negative value, metadata will only get refreshed on failure. If you set this to zero, the metadata will get refreshed after each message sent (not recommended). Important note: the refresh happen only AFTER the message is sent, so if the producer never sends a message the metadata is never refreshed
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-3-13" class="outline-4">
+<h4 id="sec-3-3-13">queue.buffering.max.ms</h4>
+<div class="outline-text-4" id="text-3-3-13">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">5000</td>
+</tr>
+</tbody>
+</table>
+<p>
+Maximum time to buffer data when using async mode. For example a setting of 100 will try to batch together 100ms of messages to send at once. This will improve throughput but adds message delivery latency due to the buffering.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-3-14" class="outline-4">
+<h4 id="sec-3-3-14">queue.buffering.max.messages</h4>
+<div class="outline-text-4" id="text-3-3-14">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">10000</td>
+</tr>
+</tbody>
+</table>
+<p>
+The maximum number of unsent messages that can be queued up the producer when using async mode before either the producer must be blocked or data must be dropped.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-3-15" class="outline-4">
+<h4 id="sec-3-3-15">queue.enqueue.timeout.ms</h4>
+<div class="outline-text-4" id="text-3-3-15">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">-1</td>
+</tr>
+</tbody>
+</table>
+<p>
+The amount of time to block before dropping messages when running in async mode and the buffer has reached queue.buffering.max.messages. If set to 0 events will be enqueued immediately or dropped if the queue is full (the producer send call will never block). If set to -1 the producer will block indefinitely and never willingly drop a send.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-3-16" class="outline-4">
+<h4 id="sec-3-3-16">batch.num.messages</h4>
+<div class="outline-text-4" id="text-3-3-16">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="right">200</td>
+</tr>
+</tbody>
+</table>
+<p>
+The number of messages to send in one batch when using async mode. The producer will wait until either this number of messages are ready to send or queue.buffer.max.ms is reached.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-3-17" class="outline-4">
+<h4 id="sec-3-3-17">send.buffer.bytes</h4>
+<div class="outline-text-4" id="text-3-3-17">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">100 * 1024</td>
+</tr>
+</tbody>
+</table>
+<p>
+Socket write buffer size
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-3-18" class="outline-4">
+<h4 id="sec-3-3-18">client.id</h4>
+<div class="outline-text-4" id="text-3-3-18">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Default</td>
+<td class="left">""</td>
+</tr>
+</tbody>
+</table>
+<p>
+The client id is a user-specified string sent in each request to help trace calls. It should logically identify the application making the request.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-3-4" class="outline-3">
+<h3 id="sec-3-4"><span class="section-number-3">3.4</span> New Producer Configs</h3>
+<div class="outline-text-3" id="text-3-4">
+<p>
+We are working on a replacement for our existing producer. The code is available in trunk now and can be considered beta quality. Below is the configuration for the new producer. 
+</p>
+</div>
+
+<div id="outline-container-sec-3-4-1" class="outline-4">
+<h4 id="sec-3-4-1">bootstrap.servers</h4>
+<div class="outline-text-4" id="text-3-4-1">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Type</td>
+<td class="left">list</td>
+</tr>
+
+<tr>
+<td class="left">Default</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">Importance</td>
+<td class="left">high</td>
+</tr>
+</tbody>
+</table>
+<p>
+A list of host/port pairs to use for establishing the initial connection to the Kafka cluster. Data will be load balanced over all servers irrespective of which servers are specified here for bootstrapping—this list only impacts the initial hosts used to discover the full set of servers. This list should be in the form <code>host1:port1,host2:port2</code>,&#x2026;. Since these servers are just used for the initial connection to discover the full cluster membership (which may change dynamically), this list need not contain the full set of servers (you may want more than one, though, in case a server is down). If no server in this list is available sending data will fail until on becomes available.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-4-2" class="outline-4">
+<h4 id="sec-3-4-2">acks</h4>
+<div class="outline-text-4" id="text-3-4-2">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Type</td>
+<td class="left">string</td>
+</tr>
+
+<tr>
+<td class="left">Default</td>
+<td class="left">1</td>
+</tr>
+
+<tr>
+<td class="left">Importance</td>
+<td class="left">high</td>
+</tr>
+</tbody>
+</table>
+<p>
+The number of acknowledgments the producer requires the leader to have received before considering a request complete. This controls the durability of records that are sent. The following settings are common:
+</p>
+
+<ul class="org-ul">
+<li><code>acks=0</code> If set to zero then the producer will not wait for any acknowledgment from the server at all. The record will be immediately added to the socket buffer and considered sent. No guarantee can be made that the server has received the record in this case, and the <code>retries</code> configuration will not take effect (as the client won't generally know of any failures). The offset given back for each record will always be set to -1.
+</li>
+<li><code>acks=1</code> This will mean the leader will write the record to its local log but will respond without awaiting full acknowledgement from all followers. In this case should the leader fail immediately after acknowledging the record but before the followers have replicated it then the record will be lost.
+</li>
+<li><code>acks=all</code> This means the leader will wait for the full set of in-sync replicas to acknowledge the record. This guarantees that the record will not be lost as long as at least one in-sync replica remains alive. This is the strongest available guarantee.
+</li>
+<li>Other settings such as <code>acks=2</code> are also possible, and will require the given number of acknowledgements but this is generally less useful.
+</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-sec-3-4-3" class="outline-4">
+<h4 id="sec-3-4-3">buffer.memory</h4>
+<div class="outline-text-4" id="text-3-4-3">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Type</td>
+<td class="left">long</td>
+</tr>
+
+<tr>
+<td class="left">Default</td>
+<td class="left">33554432</td>
+</tr>
+
+<tr>
+<td class="left">Importance</td>
+<td class="left">high</td>
+</tr>
+</tbody>
+</table>
+<p>
+The total bytes of memory the producer can use to buffer records waiting to be sent to the server. If records are sent faster than they can be delivered to the server the producer will either block or throw an exception based on the preference specified by <code>block.on.buffer.full</code>.
+</p>
+
+<p>
+This setting should correspond roughly to the total memory the producer will use, but is not a hard bound since not all memory the producer uses is used for buffering. Some additional memory will be used for compression (if compression is enabled) as well as for maintaining in-flight requests.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-4-4" class="outline-4">
+<h4 id="sec-3-4-4">compression.type</h4>
+<div class="outline-text-4" id="text-3-4-4">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Type</td>
+<td class="left">string</td>
+</tr>
+
+<tr>
+<td class="left">Default</td>
+<td class="left">none</td>
+</tr>
+
+<tr>
+<td class="left">Importance</td>
+<td class="left">high</td>
+</tr>
+</tbody>
+</table>
+<p>
+The compression type for all data generated by the producer. The default is none (i.e. no compression). Valid values are <code>none</code>, <code>gzip</code>, or <code>snappy</code>. Compression is of full batches of data, so the efficacy of batching will also impact the compression ratio (more batching means better compression).
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-4-5" class="outline-4">
+<h4 id="sec-3-4-5">retries</h4>
+<div class="outline-text-4" id="text-3-4-5">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Type</td>
+<td class="left">int</td>
+</tr>
+
+<tr>
+<td class="left">Default</td>
+<td class="left">0</td>
+</tr>
+
+<tr>
+<td class="left">Importance</td>
+<td class="left">high</td>
+</tr>
+</tbody>
+</table>
+<p>
+Setting a value greater than zero will cause the client to resend any record whose send fails with a potentially transient error. Note that this retry is no different than if the client resent the record upon receiving the error. Allowing retries will potentially change the ordering of records because if two records are sent to a single partition, and the first fails and is retried but the second succeeds, then the second record may appear first.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-4-6" class="outline-4">
+<h4 id="sec-3-4-6">batch.size</h4>
+<div class="outline-text-4" id="text-3-4-6">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Type</td>
+<td class="left">int</td>
+</tr>
+
+<tr>
+<td class="left">Default</td>
+<td class="left">16384</td>
+</tr>
+
+<tr>
+<td class="left">Importance</td>
+<td class="left">medium</td>
+</tr>
+</tbody>
+</table>
+<p>
+The producer will attempt to batch records together into fewer requests whenever multiple records are being sent to the same partition. This helps performance on both the client and the server. This configuration controls the default batch size in bytes.
+</p>
+
+<p>
+No attempt will be made to batch records larger than this size.
+</p>
+
+<p>
+Requests sent to brokers will contain multiple batches, one for each partition with data available to be sent.
+</p>
+
+<p>
+A small batch size will make batching less common and may reduce throughput (a batch size of zero will disable batching entirely). A very large batch size may use memory a bit more wastefully as we will always allocate a buffer of the specified batch size in anticipation of additional records.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3-4-7" class="outline-4">
+<h4 id="sec-3-4-7">client.id</h4>
+<div class="outline-text-4" id="text-3-4-7">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Type</td>
+<td class="left">string</td>
+</tr>
+
+<tr>
+<td class="left">Default</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">Importance</td>
+<td class="left">medium</td>
+</tr>
+</tbody>
+</table>
+<p>
+The id string to pass to the server when making requests. The purpose of this is to be able to track the source of requests beyond just ip/port by allowing a logical application name to be included with the request. The application can set any string it wants as this has no functional purpose other than in logging and metrics.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-4-8" class="outline-4">
+<h4 id="sec-3-4-8">linger.ms</h4>
+<div class="outline-text-4" id="text-3-4-8">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Type</td>
+<td class="left">long</td>
+</tr>
+
+<tr>
+<td class="left">Default</td>
+<td class="left">0</td>
+</tr>
+
+<tr>
+<td class="left">Importance</td>
+<td class="left">medium</td>
+</tr>
+</tbody>
+</table>
+<p>
+The producer groups together any records that arrive in between request transmissions into a single batched request. Normally this occurs only under load when records arrive faster than they can be sent out. However in some circumstances the client may want to reduce the number of requests even under moderate load. This setting accomplishes this by adding a small amount of artificial delay—that is, rather than immediately sending out a record the producer will wait for up to the given delay to allow other records to be sent so that the sends can be batched together. This can be thought of as analogous to Nagle's algorithm in TCP. This setting gives the upper bound on the delay for batching: once we get <code>batch.size</code> worth of records for a partition it will be sent immediately regardless of this setting, however if we have fewer than this many bytes accumulated for this partition we will 'linger' for the specified time waiting for more records to show up. This setting defaults to 0 (i.e. no delay). Setting <code>linger.ms=5</code>, for example, would have the effect of reducing the number of requests sent but would add up to 5ms of latency to records sent in the absense of load.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-4-9" class="outline-4">
+<h4 id="sec-3-4-9">max.request.size</h4>
+<div class="outline-text-4" id="text-3-4-9">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Type</td>
+<td class="left">int</td>
+</tr>
+
+<tr>
+<td class="left">Default</td>
+<td class="left">1048576</td>
+</tr>
+
+<tr>
+<td class="left">Importance</td>
+<td class="left">medium</td>
+</tr>
+</tbody>
+</table>
+<p>
+The maximum size of a request. This is also effectively a cap on the maximum record size. Note that the server has its own cap on record size which may be different from this. This setting will limit the number of record batches the producer will send in a single request to avoid sending huge requests.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-4-10" class="outline-4">
+<h4 id="sec-3-4-10">receive.buffer.bytes</h4>
+<div class="outline-text-4" id="text-3-4-10">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Type</td>
+<td class="left">int</td>
+</tr>
+
+<tr>
+<td class="left">Default</td>
+<td class="left">32768</td>
+</tr>
+
+<tr>
+<td class="left">Importance</td>
+<td class="left">medium</td>
+</tr>
+</tbody>
+</table>
+<p>
+The size of the TCP receive buffer to use when reading data
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-4-11" class="outline-4">
+<h4 id="sec-3-4-11">send.buffer.bytes</h4>
+<div class="outline-text-4" id="text-3-4-11">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Type</td>
+<td class="left">int</td>
+</tr>
+
+<tr>
+<td class="left">Default</td>
+<td class="left">131072</td>
+</tr>
+
+<tr>
+<td class="left">Importance</td>
+<td class="left">medium</td>
+</tr>
+</tbody>
+</table>
+<p>
+The size of the TCP send buffer to use when sending data
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-4-12" class="outline-4">
+<h4 id="sec-3-4-12">timeout.ms</h4>
+<div class="outline-text-4" id="text-3-4-12">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Type</td>
+<td class="left">int</td>
+</tr>
+
+<tr>
+<td class="left">Default</td>
+<td class="left">30000</td>
+</tr>
+
+<tr>
+<td class="left">Importance</td>
+<td class="left">medium</td>
+</tr>
+</tbody>
+</table>
+<p>
+The configuration controls the maximum amount of time the server will wait for acknowledgments from followers to meet the acknowledgment requirements the producer has specified with the <code>acks</code> configuration. If the requested number of acknowledgments are not met when the timeout elapses an error will be returned. This timeout is measured on the server side and does not include the network latency of the request.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-4-13" class="outline-4">
+<h4 id="sec-3-4-13">block.on.buffer.full</h4>
+<div class="outline-text-4" id="text-3-4-13">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Type</td>
+<td class="left">boolean</td>
+</tr>
+
+<tr>
+<td class="left">Default</td>
+<td class="left">true</td>
+</tr>
+
+<tr>
+<td class="left">Importance</td>
+<td class="left">low</td>
+</tr>
+</tbody>
+</table>
+<p>
+When our memory buffer is exhausted we must either stop accepting new records (block) or throw errors. By default this setting is true and we block, however in some scenarios blocking is not desirable and it is better to immediately give an error. Setting this to <code>false</code> will accomplish that: the producer will throw a BufferExhaustedException if a recrord is sent and the buffer space is full.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-4-14" class="outline-4">
+<h4 id="sec-3-4-14">metadata.fetch.timeout.ms</h4>
+<div class="outline-text-4" id="text-3-4-14">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Type</td>
+<td class="left">long</td>
+</tr>
+
+<tr>
+<td class="left">Default</td>
+<td class="left">60000</td>
+</tr>
+
+<tr>
+<td class="left">Importance</td>
+<td class="left">low</td>
+</tr>
+</tbody>
+</table>
+<p>
+The first time data is sent to a topic we must fetch metadata about that topic to know which servers host the topic's partitions. This configuration controls the maximum amount of time we will block waiting for the metadata fetch to succeed before throwing an exception back to the client.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-4-15" class="outline-4">
+<h4 id="sec-3-4-15">metadata.max.age.ms</h4>
+<div class="outline-text-4" id="text-3-4-15">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Type</td>
+<td class="left">long</td>
+</tr>
+
+<tr>
+<td class="left">Default</td>
+<td class="left">300000</td>
+</tr>
+
+<tr>
+<td class="left">Importance</td>
+<td class="left">low</td>
+</tr>
+</tbody>
+</table>
+<p>
+The period of time in milliseconds after which we force a refresh of metadata even if we haven't seen any partition leadership changes to proactively discover any new brokers or partitions.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-4-16" class="outline-4">
+<h4 id="sec-3-4-16">metric.reporters</h4>
+<div class="outline-text-4" id="text-3-4-16">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Type</td>
+<td class="left">list</td>
+</tr>
+
+<tr>
+<td class="left">Default</td>
+<td class="left">[]</td>
+</tr>
+
+<tr>
+<td class="left">Importance</td>
+<td class="left">low</td>
+</tr>
+</tbody>
+</table>
+<p>
+A list of classes to use as metrics reporters. Implementing the <code>MetricReporter</code> interface allows plugging in classes that will be notified of new metric creation. The JmxReporter is always included to register JMX statistics.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-4-17" class="outline-4">
+<h4 id="sec-3-4-17">metrics.num.samples</h4>
+<div class="outline-text-4" id="text-3-4-17">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Type</td>
+<td class="left">int</td>
+</tr>
+
+<tr>
+<td class="left">Default</td>
+<td class="left">2</td>
+</tr>
+
+<tr>
+<td class="left">Importance</td>
+<td class="left">low</td>
+</tr>
+</tbody>
+</table>
+<p>
+The number of samples maintained to compute metrics.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-4-18" class="outline-4">
+<h4 id="sec-3-4-18">metrics.sample.window.ms</h4>
+<div class="outline-text-4" id="text-3-4-18">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Type</td>
+<td class="left">long</td>
+</tr>
+
+<tr>
+<td class="left">Default</td>
+<td class="left">30000</td>
+</tr>
+
+<tr>
+<td class="left">Importance</td>
+<td class="left">low</td>
+</tr>
+</tbody>
+</table>
+<p>
+The metrics system maintains a configurable number of samples over a fixed window size. This configuration controls the size of the window. For example we might maintain two samples each measured over a 30 second period. When a window expires we erase and overwrite the oldest window.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-4-19" class="outline-4">
+<h4 id="sec-3-4-19">reconnect.backoff.ms</h4>
+<div class="outline-text-4" id="text-3-4-19">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Type</td>
+<td class="left">long</td>
+</tr>
+
+<tr>
+<td class="left">Default</td>
+<td class="left">10</td>
+</tr>
+
+<tr>
+<td class="left">Importance</td>
+<td class="left">low</td>
+</tr>
+</tbody>
+</table>
+<p>
+The amount of time to wait before attempting to reconnect to a given host when a connection fails. This avoids a scenario where the client repeatedly attempts to connect to a host in a tight loop.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-4-20" class="outline-4">
+<h4 id="sec-3-4-20">retry.backoff.ms</h4>
+<div class="outline-text-4" id="text-3-4-20">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">Type</td>
+<td class="left">long</td>
+</tr>
+
+<tr>
+<td class="left">Default</td>
+<td class="left">100</td>
+</tr>
+
+<tr>
+<td class="left">Importance</td>
+<td class="left">low</td>
+</tr>
+</tbody>
+</table>
+<p>
+The amount of time to wait before attempting to retry a failed produce request to a given topic partition. This avoids repeated sending-and-failing in a tight loop.
+</p>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: yewton</p>
-<p class="date">Created: 2015-05-15 金 21:29</p>
+<p class="date">Created: 2015-05-15 金 23:03</p>
 <p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.4.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>

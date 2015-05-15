@@ -1,0 +1,29 @@
+Kafka uses key-value pairs in the [[http://en.wikipedia.org/wiki/.properties][property file format]] for configuration. These values can be supplied either from a file or programmatically.
+
+* Broker Configs
+The essential configurations are the following:
+
+- =broker.id=
+- =log.dirs=
+- =zookeeper.connect=
+
+
+** Top-level configuration
+#+INCLUDE: "3_Configuration_Broker_Configs_Top_level.org"
+
+** Topic-level configuration
+:PROPERTIES:
+:CUSTOM_ID: topic-config
+:END:
+
+#+INCLUDE: "3_Configuration_Broker_Configs_Topic_level.org"
+
+* Consumer Configs
+#+INCLUDE: "3_Configuration_Consumer_Configs.org"
+
+* Producer Configs
+#+INCLUDE: "3_Configuration_Producer_Configs.org"
+
+* New Producer Configs
+#+INCLUDE: "3_Configuration_New_Producer_Configs.org"
+

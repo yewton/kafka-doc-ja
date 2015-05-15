@@ -1,8 +1,6 @@
-#+BIND: org-html-htmlize-output-type css
-
 We are in the process of rewritting the JVM clients for Kafka. As of 0.8.2 Kafka includes a newly rewritten Java producer. The next release will include an equivalent Java consumer. These new clients are meant to supplant the existing Scala clients, but for compatability they will co-exist for some time. These clients are available in a seperate jar with minimal dependencies, while the old Scala clients remain packaged with the server.
 
-** Producer API
+* Producer API
 As of the 0.8.2 release we encourage all new development to use the new Java producer. This client is production tested and generally both faster and more fully featured than the previous Scala client. You can use this client by adding a dependency on the client jar using the following maven co-ordinates:
 
 #+BEGIN_SRC xml
@@ -17,7 +15,7 @@ Examples showing how to use the producer are given in the [[http://kafka.apache.
 
 For those interested in the legacy Scala producer api, information can be found [[http://kafka.apache.org/081/documentation.html#producerapi][here]].
 
-** High Level Consumer API
+* High Level Consumer API
 
 #+BEGIN_SRC java
 class Consumer {
@@ -90,7 +88,7 @@ public interface kafka.javaapi.consumer.ConsumerConnector {
 
 You can follow [[https://cwiki.apache.org/confluence/display/KAFKA/Consumer+Group+Example][this example]] to learn how to use the high level consumer api.
 
-** Simple Consumer API
+* Simple Consumer API
 
 #+BEGIN_SRC java
 class kafka.javaapi.consumer.SimpleConsumer {
@@ -127,7 +125,7 @@ class kafka.javaapi.consumer.SimpleConsumer {
 
 For most applications, the high level consumer Api is good enough. Some applications want features not exposed to the high level consumer yet (e.g., set initial offset when restarting the consumer). They can instead use our low level SimpleConsumer Api. The logic will be a bit more complicated and you can follow the example in [[https://cwiki.apache.org/confluence/display/KAFKA/0.8.0%2BSimpleConsumer%2BExample][here]].
 
-** Kafka Hadoop Consumer API
+* Kafka Hadoop Consumer API
 
 Providing a horizontally scalable solution for aggregating and loading data into Hadoop was one of our basic use cases. To support this use case, we provide a Hadoop-based consumer which spawns off many map tasks to pull data from the Kafka cluster in parallel. This provides extremely fast pull-based Hadoop data load capabilities (we were able to fully saturate the network with only a handful of Kafka servers).
 

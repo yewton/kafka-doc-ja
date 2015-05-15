@@ -1,6 +1,6 @@
 #+STARTUP: content
 
-** 導入
+* 導入
 
 Kafka は分散し、分割され、複製されるコミットログサービスです。
 メッセージングシステムの機能を提供しますが、その設計は独特なものです。
@@ -22,7 +22,7 @@ Kafka は分散し、分割され、複製されるコミットログサービ�
 クライアントとサーバ間の通信はシンプルかつ高性能で、言語に依存しない [[https://cwiki.apache.org/confluence/display/KAFKA/A+Guide+To+The+Kafka+Protocol][TCP protocol]] で行なわれます。
 提供されるのは Java の Kafka クライアントですが、 [[https://cwiki.apache.org/confluence/display/KAFKA/Clients][多くの言語で]] 利用することが出来ます。
 
-*** トピックとログ
+** トピックとログ
 
 まず最初に、 Kafka が提供する高レベルな抽象概念である「トピック」について見ていきましょう。
 
@@ -59,7 +59,7 @@ Kafkaの性能はデータサイズに関しては実質定数のため、大量
 トピックは複数のパーティションに分割されるため、トピックのデータ量は無制限です。
 第二に、パーティションは並行処理の単位としても利用されます————詳細は後述します。
 
-*** 分散
+** 分散
 
 ログのパーティションは Kafka クラスタ内のサーバ上で分散して保持されており、
 各サーバはパーティションを共有するためのデータとリクエストを処理します。
@@ -73,7 +73,7 @@ Kafkaの性能はデータサイズに関しては実質定数のため、大量
 各サーバはクラスタ内の負荷が均等になるように、自身のパーティションのうちいくつかのリーダとなり、
 その他のパーティションのフォロワともなります。
 
-*** プロデューサ
+** プロデューサ
 
 プロデューサは自身の選択したトピックに対してデータを発行します。
 プロデューサはどのメッセージをトピック内のどのパーティションに割り当てるかを選択する責務があります。
@@ -81,7 +81,7 @@ Kafkaの性能はデータサイズに関しては実質定数のため、大量
 何らかの意味的な分割関数を利用することも出来ます(例えばメッセージの特定のキーを元に分割するなど)。
 パーティションの利用に関する詳細は後述します。
 
-*** コンシューマ
+** コンシューマ
 
 伝統的なメッセージングのモデルは [[http://en.wikipedia.org/wiki/Message_queue][キューイング]] と [[http://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern][出版・購読型]] の二つです。
 キューを用いる方法では、コンシューマプールがひとつのサーバからメッセージを取得することができ、
@@ -136,7 +136,7 @@ Kafka はトピック内のパーティションの /中の/ メッセージ順�
 もし、全メッセージの順序が必要な場合は、パーティションひとつだけからなるトピックを使うことで実現出来ますが、
 この場合コンシューマプロセスもただ一つのみになります。
 
-*** 保証
+** 保証
 
 高レベルな視点では Kafka は以下の保証を提供します:
 
@@ -149,12 +149,12 @@ Kafka はトピック内のパーティションの /中の/ メッセージ順�
 
 これらの保証のより詳細については、本ドキュメントの設計セクションで述べられています。
 
-** ユースケース
+* ユースケース
 
 Apache Kafka のユースケースをいくつか紹介します。
 これらの分野についての数多くの取り組みの概要が [[http://engineering.linkedin.com/distributed-systems/log-what-every-software-engineer-should-know-about-real-time-datas-unifying][このブログ記事]] にまとめられています。
 
-*** メッセージング
+** メッセージング
 
 Kafka は伝統的なメッセージブローカの代替として使うことが出来ます。
 メッセージブローカを利用する理由は様々です————
@@ -168,7 +168,7 @@ Kafka はより良いスループット、組込みのパーティショニン�
 
 このドメインでは、 [[http://activemq.apache.org/][ActiveMQ]] や [[http://activemq.apache.org/][ActiveMQ]] のような伝統的なメッセージングシステムと Kafka を比較することが出来ます。
 
-*** Web サイトのアクティビティトラッキング
+** Web サイトのアクティビティトラッキング
 
 ユーザ動向追跡パイプラインを、リアルタイムな Pub-Sub フィードの集合として再構築する、というのが Kafka の元々のユースケースでした。
 つまり、サイトアクティビティ(ページビュー、検索等のユーザが取り得る行動)はアクティビティの種別毎にトピック分けされて、
@@ -180,12 +180,12 @@ Kafka はより良いスループット、組込みのパーティショニン�
 アクティビティトラッキングは各ユーザのページビューごとに大量のアクティビティメッセージが生成されるため、
 しばしば超大容量のログを扱うことになります。
 
-*** メトリクス
+** メトリクス
 
 Kafka は運用監視データとしても使われることがあります。
 この場合は、運用データの中央フィードを生成するため、分散したアプリケーションの統計を集約するのに用いられます。
 
-*** ログ集約
+** ログ集約
 
 ログ集約ソリューションの代替として Kafka を利用する場合も多いです。
 典型的なログ集約では、物理ログファイルをサーバから収集し、
@@ -198,7 +198,7 @@ Kafka や同等のパフォーマンスと、複製によるより強い堅牢�
 及びエンドツーエンドのより低いレイテンシを提供します。
 
 
-*** ストリーム処理
+** ストリーム処理
 
 多くのユーザは段階的なデータ処理をすることになります。
 データは生データのトピックからコンシュームされ、集約され、肉付けされ、
@@ -210,25 +210,25 @@ Kafka や同等のパフォーマンスと、複製によるより強い堅牢�
 このような処理のフローは、個々のトピックから始まるリアルタイムデータフローのグラフを形成します。
 [[https://storm.apache.org/][Storm]] や [[http://samza.apache.org/][Samza]] はこのような類の変換を行なうための有名なフレームワークです。
 
-*** イベントソーシング
+** イベントソーシング
 
 [[http://martinfowler.com/eaaDev/EventSourcing.html][イベントソーシング]] はアプリケーション設計手法のひとつで、
 状態の変更が時系列順のレコード列として記録されるというものです。
 Kafka は超巨大なログデータを扱えるため、
 この手法で構築されたアプリケーションの優れたバックエンドとして利用することが出来ます。
 
-*** コミットログ
+** コミットログ
 
 Kafka を分散システムのための外部コミットログとして使うこともできます。
 ノード間でデータを複製したり、障害ノードの復旧のための再同期機構として、このログを利用することが出来ます。
 Kafka の [[http://kafka.apache.org/documentation.html#compaction][ログコンパクション]] 機能もこの用途に適しています。
 この用途では、Kafka と [[http://zookeeper.apache.org/bookkeeper/][Apache BookKeeper]] プロジェクトは似ています。
 
-** クイックスタート
+* クイックスタート
 
 このチュートリアルは、まっさらな環境で、KafkaやZooKeeperが一切稼動していない前提で進めます。
 
-*** ステップ 1: コードのダウンロード
+** ステップ 1: コードのダウンロード
 
 0.8.2.0 リリースを [[https://www.apache.org/dyn/closer.cgi?path%3D/kafka/0.8.2.0/kafka_2.10-0.8.2.0.tgz][ダウンロード]] して、解凍しましょう。
 
@@ -237,7 +237,7 @@ Kafka の [[http://kafka.apache.org/documentation.html#compaction][ログコン�
 > cd kafka_2.10-0.8.2.0
 #+END_SRC
 
-*** ステップ 2: サーバの起動
+** ステップ 2: サーバの起動
 
 Kafka は ZooKeeper を使うため、まずは ZooKeeper サーバを起動する必要があります。
 既に起動している ZooKeeper サーバがある場合は、新たに起動する必要はありません。
@@ -259,7 +259,7 @@ Kafka は ZooKeeper を使うため、まずは ZooKeeper サーバを起動す�
 ...
 #+END_SRC
 
-*** ステップ 3: トピックの作成
+** ステップ 3: トピックの作成
 
 今度は「test」という名前の、単一パーティションで、複製を作らないトピックを作成してみましょう:
 
@@ -276,7 +276,7 @@ test
 
 また、手動でトピックを作成するのではなく、存在しないトピックへパブリッシュされた場合に自動で作成するようにブローカを設定することもできます。
 
-*** ステップ 4: メッセージを送ってみる
+** ステップ 4: メッセージを送ってみる
 
 Kafka にはファイルか標準入力から Kafka クラスタにメッセージを送信出来るコマンドラインのクライアントが同梱されています。
 デフォルトでは、各行がそれぞれ異なるメッセージとして送信されます。
@@ -294,7 +294,7 @@ Kafka にはファイルか標準入力から Kafka クラスタにメッセー�
 (訳注) 警告は無視してよさそうです。 [[https://issues.apache.org/jira/browse/KAFKA-1711][0.8.3で修正される見込みのようです]] 。
 
 
-*** ステップ 5: コンシューマを起動する
+** ステップ 5: コンシューマを起動する
 
 Kafka にはメッセージを標準出力にダンプするコマンドラインのコンシューマも付属しています。
 
@@ -311,7 +311,7 @@ Kafka にはメッセージを標準出力にダンプするコマンドライ�
 全てのコマンドラインツールには追加のオプションがあります。
 引数なしでコマンドを実行すると、より詳細が参照出来る使い方のドキュメントが出力されます。
 
-*** ステップ 6: マルチブローカクラスタを立ち上げる
+** ステップ 6: マルチブローカクラスタを立ち上げる
 
 ここまでは、単一のブローカ上で動作させて決ましたが、これではあまり面白くないですね。
 単一のブローカというのは Kafka にとってはサイズ1のクラスタに過ぎないので、
@@ -437,18 +437,18 @@ my test message 2
 ^C
 #+END_SRC
 
-** Ecosystem
+* Ecosystem
 There are a plethora of tools that integrate with Kafka outside the main distribution. The [[https://cwiki.apache.org/confluence/display/KAFKA/Ecosystem][ecosystem page]] lists many of these, including stream processing systems, Hadoop integration, monitoring, and deployment tools.
 
-** Upgrading From Previous Versions
+* Upgrading From Previous Versions
 
-*** Upgrading from 0.8.1 to 0.8.2.0
+** Upgrading from 0.8.1 to 0.8.2.0
 0.8.2.0 is fully compatible with 0.8.1. The upgrade can be done one broker at a time by simply bringing it down, updating the code, and restarting it.
 
-*** Upgrading from 0.8.0 to 0.8.1
+** Upgrading from 0.8.0 to 0.8.1
 0.8.1 is fully compatible with 0.8. The upgrade can be done one broker at a time by simply bringing it down, updating the code, and restarting it.
 
-*** Upgrading from 0.7
+** Upgrading from 0.7
 0.8, the release in which added replication, was our first backwards-incompatible release: major changes were made to the API, ZooKeeper data structures, and protocol, and configuration. The upgrade from 0.7 to 0.8.x requires a [[https://cwiki.apache.org/confluence/display/KAFKA/Migrating+from+0.7+to+0.8][special tool]] for migration. This migration can be done without downtime.
 
 # Local Variables:
