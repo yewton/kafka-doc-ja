@@ -1,0 +1,7 @@
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="../org-html-themes/styles/readtheorg/css/htmlize.css"/>
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="../org-html-themes/styles/readtheorg/css/readtheorg.css"/>
+
+#+HTML_HEAD: <script src="js/jquery.min.js"></script>
+#+HTML_HEAD: <script src="js/bootstrap.min.js"></script>
+#+HTML_HEAD: <script type="text/javascript" src="../org-html-themes/styles/lib/js/jquery.stickytableheaders.min.js"></script>
+#+HTML_HEAD: <script type="text/javascript" src="../org-html-themes/styles/readtheorg/js/readtheorg.js"></script>
