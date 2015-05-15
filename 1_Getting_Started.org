@@ -1,4 +1,5 @@
-* はじめよう
+#+STARTUP: content
+
 ** 導入
 
 Kafka は分散し、分割され、複製されるコミットログサービスです。
@@ -222,3 +223,234 @@ Kafka を分散システムのための外部コミットログとして使う�
 ノード間でデータを複製したり、障害ノードの復旧のための再同期機構として、このログを利用することが出来ます。
 Kafka の [[http://kafka.apache.org/documentation.html#compaction][ログコンパクション]] 機能もこの用途に適しています。
 この用途では、Kafka と [[http://zookeeper.apache.org/bookkeeper/][Apache BookKeeper]] プロジェクトは似ています。
+
+** クイックスタート
+
+このチュートリアルは、まっさらな環境で、KafkaやZooKeeperが一切稼動していない前提で進めます。
+
+*** ステップ 1: コードのダウンロード
+
+0.8.2.0 リリースを [[https://www.apache.org/dyn/closer.cgi?path%3D/kafka/0.8.2.0/kafka_2.10-0.8.2.0.tgz][ダウンロード]] して、解凍しましょう。
+
+#+BEGIN_SRC
+> tar -xzf kafka_2.10-0.8.2.0.tgz
+> cd kafka_2.10-0.8.2.0
+#+END_SRC
+
+*** ステップ 2: サーバの起動
+
+Kafka は ZooKeeper を使うため、まずは ZooKeeper サーバを起動する必要があります。
+既に起動している ZooKeeper サーバがある場合は、新たに起動する必要はありません。
+新たに起動する場合は、 Kafka に同梱されている便利スクリプトを使ってください。
+このスクリプトは、単一ノードを手早く作るための適当なものです。
+
+#+BEGIN_SRC
+> bin/zookeeper-server-start.sh config/zookeeper.properties
+[2013-04-22 15:01:37,495] INFO Reading configuration from: config/zookeeper.properties (org.apache.zookeeper.server.quorum.QuorumPeerConfig)
+...
+#+END_SRC
+
+では、 Kafka サーバを起動しましょう:
+
+#+BEGIN_SRC
+> bin/kafka-server-start.sh config/server.properties
+[2013-04-22 15:01:47,028] INFO Verifying properties (kafka.utils.VerifiableProperties)
+[2013-04-22 15:01:47,051] INFO Property socket.send.buffer.bytes is overridden to 1048576 (kafka.utils.VerifiableProperties)
+...
+#+END_SRC
+
+*** ステップ 3: トピックの作成
+
+今度は「test」という名前の、単一パーティションで、複製を作らないトピックを作成してみましょう:
+
+#+BEGIN_SRC
+> bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic test
+#+END_SRC
+
+list コマンドで、作成したトピックを参照できるようになるはずです:
+
+#+BEGIN_SRC
+> bin/kafka-topics.sh --list --zookeeper localhost:2181
+test
+#+END_SRC
+
+また、手動でトピックを作成するのではなく、存在しないトピックへパブリッシュされた場合に自動で作成するようにブローカを設定することもできます。
+
+*** ステップ 4: メッセージを送ってみる
+
+Kafka にはファイルか標準入力から Kafka クラスタにメッセージを送信出来るコマンドラインのクライアントが同梱されています。
+デフォルトでは、各行がそれぞれ異なるメッセージとして送信されます。
+
+プロデューサスクリプトを起動し、コンソールにメッセージを打ちこんでサーバに送信してみましょう。
+
+#+BEGIN_SRC
+> bin/kafka-console-producer.sh --broker-list localhost:9092 --topic test
+[2015-05-15 19:45:39,512] WARN Property topic is not valid (kafka.utils.VerifiableProperties)
+これはメッセージです
+これは別のメッセージです
+^D
+#+END_SRC
+
+(訳注) 警告は無視してよさそうです。 [[https://issues.apache.org/jira/browse/KAFKA-1711][0.8.3で修正される見込みのようです]] 。
+
+
+*** ステップ 5: コンシューマを起動する
+
+Kafka にはメッセージを標準出力にダンプするコマンドラインのコンシューマも付属しています。
+
+#+BEGIN_SRC
+> bin/kafka-console-consumer.sh --zookeeper localhost:2181 --topic test --from-beginning
+これはメッセージです
+これも別のメッセージです
+^CConsumed 2 messages
+#+END_SRC
+
+別々のターミナルで上記の両方のコマンドを実行すれば、プロデューサのターミナルでメッセージを打ち込むと、
+コンシューマのターミナルでそれを確認することが出来ます。
+
+全てのコマンドラインツールには追加のオプションがあります。
+引数なしでコマンドを実行すると、より詳細が参照出来る使い方のドキュメントが出力されます。
+
+*** ステップ 6: マルチブローカクラスタを立ち上げる
+
+ここまでは、単一のブローカ上で動作させて決ましたが、これではあまり面白くないですね。
+単一のブローカというのは Kafka にとってはサイズ1のクラスタに過ぎないので、
+複数のブローカインスタンスを起動することもそれほど違いはありません。
+ですが、感覚を掴む為に3ノードのクラスタに拡張してみましょう(とはいえ、まだ全てのノードは同じローカルマシン上です)。
+
+まず、各ブローカ用の設定ファイルを作ります:
+
+#+BEGIN_SRC
+> cp config/server.properties config/server-1.properties
+> cp config/server.properties config/server-2.properties
+#+END_SRC
+
+続いて、これらのファイルを編集して、以下のプロパティを設定します:
+
+#+BEGIN_SRC
+config/server-1.properties:
+    broker.id=1
+    port=9093
+    log.dirs=/tmp/kafka-logs-1
+#+END_SRC
+
+#+BEGIN_SRC
+config/server-2.properties:
+    broker.id=2
+    port=9094
+    log.dirs=/tmp/kafka-logs-2
+#+END_SRC
+
+=broker.id= は、各ノードのクラスタ内でユニークな、永続的な名前を表すプロパティです。
+ポート番号とログディレクトリだけは変更が必要です。
+いま、これらのブローカは全て同一のマシン上で稼動しているので、
+同じポート番号に登録しようとしたり、お互いのデータを上書きしあったりしてしまわないようにする必要があるためです。
+
+既に ZooKeeper と単一ノードは起動しているので、3ノードのクラスタにするには、新しく2つのノードを立ち上げるだけです:
+
+#+BEGIN_SRC
+> bin/kafka-server-start.sh config/server-1.properties > /dev/null 2>&1 &
+...
+> bin/kafka-server-start.sh config/server-2.properties > /dev/null 2>&1 &
+...
+#+END_SRC
+
+では、レプリケーションファクタ3のトピックを作成してみます:
+
+#+BEGIN_SRC
+> bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 3 --partitions 1 --topic my-replicated-topic
+#+END_SRC
+
+出来ました、が、クラスタ上のブローカの状態を見るにはどうすればよいのでしょう？
+その為には "describe topics" コマンドを実行します:
+
+#+BEGIN_SRC
+> bin/kafka-topics.sh --describe --zookeeper localhost:2181 --topic my-replicated-topic
+Topic:my-replicated-topic	PartitionCount:1	ReplicationFactor:3	Configs:
+	Topic: my-replicated-topic	Partition: 0	Leader: 1	Replicas: 1,2,0	Isr: 1,2,0
+#+END_SRC
+
+出力内容の説明をします。
+最初の行が全パーティションの要約で、続く各行がそれぞれ1パーティションの情報を表します。
+このトピックにはパーティションが一つしかないので、出力は1行しかありません。
+
+- =Leader= はそのパーティションの全読み書きの責務を負うノードです。各ノードは、ランダムに選択されたパーティションのリーダになり得ます
+- =Replicas= はこのパーティションのログを複製しているノードのリストです。リーダか否か、現在生存しているノードかどうかにはかかわらず表示されます
+- =Isr= は「同期中」の複製を表します。 =Replicas= のリストのうち、現在生存しており、リーダに追い付いているノードが表示されます
+
+この例では、ノード1はこのトピックの唯一のパーティションのリーダであることに着目してください。
+
+同じコマンドを最初に作ったトピックについて実行して、ブローカの状況を見てみましょう:
+
+#+BEGIN_SRC
+> bin/kafka-topics.sh --describe --zookeeper localhost:2181 --topic test
+Topic:test	PartitionCount:1	ReplicationFactor:1	Configs:
+	Topic: test	Partition: 0	Leader: 0	Replicas: 0	Isr: 0
+#+END_SRC
+
+特に変わったところはありません——このトピックは複製を一切持たず、元々クラスタを作成したときの唯一のノードである server 0 上にあります。
+
+さて、新しく作った方のトピックにいくつかメッセージをパブリッシュしてみましょう:
+
+#+BEGIN_SRC
+> bin/kafka-console-producer.sh --broker-list localhost:9092 --topic my-replicated-topic
+...
+my test message 1
+my test message 2
+^D
+#+END_SRC
+
+続いてこれらのメッセージをコンシュームします:
+
+#+BEGIN_SRC
+> bin/kafka-console-consumer.sh --zookeeper localhost:2181 --from-beginning --topic my-replicated-topic
+...
+my test message 1
+my test message 2
+^C
+#+END_SRC
+
+ここで、耐障害性のテストをしてみましょう。
+今はブローカ1がリーダなので、こいつを殺しましょう:
+
+#+BEGIN_SRC
+> ps | grep server-1.properties
+7564 ttys002    0:15.91 /System/Library/Frameworks/JavaVM.framework/Versions/1.6/Home/bin/java...
+> kill -9 7564
+#+END_SRC
+
+リーダシップがスレーブノードの1つに移され、ノード1は =Isr= から外れます:
+
+#+BEGIN_SRC
+> bin/kafka-topics.sh --describe --zookeeper localhost:2181 --topic my-replicated-topic
+Topic:my-replicated-topic	PartitionCount:1	ReplicationFactor:3	Configs:
+	Topic: my-replicated-topic	Partition: 0	Leader: 2	Replicas: 1,2,0	Isr: 2,0
+#+END_SRC
+
+元々の書き込みを引き受けたリーダがダウンしているにもかかわらず、なおメッセージはコンシューム可能です。
+
+#+BEGIN_SRC
+> bin/kafka-console-consumer.sh --zookeeper localhost:2181 --from-beginning --topic my-replicated-topic
+...
+my test message 1
+my test message 2
+^C
+#+END_SRC
+
+** Ecosystem
+There are a plethora of tools that integrate with Kafka outside the main distribution. The [[https://cwiki.apache.org/confluence/display/KAFKA/Ecosystem][ecosystem page]] lists many of these, including stream processing systems, Hadoop integration, monitoring, and deployment tools.
+
+** Upgrading From Previous Versions
+
+*** Upgrading from 0.8.1 to 0.8.2.0
+0.8.2.0 is fully compatible with 0.8.1. The upgrade can be done one broker at a time by simply bringing it down, updating the code, and restarting it.
+
+*** Upgrading from 0.8.0 to 0.8.1
+0.8.1 is fully compatible with 0.8. The upgrade can be done one broker at a time by simply bringing it down, updating the code, and restarting it.
+
+*** Upgrading from 0.7
+0.8, the release in which added replication, was our first backwards-incompatible release: major changes were made to the API, ZooKeeper data structures, and protocol, and configuration. The upgrade from 0.7 to 0.8.x requires a [[https://cwiki.apache.org/confluence/display/KAFKA/Migrating+from+0.7+to+0.8][special tool]] for migration. This migration can be done without downtime.
+
+# Local Variables:
+# org-export-allow-bind-keywords: t
+# End:

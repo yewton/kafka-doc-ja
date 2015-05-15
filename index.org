@@ -1,15 +1,20 @@
-#+OPTIONS: html-link-use-abs-url:nil html-postamble:auto html-preamble:t html-scripts:t
-#+OPTIONS: html-style:t html5-fancy:nil tex:t
-#+CREATOR: <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.4.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)
-#+HTML_CONTAINER: div
-#+HTML_DOCTYPE: xhtml-strict
-#+HTML_HEAD:
-#+HTML_HEAD_EXTRA:
-#+HTML_LINK_HOME:
-#+HTML_LINK_UP:
-#+HTML_MATHJAX:
-#+INFOJS_OPT:
-#+LATEX_HEADER:
 #+TITLE: Apache Kafka
+#+AUTHOR: yewton
+#+OPTIONS: num:2
+#+CREATOR: <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.4.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)
+#+SETUPFILE: setup.org
+#+HTML_HEAD: <link href="css/src-block-theme.css" rel="stylesheet">
+#+BIND: org-html-htmlize-output-type 'css
+#+BIND: org-html-htmlize-font-prefix "org-"
 
-#+INCLUDE: "~/Dropbox/org/apache_kafka_0_8_2/1_Getting_Started.org"
+* はじめよう
+#+INCLUDE: "1_Getting_Started.org"
+
+* API
+#+INCLUDE: "2_API.org"
+
+# Local Variables:
+# org-export-allow-bind-keywords: t
+# org-html-htmlize-output-type: css
+# org-html-htmlize-font-prefix: "org-"
+# End:
