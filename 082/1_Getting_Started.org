@@ -282,6 +282,7 @@ Kafka にはファイルか標準入力から Kafka クラスタにメッセー�
 デフォルトでは、各行がそれぞれ異なるメッセージとして送信されます。
 
 プロデューサスクリプトを起動し、コンソールにメッセージを打ちこんでサーバに送信してみましょう。
+[fn::(訳注) 警告は無視してよさそうです。 [[https://issues.apache.org/jira/browse/KAFKA-1711][0.8.3で修正される見込みのようです]] 。]
 
 #+BEGIN_SRC
 > bin/kafka-console-producer.sh --broker-list localhost:9092 --topic test
@@ -291,7 +292,7 @@ Kafka にはファイルか標準入力から Kafka クラスタにメッセー�
 ^D
 #+END_SRC
 
-(訳注) 警告は無視してよさそうです。 [[https://issues.apache.org/jira/browse/KAFKA-1711][0.8.3で修正される見込みのようです]] 。
+
 
 
 ** ステップ 5: コンシューマを起動する

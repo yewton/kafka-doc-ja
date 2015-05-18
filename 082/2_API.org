@@ -1,7 +1,16 @@
-We are in the process of rewritting the JVM clients for Kafka. As of 0.8.2 Kafka includes a newly rewritten Java producer. The next release will include an equivalent Java consumer. These new clients are meant to supplant the existing Scala clients, but for compatability they will co-exist for some time. These clients are available in a seperate jar with minimal dependencies, while the old Scala clients remain packaged with the server.
+現在 Kafka の JVM クライアントをリライト中です。
+0.8.2 では、新規に書き直された Java プロデューサーが同梱されています。
+次期リリースでは同様に Java コンシューマを含める予定です。
+これらの新しいクライアントは既存の Scala クライアントを置き換えるものとなる見込みですが、
+互換性のためにしばらくは共存することになります。
+これらのクライアントは別のjarで提供され、最低限の依存関係だけが定義されています。
+過去の Scala クライアントは、サーバと同じパッケージに同梱されていました。
+[fn:: (訳注) 0.8.2 のリリースにconsumerも一部既に含まれていますが、正式には 0.9 で利用可能なようです( [[http://mail-archives.apache.org/mod_mbox/kafka-users/201505.mbox/%3C7D2658D6A1CA594AAD4246FFB16B38786FED5F7A%40LCA1-MB04.linkedin.biz%3E][RE: Java Consumer API]] 、 [[http://mail-archives.apache.org/mod_mbox/kafka-users/201503.mbox/%3CD13F868B.15C38%25jqin%40linkedin.com%3E][Re: Consumer in Java client]] )]
 
-* Producer API
-As of the 0.8.2 release we encourage all new development to use the new Java producer. This client is production tested and generally both faster and more fully featured than the previous Scala client. You can use this client by adding a dependency on the client jar using the following maven co-ordinates:
+* プロデューサ API
+0.8.2 では、新規開発には新しい Java プロデューサを使うことを強くお奨めします。
+これは実稼動環境での試験が済んでおり、一般的に以前の Scala クライアントよりも高速で高機能です。
+以下のように、クライアント jar への依存を maven の pom に指定することで利用できます:
 
 #+BEGIN_SRC xml
 	<dependency>
@@ -11,126 +20,133 @@ As of the 0.8.2 release we encourage all new development to use the new Java pro
 	</dependency>
 #+END_SRC
 
-Examples showing how to use the producer are given in the [[http://kafka.apache.org/082/javadoc/index.html?org/apache/kafka/clients/producer/KafkaProducer.html][javadocs]].
+使い方や使用例は [[http://kafka.apache.org/082/javadoc/index.html?org/apache/kafka/clients/producer/KafkaProducer.html][javadoc]] に書かれています。
 
-For those interested in the legacy Scala producer api, information can be found [[http://kafka.apache.org/081/documentation.html#producerapi][here]].
+レガシーな Scala プロデューサ API についてもし興味があれば、 [[http://kafka.apache.org/081/documentation.html#producerapi][ここ]] を参照してください。
 
-* High Level Consumer API
+* ハイレベルコンシューマ API
 
 #+BEGIN_SRC java
 class Consumer {
   /**
-   *  Create a ConsumerConnector
-   *
-   *  @param config  at the minimum, need to specify the groupid of the consumer and the zookeeper
-   *                 connection string zookeeper.connect.
-   */
+   ,*  ConsumerConnector の作成
+   ,*
+   ,*  @param config  コンシューマの groupid と、 ZooKeeper との接続情報文字列 zookeeper.connect が、
+   ,*                 最低限必要
+   ,*/
   public static kafka.javaapi.consumer.ConsumerConnector createJavaConsumerConnector(ConsumerConfig config);
 }
 
 /**
- *  V: type of the message
- *  K: type of the optional key assciated with the message
- */
+ ,*  V: メッセージの型
+ ,*  K: メッセージに関連付けられたオプショナルなキー
+ ,*/
 public interface kafka.javaapi.consumer.ConsumerConnector {
   /**
-   *  Create a list of message streams of type T for each topic.
-   *
-   *  @param topicCountMap  a map of (topic, #streams) pair
-   *  @param decoder a decoder that converts from Message to T
-   *  @return a map of (topic, list of  KafkaStream) pairs.
-   *          The number of items in the list is #streams. Each stream supports
-   *          an iterator over message/metadata pairs.
-   */
+   ,*  トピック毎に <K,V> 型のメッセージストリームのリストを生成する。
+   ,*
+   ,*  @param topicCountMap  (トピック, ストリーム数) の Map
+   ,*  @param keyDecoder バイト列の Message を K 型へ変換するデコーダ
+   ,*  @param valueDecoder バイト列の Message から V 型へ変換するデコーダ
+   ,*  @return (トピック, KafkaStream のリスト) の Map。
+   ,*          リストの要素数はストリーム数となる。
+   ,*          各ストリームは (メッセージ, メタデータ) のペア (MessageAndMetadata) のイテレータをサポートする。
+   ,*/
   public <K,V> Map<String, List<KafkaStream<K,V>>>
     createMessageStreams(Map<String, Integer> topicCountMap, Decoder<K> keyDecoder, Decoder<V> valueDecoder);
 
   /**
-   *  Create a list of message streams of type T for each topic, using the default decoder.
-   */
+   ,*  デフォルトのデコーダでトピック毎のストリームのリストを作成する。
+   ,*/
   public Map<String, List<KafkaStream<byte[], byte[]>>> createMessageStreams(Map<String, Integer> topicCountMap);
 
   /**
-   *  Create a list of message streams for topics matching a wildcard.
-   *
-   *  @param topicFilter a TopicFilter that specifies which topics to
-   *                    subscribe to (encapsulates a whitelist or a blacklist).
-   *  @param numStreams the number of message streams to return.
-   *  @param keyDecoder a decoder that decodes the message key
-   *  @param valueDecoder a decoder that decodes the message itself
-   *  @return a list of KafkaStream. Each stream supports an
-   *          iterator over its MessageAndMetadata elements.
-   */
+   ,*  ワイルドカードにマッチしたトピックのメッセージストリームのリストを作成する。 
+   ,*
+   ,*  @param topicFilter どのトピックを購読するかを特定する TopicFilter
+   ,*                     (ホワイトリスト方式かブラックリスト方式かを隠蔽している)。
+   ,*  @param numStreams 返すメッセージストリームの数
+   ,*  @param keyDecoder メッセージキーをデコードするデコーダ
+   ,*  @param valueDecoder メッセージ自身をデコードするデコーダ
+   ,*  @return KafkaStream のリスト。
+   ,*          各ストリームは MessageAndMetadata 要素のイテレータをサポートする。
+   ,*/
   public <K,V> List<KafkaStream<K,V>>
     createMessageStreamsByFilter(TopicFilter topicFilter, int numStreams, Decoder<K> keyDecoder, Decoder<V> valueDecoder);
 
   /**
-   *  Create a list of message streams for topics matching a wildcard, using the default decoder.
-   */
+   ,*  デフォルトのデコーダでワイルドカードにマッチしたトピックのメッセージストリームのリストを作成する。 
+   ,*/
   public List<KafkaStream<byte[], byte[]>> createMessageStreamsByFilter(TopicFilter topicFilter, int numStreams);
 
   /**
-   *  Create a list of message streams for topics matching a wildcard, using the default decoder, with one stream.
-   */
+   ,*  ワイルドカードにマッチしたトピックのメッセージストリームをデフォルトのデコーダで一つだけ作成する。
+   ,*/
   public List<KafkaStream<byte[], byte[]>> createMessageStreamsByFilter(TopicFilter topicFilter);
 
   /**
-   *  Commit the offsets of all topic/partitions connected by this connector.
-   */
+   ,*  このコネクタで接続している全てのトピック/パーティションのオフセットをコミットする
+   ,*/
   public void commitOffsets();
 
   /**
-   *  Shut down the connector
+   ,*  コネクタをシャットダウンする
    */
   public void shutdown();
 }
 #+END_SRC
 
-You can follow [[https://cwiki.apache.org/confluence/display/KAFKA/Consumer+Group+Example][this example]] to learn how to use the high level consumer api.
+[fn:: (訳注) 関連ソース [[https://github.com/apache/kafka/blob/0.8.2/core/src/main/scala/kafka/consumer/ConsumerConnector.scala][ConsumerConnector]] 、[[https://github.com/apache/kafka/blob/0.8.2/core/src/main/scala/kafka/consumer/KafkaStream.scala][KafkaStream]] 、 [[https://github.com/apache/kafka/blob/0.8.2/core/src/main/scala/kafka/message/MessageAndMetadata.scala][MessageAndMetadata]]]
 
-* Simple Consumer API
+ハイレベルコンシューマ API の使い方を習得するには、[[https://cwiki.apache.org/confluence/display/KAFKA/Consumer%2BGroup%2BExample][この例]] を参照して下さい。
+
+* シンプルコンシューマ API
 
 #+BEGIN_SRC java
 class kafka.javaapi.consumer.SimpleConsumer {
   /**
-   *  Fetch a set of messages from a topic.
+   *  トピックからメッセージのセットを取得する。
    *
-   *  @param request specifies the topic name, topic partition, starting byte offset, maximum bytes to be fetched.
-   *  @return a set of fetched messages
+   *  @param 取得するトピック名、パーティション、開始バイトオフセット、最大バイトを指定するリクエスト
+   *  @return 取得したメッセージのセット
    */
   public FetchResponse fetch(kafka.javaapi.FetchRequest request);
 
   /**
-   *  Fetch metadata for a sequence of topics.
+   *  複数トピックのメタデータを取得する。
    *
-   *  @param request specifies the versionId, clientId, sequence of topics.
-   *  @return metadata for each topic in the request.
+   *  @param 取得する versionId, clientId, topic のシーケンスを指定するリクエスト。
+   *  @return リクエストされた各トピックのメタデータ。
    */
   public kafka.javaapi.TopicMetadataResponse send(kafka.javaapi.TopicMetadataRequest request);
 
   /**
-   *  Get a list of valid offsets (up to maxSize) before the given time.
-   *
-   *  @param request a [[kafka.javaapi.OffsetRequest]] object.
-   *  @return a [[kafka.javaapi.OffsetResponse]] object.
+   *  与えられた時刻より以前の(maxSize以下の)妥当なオフセットのリストを取得する。
    */
   public kafak.javaapi.OffsetResponse getOffsetsBefore(OffsetRequest request);
 
   /**
-   * Close the SimpleConsumer.
+   * シンプルコンシューマをクローズする。
    */
   public void close();
 }
 #+END_SRC
 
-For most applications, the high level consumer Api is good enough. Some applications want features not exposed to the high level consumer yet (e.g., set initial offset when restarting the consumer). They can instead use our low level SimpleConsumer Api. The logic will be a bit more complicated and you can follow the example in [[https://cwiki.apache.org/confluence/display/KAFKA/0.8.0%2BSimpleConsumer%2BExample][here]].
+[fn:: (訳注) 関連ソース [[https://github.com/apache/kafka/blob/0.8.2/core/src/main/scala/kafka/consumer/SimpleConsumer.scala][SimpleConsumer]] 、 [[https://github.com/apache/kafka/blob/0.8.2/core/src/main/scala/kafka/api/FetchRequest.scala][FetchRequest]] 、 [[https://github.com/apache/kafka/blob/0.8.2/core/src/main/scala/kafka/api/FetchResponse.scala][FetchResponse]] 、 [[https://github.com/apache/kafka/blob/0.8.2/core/src/main/scala/kafka/api/TopicMetadataRequest.scala][TopicMetadataRequest]] 、 [[https://github.com/apache/kafka/blob/0.8.2/core/src/main/scala/kafka/api/TopicMetadataResponse.scala][TopicMetadataResponse]] 、[[https://github.com/apache/kafka/blob/0.8.2/core/src/main/scala/kafka/api/OffsetRequest.scala][OffsetRequest]] 、[[https://github.com/apache/kafka/blob/0.8.2/core/src/main/scala/kafka/api/OffsetResponse.scala][OffsetResponse]] ]
 
-* Kafka Hadoop Consumer API
+ほとんどのアプリケーションはハイレベルコンシューマ API で十分でしょう。
+ハイレベルコンシューマではまだ提供されていない機能を利用したいアプリケーションもあるかもしれません
+(例えば、 再起動時の初期オフセットを設定するなど)。
+その場合は低レベルな SimpleConsumer Api を利用出来ます。
+利用する際のロジックはより複雑になります。
+[[https://cwiki.apache.org/confluence/display/KAFKA/0.8.0%2BSimpleConsumer%2BExample][こちら]] の例に従ってやってみてください。
 
-Providing a horizontally scalable solution for aggregating and loading data into Hadoop was one of our basic use cases. To support this use case, we provide a Hadoop-based consumer which spawns off many map tasks to pull data from the Kafka cluster in parallel. This provides extremely fast pull-based Hadoop data load capabilities (we were able to fully saturate the network with only a handful of Kafka servers).
+* Kafka Hadoop コンシューマ API
 
-Usage information on the hadoop consumer can be found [[https://github.com/linkedin/camus/][here]].
+データを集約し Hadoop に保存する、水平スケールするソリューションを提供するというのは、基本的なユースケースでした。
+このユースケースをサポートするため、
+Kafka クラスタから並列にデータを取得する大量のマップタスクを起動させる、Hadoop ベースのコンシューマを提供しています。
+これにより高速なプルペースの Hadoop データロードが実現できます
+(ごく少ない Kafka サーバだけでネットワーク帯域を完全に使い切ることが出来ていました)。
 
-# Local Variables:
-# org-export-allow-bind-keywords: t
-# End:
+Hadoop コンシューマの使用方法は [[https://github.com/linkedin/camus/][こちら]] です。
