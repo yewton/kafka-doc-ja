@@ -13,7 +13,7 @@
 * API
 #+INCLUDE: "2_API.org"
 
-* Configuration
+* 設定
 #+INCLUDE: "3_Configuration.org"
 
 # Local Variables:

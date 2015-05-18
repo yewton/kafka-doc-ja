@@ -1,15 +1,16 @@
-Kafka uses key-value pairs in the [[http://en.wikipedia.org/wiki/.properties][property file format]] for configuration. These values can be supplied either from a file or programmatically.
+Kafka は  [[http://en.wikipedia.org/wiki/.properties][プロパティファイルフォーマット]] の key-value ペアで設定を行ないます。
+これらの値はファイル、もしくはプログラム中で設定することが出来ます。
 
-* Broker Configs
-The essential configurations are the following:
+* ブローカ設定
+最低限の設定値は以下の3つです:
 
 - =broker.id=
 - =log.dirs=
 - =zookeeper.connect=
 
+トピックレベルの設定とデフォルト値の詳細については [[#topic-config][後述]] します。
 
-** Top-level configuration
-#+INCLUDE: "3_Configuration_Broker_Configs_Top_level.org"
+#+INCLUDE: "3_Configuration_Broker_Configs.org"
 
 ** Topic-level configuration
 :PROPERTIES:
