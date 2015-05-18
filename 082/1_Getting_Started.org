@@ -437,19 +437,27 @@ my test message 2
 ^C
 #+END_SRC
 
-* Ecosystem
-There are a plethora of tools that integrate with Kafka outside the main distribution. The [[https://cwiki.apache.org/confluence/display/KAFKA/Ecosystem][ecosystem page]] lists many of these, including stream processing systems, Hadoop integration, monitoring, and deployment tools.
+* エコシステム
+メインディストリビューション外にも、Kafka 関連のツールが大量にあります。
+[[https://cwiki.apache.org/confluence/display/KAFKA/Ecosystem][エコシステムのページ]] に、ストリームプロセッシングシステムやHadoopとの統合、モニタリング、デプロイ等、
+それらのツールの多くが列挙されています。
 
-* Upgrading From Previous Versions
+* 以前のバージョンからのアップグレード
 
-** Upgrading from 0.8.1 to 0.8.2.0
-0.8.2.0 is fully compatible with 0.8.1. The upgrade can be done one broker at a time by simply bringing it down, updating the code, and restarting it.
+** 0.8.1 から 0.8.2.0 へのアップグレード
+0.8.2.0 は 0.8.1 と完全に互換性があります。
+単純に1台ずつブローカ停止し、コードを更新し、再起動することでアップグレード出来ます。
 
-** Upgrading from 0.8.0 to 0.8.1
-0.8.1 is fully compatible with 0.8. The upgrade can be done one broker at a time by simply bringing it down, updating the code, and restarting it.
+** 0.8.0 から 0.8.1 へのアップグレード
+0.8.1 は 0.8 と完全に互換性があります。
+単純に1台ずつブローカ停止し、コードを更新し、再起動することでアップグレード出来ます。
 
-** Upgrading from 0.7
-0.8, the release in which added replication, was our first backwards-incompatible release: major changes were made to the API, ZooKeeper data structures, and protocol, and configuration. The upgrade from 0.7 to 0.8.x requires a [[https://cwiki.apache.org/confluence/display/KAFKA/Migrating+from+0.7+to+0.8][special tool]] for migration. This migration can be done without downtime.
+** 0.7 からのアップグレード
+レプリケーションが追加された 0.8 は、初めて後方互換性が失われたリリースでした。
+API、 ZooKeeper のデータ構造、プロトコル、設定に主要な変更が入りました。
+
+0.7 から 0.8.x へのアップグレードには、移行のための [[https://cwiki.apache.org/confluence/display/KAFKA/Migrating%2Bfrom%2B0.7%2Bto%2B0.8][特別なツール]] が必要です。
+移行は無停止で行なうことが可能です。
 
 # Local Variables:
 # org-export-allow-bind-keywords: t
