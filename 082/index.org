@@ -3,9 +3,6 @@
 #+OPTIONS: num:2 toc:2
 #+CREATOR: <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.4.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)
 #+SETUPFILE: setup.org
-#+HTML_HEAD: <link href="css/src-block-theme.css" rel="stylesheet">
-#+BIND: org-html-htmlize-output-type 'css
-#+BIND: org-html-htmlize-font-prefix "org-"
 
 * はじめよう
 #+INCLUDE: "1_Getting_Started.org"
@@ -15,9 +12,3 @@
 
 * 設定
 #+INCLUDE: "3_Configuration.org"
-
-# Local Variables:
-# org-export-allow-bind-keywords: t
-# org-html-htmlize-output-type: css
-# org-html-htmlize-font-prefix: "org-"
-# End:
