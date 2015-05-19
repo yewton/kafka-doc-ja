@@ -154,36 +154,79 @@ I/O スレッドが処理する為にキューに詰まれる最大リクエス�
 
 この設定値はトピック毎に上書き可能です( [[#topic-config][トピックレベルの設定]] を参照)。
 
-* log.retention.bytes
-| デフォルト |-1|
-The amount of data to retain in the log for each topic-partitions. Note that this is the limit per-partition so multiply by the number of partitions to get the total data retained for the topic. Also note that if both log.retention.hours and log.retention.bytes are both set we delete a segment when either limit is exceeded. This setting can be overridden on a per-topic basis (see the per-topic configuration section).
-* log.retention.check.interval.ms
-| デフォルト |5 minutes|
-The period with which we check whether any log segment is eligible for deletion to meet the retention policies.
-* log.cleaner.enable
-| デフォルト |false|
-This configuration must be set to true for log compaction to run.
-* log.cleaner.threads
-| デフォルト |1|
-The number of threads to use for cleaning logs in log compaction.
-* log.cleaner.io.max.bytes.per.second
-| デフォルト |Double.MaxValue|
-The maximum amount of I/O the log cleaner can do while performing log compaction. This setting allows setting a limit for the cleaner to avoid impacting live request serving.
-* log.cleaner.dedupe.buffer.size
-| デフォルト |500*1024*1024|
-The size of the buffer the log cleaner uses for indexing and deduplicating logs during cleaning. Larger is better provided you have sufficient memory.
-* log.cleaner.io.buffer.size
-| デフォルト |512*1024|
-The size of the I/O chunk used during log cleaning. You probably don't need to change this.
-* log.cleaner.io.buffer.load.factor
-| デフォルト |0.9|
-The load factor of the hash table used in log cleaning. You probably don't need to change this.
-* log.cleaner.backoff.ms
-| デフォルト |15000|
-The interval between checks to see if any logs need cleaning.
-* log.cleaner.min.cleanable.ratio
-| デフォルト |0.5|
-This configuration controls how frequently the log compactor will attempt to clean the log (assuming log compaction is enabled). By default we will avoid cleaning a log where more than 50% of the log has been compacted. This ratio bounds the maximum space wasted in the log by duplicates (at 50% at most 50% of the log could be duplicates). A higher ratio will mean fewer, more efficient cleanings but will mean more wasted space in the log. This setting can be overridden on a per-topic basis (see the per-topic configuration section).
+* =log.retention.bytes=
+| デフォルト | -1 |
+
+各トピックパーティションログの総サイズ制限です。
+これはパーティション毎の制限なので、トピックが必要とするトータルのデータ容量は、これにパーティション数を掛けた値になります。
+
+#+BEGIN_NOTE
+=log.retention.minutes= と =log.retention.bytes= が両方セットされていた場合、
+いずれかの上限に達した時点でクリーンアップを行ないます。
+#+END_NOTE
+
+この設定値はトピック毎に上書き可能です( [[#topic-config][トピックレベルの設定]] を参照)。
+
+* =log.retention.check.interval.ms=
+| デフォルト | 5 minutes |
+
+ログの保持ポリシーと照らし合わせて、削除対象となるログセグメントがあるかどうかを確認する間隔です。
+
+* =log.cleaner.enable=
+| デフォルト | false |
+
+ログコンパクションを実行するためには、この設定は必ず =true= にしなければなりません。
+
+* =log.cleaner.threads=
+| デフォルト | 1 |
+
+ログコンパクション実行時のログクリーニングに使われるスレッド数です。
+
+* =log.cleaner.io.max.bytes.per.second=
+| デフォルト | Double.MaxValue |
+
+ログクリーナがログコンパクション実行時に発生する I/O の最大総サイズです。
+この制限を設けることで、クリーナが運用中のサービスに影響を与えることを避けることが出来ます。
+
+* =log.cleaner.dedupe.buffer.size=
+| デフォルト | 500*1024*1024 |
+
+ログクリーナがクリーニング中にインデクシングとログの重複除去のために使用するバッファサイズです。
+十分なメモリがあるならば、より大きな値の方が望ましいです。
+
+* =log.cleaner.io.buffer.size=
+| デフォルト | 512*1024 |
+
+ログクリーニング中に使用される I/O チャンクのサイズです。
+恐らく変更する必要はないでしょう。
+
+* =log.cleaner.io.buffer.load.factor=
+| デフォルト | 0.9 |
+
+ログクリーニング中に使用されるハッシュテーブルの load factor です。
+恐らく変更する必要はないでしょう。
+
+* =log.cleaner.backoff.ms=
+| デフォルト | 15000 |
+
+クリーニングが必要なログが無いか確認する間隔です。
+
+* =log.cleaner.min.cleanable.ratio=
+| デフォルト | 0.5 |
+
+[[http://kafka.apache.org/documentation.html#compaction][ログコンパクション]] が有効なときの、ログコンパクタがログをクリーンする頻度を設定します。
+デフォルトでは50%以上のログがコンパクションされていた場合はクリーニングを行ないません。
+この比率はログの重複により消費される最大スペースを設定します
+(50%だと、多くて50%のログが重複している可能性がある、ということです)。
+より高い比率に設定すれば、より少なく、効率的なクリーニングが行われることになりますが、
+
+
+By default we will avoid cleaning a log where more than 50% of the log has been compacted. 
+This ratio bounds the maximum space wasted in the log by duplicates (at 50% at most 50% of the log could be duplicates). 
+A higher ratio will mean fewer, more efficient cleanings but will mean more wasted space in the log.
+
+この設定値はトピック毎に上書き可能です( [[#topic-config][トピックレベルの設定]] を参照)。
+
 * log.cleaner.delete.retention.ms
 | デフォルト |1 day|
 The amount of time to retain delete tombstone markers for log compacted topics. This setting also gives a bound on the time in which a consumer must complete a read if they begin from offset 0 to ensure that they get a valid snapshot of the final stage (otherwise delete tombstones may be collected before they complete their scan). This setting can be overridden on a per-topic basis (see the per-topic configuration section).

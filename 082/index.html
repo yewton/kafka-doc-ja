@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 <title>Apache Kafka</title>
-<!-- 2015-05-19 火 17:20 -->
+<!-- 2015-05-19 火 22:44 -->
 <meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta  name="generator" content="Org-mode" />
 <meta  name="author" content="yewton" />
@@ -198,14 +198,10 @@ Kafka は分散し、分割され、複製されるコミットログサービ�
 </p>
 
 <ul class="org-ul">
-<li>Kafka は <i>トピック</i> と呼ばれるカテゴリ毎にメッセージのフィードを保持しています
-</li>
-<li>Kafka のトピックに対してメッセージを発行するプロセスを <i>プロデューサ</i> と呼びます
-</li>
-<li>複数のトピックを購読し、発行されたメッセージのフィードを処理するプロセスを <i>コンシューマ</i> と呼びます
-</li>
-<li>Kafka はひとつ以上の <i>ブローカ</i> と呼ばれるサーバで構成されるクラスタとして動作します
-</li>
+<li>Kafka は <i>トピック</i> と呼ばれるカテゴリ毎にメッセージのフィードを保持しています</li>
+<li>Kafka のトピックに対してメッセージを発行するプロセスを <i>プロデューサ</i> と呼びます</li>
+<li>複数のトピックを購読し、発行されたメッセージのフィードを処理するプロセスを <i>コンシューマ</i> と呼びます</li>
+<li>Kafka はひとつ以上の <i>ブローカ</i> と呼ばれるサーバで構成されるクラスタとして動作します</li>
 </ul>
 
 <p>
@@ -225,9 +221,9 @@ Kafka は分散し、分割され、複製されるコミットログサービ�
 </p>
 </div>
 
-<div id="outline-container-sec-1-1-1" class="outline-4">
-<h4 id="sec-1-1-1">トピックとログ</h4>
-<div class="outline-text-4" id="text-1-1-1">
+<div id="outline-container-unnumbered-1" class="outline-4">
+<h4 id="unnumbered-1">トピックとログ</h4>
+<div class="outline-text-4" id="text-unnumbered-1">
 <p>
 まず最初に、 Kafka が提供する高レベルな抽象概念である「トピック」について見ていきましょう。
 </p>
@@ -283,9 +279,9 @@ Kafkaの性能はデータサイズに関しては実質定数のため、大量
 </div>
 </div>
 
-<div id="outline-container-sec-1-1-2" class="outline-4">
-<h4 id="sec-1-1-2">分散</h4>
-<div class="outline-text-4" id="text-1-1-2">
+<div id="outline-container-unnumbered-2" class="outline-4">
+<h4 id="unnumbered-2">分散</h4>
+<div class="outline-text-4" id="text-unnumbered-2">
 <p>
 ログのパーティションは Kafka クラスタ内のサーバ上で分散して保持されており、
 各サーバはパーティションを共有するためのデータとリクエストを処理します。
@@ -304,9 +300,9 @@ Kafkaの性能はデータサイズに関しては実質定数のため、大量
 </div>
 </div>
 
-<div id="outline-container-sec-1-1-3" class="outline-4">
-<h4 id="sec-1-1-3">プロデューサ</h4>
-<div class="outline-text-4" id="text-1-1-3">
+<div id="outline-container-unnumbered-3" class="outline-4">
+<h4 id="unnumbered-3">プロデューサ</h4>
+<div class="outline-text-4" id="text-unnumbered-3">
 <p>
 プロデューサは自身の選択したトピックに対してデータを発行します。
 プロデューサはどのメッセージをトピック内のどのパーティションに割り当てるかを選択する責務があります。
@@ -317,9 +313,9 @@ Kafkaの性能はデータサイズに関しては実質定数のため、大量
 </div>
 </div>
 
-<div id="outline-container-sec-1-1-4" class="outline-4">
-<h4 id="sec-1-1-4">コンシューマ</h4>
-<div class="outline-text-4" id="text-1-1-4">
+<div id="outline-container-unnumbered-4" class="outline-4">
+<h4 id="unnumbered-4">コンシューマ</h4>
+<div class="outline-text-4" id="text-unnumbered-4">
 <p>
 伝統的なメッセージングのモデルは <a href="http://en.wikipedia.org/wiki/Message_queue">キューイング</a> と <a href="http://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern">出版・購読型</a> の二つです。
 キューを用いる方法では、コンシューマプールがひとつのサーバからメッセージを取得することができ、
@@ -397,9 +393,9 @@ Kafka はトピック内のパーティションの <i>中の</i> メッセー�
 </div>
 </div>
 
-<div id="outline-container-sec-1-1-5" class="outline-4">
-<h4 id="sec-1-1-5">保証</h4>
-<div class="outline-text-4" id="text-1-1-5">
+<div id="outline-container-unnumbered-5" class="outline-4">
+<h4 id="unnumbered-5">保証</h4>
+<div class="outline-text-4" id="text-unnumbered-5">
 <p>
 高レベルな視点では Kafka は以下の保証を提供します:
 </p>
@@ -407,13 +403,10 @@ Kafka はトピック内のパーティションの <i>中の</i> メッセー�
 <ul class="org-ul">
 <li>プロデューサから特定のトピックパーティションへと送られたメッセージは、送られた順に追記されます。
 つまり、メッセージ <code>M1</code> と <code>M2</code> が同じプロデューサから送られ、かつ <code>M1</code> が最初に送られていた場合、
-<code>M1</code> は <code>M2</code> よりも小さいオフセットを持ち、 <code>M2</code> よりも先にログに現れます。
-</li>
-<li>コンシューマインスタンスはログに保存されている順番にメッセージを読みます。
-</li>
+<code>M1</code> は <code>M2</code> よりも小さいオフセットを持ち、 <code>M2</code> よりも先にログに現れます。</li>
+<li>コンシューマインスタンスはログに保存されている順番にメッセージを読みます。</li>
 <li>レプリケーションファクタ <code>N</code> に設定されたトピックは、 <code>N-1</code> 個までのサーバ障害については、
-メッセージのロスト無く稼動することが出来ます。
-</li>
+メッセージのロスト無く稼動することが出来ます。</li>
 </ul>
 
 <p>
@@ -432,9 +425,9 @@ Apache Kafka のユースケースをいくつか紹介します。
 </p>
 </div>
 
-<div id="outline-container-sec-1-2-1" class="outline-4">
-<h4 id="sec-1-2-1">メッセージング</h4>
-<div class="outline-text-4" id="text-1-2-1">
+<div id="outline-container-unnumbered-6" class="outline-4">
+<h4 id="unnumbered-6">メッセージング</h4>
+<div class="outline-text-4" id="text-unnumbered-6">
 <p>
 Kafka は伝統的なメッセージブローカの代替として使うことが出来ます。
 メッセージブローカを利用する理由は様々です——
@@ -455,9 +448,9 @@ Kafka はより良いスループット、組込みのパーティショニン�
 </div>
 </div>
 
-<div id="outline-container-sec-1-2-2" class="outline-4">
-<h4 id="sec-1-2-2">Web サイトのアクティビティトラッキング</h4>
-<div class="outline-text-4" id="text-1-2-2">
+<div id="outline-container-unnumbered-7" class="outline-4">
+<h4 id="unnumbered-7">Web サイトのアクティビティトラッキング</h4>
+<div class="outline-text-4" id="text-unnumbered-7">
 <p>
 ユーザ動向追跡パイプラインを、リアルタイムな Pub-Sub フィードの集合として再構築する、というのが Kafka の元々のユースケースでした。
 つまり、サイトアクティビティ(ページビュー、検索等のユーザが取り得る行動)はアクティビティの種別毎にトピック分けされて、
@@ -474,9 +467,9 @@ Kafka はより良いスループット、組込みのパーティショニン�
 </div>
 </div>
 
-<div id="outline-container-sec-1-2-3" class="outline-4">
-<h4 id="sec-1-2-3">メトリクス</h4>
-<div class="outline-text-4" id="text-1-2-3">
+<div id="outline-container-unnumbered-8" class="outline-4">
+<h4 id="unnumbered-8">メトリクス</h4>
+<div class="outline-text-4" id="text-unnumbered-8">
 <p>
 Kafka は運用監視データとしても使われることがあります。
 この場合は、運用データの中央フィードを生成するため、分散したアプリケーションの統計を集約するのに用いられます。
@@ -484,9 +477,9 @@ Kafka は運用監視データとしても使われることがあります。
 </div>
 </div>
 
-<div id="outline-container-sec-1-2-4" class="outline-4">
-<h4 id="sec-1-2-4">ログ集約</h4>
-<div class="outline-text-4" id="text-1-2-4">
+<div id="outline-container-unnumbered-9" class="outline-4">
+<h4 id="unnumbered-9">ログ集約</h4>
+<div class="outline-text-4" id="text-unnumbered-9">
 <p>
 ログ集約ソリューションの代替として Kafka を利用する場合も多いです。
 典型的なログ集約では、物理ログファイルをサーバから収集し、
@@ -502,9 +495,9 @@ Kafka や同等のパフォーマンスと、複製によるより強い堅牢�
 </div>
 
 
-<div id="outline-container-sec-1-2-5" class="outline-4">
-<h4 id="sec-1-2-5">ストリーム処理</h4>
-<div class="outline-text-4" id="text-1-2-5">
+<div id="outline-container-unnumbered-10" class="outline-4">
+<h4 id="unnumbered-10">ストリーム処理</h4>
+<div class="outline-text-4" id="text-unnumbered-10">
 <p>
 多くのユーザは段階的なデータ処理をすることになります。
 データは生データのトピックからコンシュームされ、集約され、肉付けされ、
@@ -519,9 +512,9 @@ Kafka や同等のパフォーマンスと、複製によるより強い堅牢�
 </div>
 </div>
 
-<div id="outline-container-sec-1-2-6" class="outline-4">
-<h4 id="sec-1-2-6">イベントソーシング</h4>
-<div class="outline-text-4" id="text-1-2-6">
+<div id="outline-container-unnumbered-11" class="outline-4">
+<h4 id="unnumbered-11">イベントソーシング</h4>
+<div class="outline-text-4" id="text-unnumbered-11">
 <p>
 <a href="http://martinfowler.com/eaaDev/EventSourcing.html">イベントソーシング</a> はアプリケーション設計手法のひとつで、
 状態の変更が時系列順のレコード列として記録されるというものです。
@@ -531,9 +524,9 @@ Kafka は超巨大なログデータを扱えるため、
 </div>
 </div>
 
-<div id="outline-container-sec-1-2-7" class="outline-4">
-<h4 id="sec-1-2-7">コミットログ</h4>
-<div class="outline-text-4" id="text-1-2-7">
+<div id="outline-container-unnumbered-12" class="outline-4">
+<h4 id="unnumbered-12">コミットログ</h4>
+<div class="outline-text-4" id="text-unnumbered-12">
 <p>
 Kafka を分散システムのための外部コミットログとして使うこともできます。
 ノード間でデータを複製したり、障害ノードの復旧のための再同期機構として、このログを利用することが出来ます。
@@ -552,9 +545,9 @@ Kafka の <a href="http://kafka.apache.org/documentation.html#compaction">ログ
 </p>
 </div>
 
-<div id="outline-container-sec-1-3-1" class="outline-4">
-<h4 id="sec-1-3-1">ステップ 1: コードのダウンロード</h4>
-<div class="outline-text-4" id="text-1-3-1">
+<div id="outline-container-unnumbered-13" class="outline-4">
+<h4 id="unnumbered-13">ステップ 1: コードのダウンロード</h4>
+<div class="outline-text-4" id="text-unnumbered-13">
 <p>
 0.8.2.0 リリースを <a href="https://www.apache.org/dyn/closer.cgi?path=/kafka/0.8.2.0/kafka_2.10-0.8.2.0.tgz">ダウンロード</a> して、解凍しましょう。
 </p>
@@ -566,9 +559,9 @@ Kafka の <a href="http://kafka.apache.org/documentation.html#compaction">ログ
 </div>
 </div>
 
-<div id="outline-container-sec-1-3-2" class="outline-4">
-<h4 id="sec-1-3-2">ステップ 2: サーバの起動</h4>
-<div class="outline-text-4" id="text-1-3-2">
+<div id="outline-container-unnumbered-14" class="outline-4">
+<h4 id="unnumbered-14">ステップ 2: サーバの起動</h4>
+<div class="outline-text-4" id="text-unnumbered-14">
 <p>
 Kafka は ZooKeeper を使うため、まずは ZooKeeper サーバを起動する必要があります。
 既に起動している ZooKeeper サーバがある場合は、新たに起動する必要はありません。
@@ -595,9 +588,9 @@ Kafka は ZooKeeper を使うため、まずは ZooKeeper サーバを起動す�
 </div>
 </div>
 
-<div id="outline-container-sec-1-3-3" class="outline-4">
-<h4 id="sec-1-3-3">ステップ 3: トピックの作成</h4>
-<div class="outline-text-4" id="text-1-3-3">
+<div id="outline-container-unnumbered-15" class="outline-4">
+<h4 id="unnumbered-15">ステップ 3: トピックの作成</h4>
+<div class="outline-text-4" id="text-unnumbered-15">
 <p>
 今度は「test」という名前の、単一パーティションで、複製を作らないトピックを作成してみましょう:
 </p>
@@ -621,9 +614,9 @@ test
 </div>
 </div>
 
-<div id="outline-container-sec-1-3-4" class="outline-4">
-<h4 id="sec-1-3-4">ステップ 4: メッセージを送ってみる</h4>
-<div class="outline-text-4" id="text-1-3-4">
+<div id="outline-container-unnumbered-16" class="outline-4">
+<h4 id="unnumbered-16">ステップ 4: メッセージを送ってみる</h4>
+<div class="outline-text-4" id="text-unnumbered-16">
 <p>
 Kafka にはファイルか標準入力から Kafka クラスタにメッセージを送信出来るコマンドラインのクライアントが同梱されています。
 デフォルトでは、各行がそれぞれ異なるメッセージとして送信されます。
@@ -631,7 +624,7 @@ Kafka にはファイルか標準入力から Kafka クラスタにメッセー�
 
 <p>
 プロデューサスクリプトを起動し、コンソールにメッセージを打ちこんでサーバに送信してみましょう。
-<sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup>
+<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>
 </p>
 
 <pre class="example">
@@ -647,9 +640,9 @@ Kafka にはファイルか標準入力から Kafka クラスタにメッセー�
 
 
 
-<div id="outline-container-sec-1-3-5" class="outline-4">
-<h4 id="sec-1-3-5">ステップ 5: コンシューマを起動する</h4>
-<div class="outline-text-4" id="text-1-3-5">
+<div id="outline-container-unnumbered-17" class="outline-4">
+<h4 id="unnumbered-17">ステップ 5: コンシューマを起動する</h4>
+<div class="outline-text-4" id="text-unnumbered-17">
 <p>
 Kafka にはメッセージを標準出力にダンプするコマンドラインのコンシューマも付属しています。
 </p>
@@ -673,9 +666,9 @@ Kafka にはメッセージを標準出力にダンプするコマンドライ�
 </div>
 </div>
 
-<div id="outline-container-sec-1-3-6" class="outline-4">
-<h4 id="sec-1-3-6">ステップ 6: マルチブローカクラスタを立ち上げる</h4>
-<div class="outline-text-4" id="text-1-3-6">
+<div id="outline-container-unnumbered-18" class="outline-4">
+<h4 id="unnumbered-18">ステップ 6: マルチブローカクラスタを立ち上げる</h4>
+<div class="outline-text-4" id="text-unnumbered-18">
 <p>
 ここまでは、単一のブローカ上で動作させて決ましたが、これではあまり面白くないですね。
 単一のブローカというのは Kafka にとってはサイズ1のクラスタに過ぎないので、
@@ -754,12 +747,9 @@ Topic:my-replicated-topic	PartitionCount:1	ReplicationFactor:3	Configs:
 </p>
 
 <ul class="org-ul">
-<li><code>Leader</code> はそのパーティションの全読み書きの責務を負うノードです。各ノードは、ランダムに選択されたパーティションのリーダになり得ます
-</li>
-<li><code>Replicas</code> はこのパーティションのログを複製しているノードのリストです。リーダか否か、現在生存しているノードかどうかにはかかわらず表示されます
-</li>
-<li><code>Isr</code> は「同期中」の複製を表します。 <code>Replicas</code> のリストのうち、現在生存しており、リーダに追い付いているノードが表示されます
-</li>
+<li><code>Leader</code> はそのパーティションの全読み書きの責務を負うノードです。各ノードは、ランダムに選択されたパーティションのリーダになり得ます</li>
+<li><code>Replicas</code> はこのパーティションのログを複製しているノードのリストです。リーダか否か、現在生存しているノードかどうかにはかかわらず表示されます</li>
+<li><code>Isr</code> は「同期中」の複製を表します。 <code>Replicas</code> のリストのうち、現在生存しており、リーダに追い付いているノードが表示されます</li>
 </ul>
 
 <p>
@@ -854,9 +844,9 @@ my test message 2
 <div id="outline-container-sec-1-5" class="outline-3">
 <h3 id="sec-1-5"><span class="section-number-3">1.5</span> 以前のバージョンからのアップグレード</h3>
 <div class="outline-text-3" id="text-1-5">
-</div><div id="outline-container-sec-1-5-1" class="outline-4">
-<h4 id="sec-1-5-1">0.8.1 から 0.8.2.0 へのアップグレード</h4>
-<div class="outline-text-4" id="text-1-5-1">
+</div><div id="outline-container-unnumbered-19" class="outline-4">
+<h4 id="unnumbered-19">0.8.1 から 0.8.2.0 へのアップグレード</h4>
+<div class="outline-text-4" id="text-unnumbered-19">
 <p>
 0.8.2.0 は 0.8.1 と完全に互換性があります。
 単純に1台ずつブローカ停止し、コードを更新し、再起動することでアップグレード出来ます。
@@ -864,9 +854,9 @@ my test message 2
 </div>
 </div>
 
-<div id="outline-container-sec-1-5-2" class="outline-4">
-<h4 id="sec-1-5-2">0.8.0 から 0.8.1 へのアップグレード</h4>
-<div class="outline-text-4" id="text-1-5-2">
+<div id="outline-container-unnumbered-20" class="outline-4">
+<h4 id="unnumbered-20">0.8.0 から 0.8.1 へのアップグレード</h4>
+<div class="outline-text-4" id="text-unnumbered-20">
 <p>
 0.8.1 は 0.8 と完全に互換性があります。
 単純に1台ずつブローカ停止し、コードを更新し、再起動することでアップグレード出来ます。
@@ -874,9 +864,9 @@ my test message 2
 </div>
 </div>
 
-<div id="outline-container-sec-1-5-3" class="outline-4">
-<h4 id="sec-1-5-3">0.7 からのアップグレード</h4>
-<div class="outline-text-4" id="text-1-5-3">
+<div id="outline-container-unnumbered-21" class="outline-4">
+<h4 id="unnumbered-21">0.7 からのアップグレード</h4>
+<div class="outline-text-4" id="text-unnumbered-21">
 <p>
 レプリケーションが追加された 0.8 は、初めて後方互換性が失われたリリースでした。
 API、 ZooKeeper のデータ構造、プロトコル、設定に主要な変更が入りました。
@@ -902,7 +892,7 @@ API、 ZooKeeper のデータ構造、プロトコル、設定に主要な変更
 互換性のためにしばらくは共存することになります。
 これらのクライアントは別のjarで提供され、最低限の依存関係だけが定義されています。
 過去の Scala クライアントは、サーバと同じパッケージに同梱されていました。
-<sup><a id="fnr.2" name="fnr.2" class="footref" href="#fn.2">2</a></sup>
+<sup><a id="fnr.2" class="footref" href="#fn.2">2</a></sup>
 </p>
 </div>
 
@@ -965,13 +955,13 @@ API、 ZooKeeper のデータ構造、プロトコル、設定に主要な変更
 <span class="org-doc">   *          &#12522;&#12473;&#12488;&#12398;&#35201;&#32032;&#25968;&#12399;&#12473;&#12488;&#12522;&#12540;&#12512;&#25968;&#12392;&#12394;&#12427;&#12290;</span>
 <span class="org-doc">   *          &#21508;&#12473;&#12488;&#12522;&#12540;&#12512;&#12399; (&#12513;&#12483;&#12475;&#12540;&#12472;, &#12513;&#12479;&#12487;&#12540;&#12479;) &#12398;&#12506;&#12450; (MessageAndMetadata) &#12398;&#12452;&#12486;&#12524;&#12540;&#12479;&#12434;&#12469;&#12509;&#12540;&#12488;&#12377;&#12427;&#12290;</span>
 <span class="org-doc">   */</span>
-  <span class="org-keyword">public</span> &lt;<span class="org-type">K</span>,<span class="org-type">V</span>&gt; <span class="org-type">Map</span>&lt;<span class="org-type">String</span>, <span class="org-type">List</span>&lt;<span class="org-type">KafkaStream</span>&lt;<span class="org-type">K</span>,<span class="org-type">V</span>&gt;&gt;&gt;
-    <span class="org-function-name">createMessageStreams</span><span class="org-rainbow-delimiters-depth-2">(</span><span class="org-type">Map</span>&lt;<span class="org-type">String</span>, <span class="org-type">Integer</span>&gt; <span class="org-variable-name">topicCountMap</span>, <span class="org-type">Decoder</span>&lt;<span class="org-type">K</span>&gt; <span class="org-variable-name">keyDecoder</span>, <span class="org-type">Decoder</span>&lt;<span class="org-type">V</span>&gt; <span class="org-variable-name">valueDecoder</span><span class="org-rainbow-delimiters-depth-2">)</span>;
+  <span class="org-keyword">public</span> <span class="org-rainbow-delimiters-depth-2">&lt;</span><span class="org-type">K</span>,<span class="org-type">V</span><span class="org-rainbow-delimiters-depth-2">&gt;</span> <span class="org-type">Map</span><span class="org-rainbow-delimiters-depth-2">&lt;</span><span class="org-type">String</span>, <span class="org-type">List</span><span class="org-rainbow-delimiters-depth-3">&lt;</span><span class="org-type">KafkaStream</span><span class="org-rainbow-delimiters-depth-4">&lt;</span><span class="org-type">K</span>,<span class="org-type">V</span><span class="org-rainbow-delimiters-depth-4">&gt;</span><span class="org-rainbow-delimiters-depth-3">&gt;</span><span class="org-rainbow-delimiters-depth-2">&gt;</span>
+    <span class="org-function-name">createMessageStreams</span><span class="org-rainbow-delimiters-depth-2">(</span><span class="org-type">Map</span><span class="org-rainbow-delimiters-depth-3">&lt;</span><span class="org-type">String</span>, <span class="org-type">Integer</span><span class="org-rainbow-delimiters-depth-3">&gt;</span> <span class="org-variable-name">topicCountMap</span>, <span class="org-type">Decoder</span><span class="org-rainbow-delimiters-depth-3">&lt;</span><span class="org-type">K</span><span class="org-rainbow-delimiters-depth-3">&gt;</span> <span class="org-variable-name">keyDecoder</span>, <span class="org-type">Decoder</span><span class="org-rainbow-delimiters-depth-3">&lt;</span><span class="org-type">V</span><span class="org-rainbow-delimiters-depth-3">&gt;</span> <span class="org-variable-name">valueDecoder</span><span class="org-rainbow-delimiters-depth-2">)</span>;
 
   <span class="org-doc">/**</span>
 <span class="org-doc">   *  &#12487;&#12501;&#12457;&#12523;&#12488;&#12398;&#12487;&#12467;&#12540;&#12480;&#12391;&#12488;&#12500;&#12483;&#12463;&#27598;&#12398;&#12473;&#12488;&#12522;&#12540;&#12512;&#12398;&#12522;&#12473;&#12488;&#12434;&#20316;&#25104;&#12377;&#12427;&#12290;</span>
 <span class="org-doc">   */</span>
-  <span class="org-keyword">public</span> <span class="org-type">Map</span>&lt;<span class="org-type">String</span>, <span class="org-type">List</span>&lt;<span class="org-type">KafkaStream</span>&lt;<span class="org-type">byte</span><span class="org-rainbow-delimiters-depth-2">[]</span>, <span class="org-type">byte</span><span class="org-rainbow-delimiters-depth-2">[]</span>&gt;&gt;&gt; <span class="org-function-name">createMessageStreams</span><span class="org-rainbow-delimiters-depth-2">(</span><span class="org-type">Map</span>&lt;<span class="org-type">String</span>, <span class="org-type">Integer</span>&gt; <span class="org-variable-name">topicCountMap</span><span class="org-rainbow-delimiters-depth-2">)</span>;
+  <span class="org-keyword">public</span> <span class="org-type">Map</span><span class="org-rainbow-delimiters-depth-2">&lt;</span><span class="org-type">String</span>, <span class="org-type">List</span><span class="org-rainbow-delimiters-depth-3">&lt;</span><span class="org-type">KafkaStream</span><span class="org-rainbow-delimiters-depth-4">&lt;</span><span class="org-type">byte</span><span class="org-rainbow-delimiters-depth-5">[]</span>, <span class="org-type">byte</span><span class="org-rainbow-delimiters-depth-5">[]</span><span class="org-rainbow-delimiters-depth-4">&gt;</span><span class="org-rainbow-delimiters-depth-3">&gt;</span><span class="org-rainbow-delimiters-depth-2">&gt;</span> <span class="org-function-name">createMessageStreams</span><span class="org-rainbow-delimiters-depth-2">(</span><span class="org-type">Map</span><span class="org-rainbow-delimiters-depth-3">&lt;</span><span class="org-type">String</span>, <span class="org-type">Integer</span><span class="org-rainbow-delimiters-depth-3">&gt;</span> <span class="org-variable-name">topicCountMap</span><span class="org-rainbow-delimiters-depth-2">)</span>;
 
   <span class="org-doc">/**</span>
 <span class="org-doc">   *  &#12527;&#12452;&#12523;&#12489;&#12459;&#12540;&#12489;&#12395;&#12510;&#12483;&#12481;&#12375;&#12383;&#12488;&#12500;&#12483;&#12463;&#12398;&#12513;&#12483;&#12475;&#12540;&#12472;&#12473;&#12488;&#12522;&#12540;&#12512;&#12398;&#12522;&#12473;&#12488;&#12434;&#20316;&#25104;&#12377;&#12427;&#12290; </span>
@@ -984,18 +974,18 @@ API、 ZooKeeper のデータ構造、プロトコル、設定に主要な変更
 <span class="org-doc">   *  </span><span class="org-doc"><span class="org-constant">@return</span></span><span class="org-doc"> KafkaStream &#12398;&#12522;&#12473;&#12488;&#12290;</span>
 <span class="org-doc">   *          &#21508;&#12473;&#12488;&#12522;&#12540;&#12512;&#12399; MessageAndMetadata &#35201;&#32032;&#12398;&#12452;&#12486;&#12524;&#12540;&#12479;&#12434;&#12469;&#12509;&#12540;&#12488;&#12377;&#12427;&#12290;</span>
 <span class="org-doc">   */</span>
-  <span class="org-keyword">public</span> &lt;<span class="org-type">K</span>,<span class="org-type">V</span>&gt; <span class="org-type">List</span>&lt;<span class="org-type">KafkaStream</span>&lt;<span class="org-type">K</span>,<span class="org-type">V</span>&gt;&gt;
-    <span class="org-function-name">createMessageStreamsByFilter</span><span class="org-rainbow-delimiters-depth-2">(</span><span class="org-type">TopicFilter</span> <span class="org-variable-name">topicFilter</span>, <span class="org-type">int</span> <span class="org-variable-name">numStreams</span>, <span class="org-type">Decoder</span>&lt;<span class="org-type">K</span>&gt; <span class="org-variable-name">keyDecoder</span>, <span class="org-type">Decoder</span>&lt;<span class="org-type">V</span>&gt; <span class="org-variable-name">valueDecoder</span><span class="org-rainbow-delimiters-depth-2">)</span>;
+  <span class="org-keyword">public</span> <span class="org-rainbow-delimiters-depth-2">&lt;</span><span class="org-type">K</span>,<span class="org-type">V</span><span class="org-rainbow-delimiters-depth-2">&gt;</span> <span class="org-type">List</span><span class="org-rainbow-delimiters-depth-2">&lt;</span><span class="org-type">KafkaStream</span><span class="org-rainbow-delimiters-depth-3">&lt;</span><span class="org-type">K</span>,<span class="org-type">V</span><span class="org-rainbow-delimiters-depth-3">&gt;</span><span class="org-rainbow-delimiters-depth-2">&gt;</span>
+    <span class="org-function-name">createMessageStreamsByFilter</span><span class="org-rainbow-delimiters-depth-2">(</span><span class="org-type">TopicFilter</span> <span class="org-variable-name">topicFilter</span>, <span class="org-type">int</span> <span class="org-variable-name">numStreams</span>, <span class="org-type">Decoder</span><span class="org-rainbow-delimiters-depth-3">&lt;</span><span class="org-type">K</span><span class="org-rainbow-delimiters-depth-3">&gt;</span> <span class="org-variable-name">keyDecoder</span>, <span class="org-type">Decoder</span><span class="org-rainbow-delimiters-depth-3">&lt;</span><span class="org-type">V</span><span class="org-rainbow-delimiters-depth-3">&gt;</span> <span class="org-variable-name">valueDecoder</span><span class="org-rainbow-delimiters-depth-2">)</span>;
 
   <span class="org-doc">/**</span>
 <span class="org-doc">   *  &#12487;&#12501;&#12457;&#12523;&#12488;&#12398;&#12487;&#12467;&#12540;&#12480;&#12391;&#12527;&#12452;&#12523;&#12489;&#12459;&#12540;&#12489;&#12395;&#12510;&#12483;&#12481;&#12375;&#12383;&#12488;&#12500;&#12483;&#12463;&#12398;&#12513;&#12483;&#12475;&#12540;&#12472;&#12473;&#12488;&#12522;&#12540;&#12512;&#12398;&#12522;&#12473;&#12488;&#12434;&#20316;&#25104;&#12377;&#12427;&#12290; </span>
 <span class="org-doc">   */</span>
-  <span class="org-keyword">public</span> <span class="org-type">List</span>&lt;<span class="org-type">KafkaStream</span>&lt;<span class="org-type">byte</span><span class="org-rainbow-delimiters-depth-2">[]</span>, <span class="org-type">byte</span><span class="org-rainbow-delimiters-depth-2">[]</span>&gt;&gt; <span class="org-function-name">createMessageStreamsByFilter</span><span class="org-rainbow-delimiters-depth-2">(</span><span class="org-type">TopicFilter</span> <span class="org-variable-name">topicFilter</span>, <span class="org-type">int</span> <span class="org-variable-name">numStreams</span><span class="org-rainbow-delimiters-depth-2">)</span>;
+  <span class="org-keyword">public</span> <span class="org-type">List</span><span class="org-rainbow-delimiters-depth-2">&lt;</span><span class="org-type">KafkaStream</span><span class="org-rainbow-delimiters-depth-3">&lt;</span><span class="org-type">byte</span><span class="org-rainbow-delimiters-depth-4">[]</span>, <span class="org-type">byte</span><span class="org-rainbow-delimiters-depth-4">[]</span><span class="org-rainbow-delimiters-depth-3">&gt;</span><span class="org-rainbow-delimiters-depth-2">&gt;</span> <span class="org-function-name">createMessageStreamsByFilter</span><span class="org-rainbow-delimiters-depth-2">(</span><span class="org-type">TopicFilter</span> <span class="org-variable-name">topicFilter</span>, <span class="org-type">int</span> <span class="org-variable-name">numStreams</span><span class="org-rainbow-delimiters-depth-2">)</span>;
 
   <span class="org-doc">/**</span>
 <span class="org-doc">   *  &#12527;&#12452;&#12523;&#12489;&#12459;&#12540;&#12489;&#12395;&#12510;&#12483;&#12481;&#12375;&#12383;&#12488;&#12500;&#12483;&#12463;&#12398;&#12513;&#12483;&#12475;&#12540;&#12472;&#12473;&#12488;&#12522;&#12540;&#12512;&#12434;&#12487;&#12501;&#12457;&#12523;&#12488;&#12398;&#12487;&#12467;&#12540;&#12480;&#12391;&#19968;&#12388;&#12384;&#12369;&#20316;&#25104;&#12377;&#12427;&#12290;</span>
 <span class="org-doc">   */</span>
-  <span class="org-keyword">public</span> <span class="org-type">List</span>&lt;<span class="org-type">KafkaStream</span>&lt;<span class="org-type">byte</span><span class="org-rainbow-delimiters-depth-2">[]</span>, <span class="org-type">byte</span><span class="org-rainbow-delimiters-depth-2">[]</span>&gt;&gt; <span class="org-function-name">createMessageStreamsByFilter</span><span class="org-rainbow-delimiters-depth-2">(</span><span class="org-type">TopicFilter</span> <span class="org-variable-name">topicFilter</span><span class="org-rainbow-delimiters-depth-2">)</span>;
+  <span class="org-keyword">public</span> <span class="org-type">List</span><span class="org-rainbow-delimiters-depth-2">&lt;</span><span class="org-type">KafkaStream</span><span class="org-rainbow-delimiters-depth-3">&lt;</span><span class="org-type">byte</span><span class="org-rainbow-delimiters-depth-4">[]</span>, <span class="org-type">byte</span><span class="org-rainbow-delimiters-depth-4">[]</span><span class="org-rainbow-delimiters-depth-3">&gt;</span><span class="org-rainbow-delimiters-depth-2">&gt;</span> <span class="org-function-name">createMessageStreamsByFilter</span><span class="org-rainbow-delimiters-depth-2">(</span><span class="org-type">TopicFilter</span> <span class="org-variable-name">topicFilter</span><span class="org-rainbow-delimiters-depth-2">)</span>;
 
   <span class="org-doc">/**</span>
 <span class="org-doc">   *  &#12371;&#12398;&#12467;&#12493;&#12463;&#12479;&#12391;&#25509;&#32154;&#12375;&#12390;&#12356;&#12427;&#20840;&#12390;&#12398;&#12488;&#12500;&#12483;&#12463;/&#12497;&#12540;&#12486;&#12451;&#12471;&#12519;&#12531;&#12398;&#12458;&#12501;&#12475;&#12483;&#12488;&#12434;&#12467;&#12511;&#12483;&#12488;&#12377;&#12427;</span>
@@ -1011,7 +1001,7 @@ API、 ZooKeeper のデータ構造、プロトコル、設定に主要な変更
 </div>
 
 <p>
-<sup><a id="fnr.3" name="fnr.3" class="footref" href="#fn.3">3</a></sup>
+<sup><a id="fnr.3" class="footref" href="#fn.3">3</a></sup>
 </p>
 
 <p>
@@ -1056,7 +1046,7 @@ API、 ZooKeeper のデータ構造、プロトコル、設定に主要な変更
 </div>
 
 <p>
-<sup><a id="fnr.4" name="fnr.4" class="footref" href="#fn.4">4</a></sup>
+<sup><a id="fnr.4" class="footref" href="#fn.4">4</a></sup>
 </p>
 
 <p>
@@ -1105,12 +1095,9 @@ Kafka は  <a href="http://en.wikipedia.org/wiki/.properties">プロパティフ
 </p>
 
 <ul class="org-ul">
-<li><code>broker.id</code>
-</li>
-<li><code>log.dirs</code>
-</li>
-<li><code>zookeeper.connect</code>
-</li>
+<li><code>broker.id</code></li>
+<li><code>log.dirs</code></li>
+<li><code>zookeeper.connect</code></li>
 </ul>
 
 <p>
@@ -1118,9 +1105,9 @@ Kafka は  <a href="http://en.wikipedia.org/wiki/.properties">プロパティフ
 </p>
 </div>
 
-<div id="outline-container-sec-3-1-1" class="outline-4">
-<h4 id="sec-3-1-1"><code>broker.id</code></h4>
-<div class="outline-text-4" id="text-3-1-1">
+<div id="outline-container-unnumbered-22" class="outline-4">
+<h4 id="unnumbered-22"><code>broker.id</code></h4>
+<div class="outline-text-4" id="text-unnumbered-22">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -1149,9 +1136,9 @@ Kafka は  <a href="http://en.wikipedia.org/wiki/.properties">プロパティフ
 </div>
 </div>
 
-<div id="outline-container-sec-3-1-2" class="outline-4">
-<h4 id="sec-3-1-2"><code>log.dirs</code></h4>
-<div class="outline-text-4" id="text-3-1-2">
+<div id="outline-container-unnumbered-23" class="outline-4">
+<h4 id="unnumbered-23"><code>log.dirs</code></h4>
+<div class="outline-text-4" id="text-unnumbered-23">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -1177,9 +1164,9 @@ Kafka のデータが保存される1つ以上のディレクトリです。
 </div>
 </div>
 
-<div id="outline-container-sec-3-1-3" class="outline-4">
-<h4 id="sec-3-1-3"><code>port</code></h4>
-<div class="outline-text-4" id="text-3-1-3">
+<div id="outline-container-unnumbered-24" class="outline-4">
+<h4 id="unnumbered-24"><code>port</code></h4>
+<div class="outline-text-4" id="text-unnumbered-24">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -1202,9 +1189,9 @@ Kafka のデータが保存される1つ以上のディレクトリです。
 </div>
 </div>
 
-<div id="outline-container-sec-3-1-4" class="outline-4">
-<h4 id="sec-3-1-4"><code>zookeeper.connect</code></h4>
-<div class="outline-text-4" id="text-3-1-4">
+<div id="outline-container-unnumbered-25" class="outline-4">
+<h4 id="unnumbered-25"><code>zookeeper.connect</code></h4>
+<div class="outline-text-4" id="text-unnumbered-25">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -1236,7 +1223,7 @@ ZooKeeper では "chroot" パスを追加することも出来、
 全 Kafka クラスタのデータが <code>/chroot/path</code> 以下に配置されるように出来ます。
 </p>
 
-<div class="note">
+<div class="NOTE">
 <p>
 chroot を指定する場合、ブローカを起動する前にパスを作っておく必要があります。
 また、全コンシューマが同じ接続情報文字列を利用するようにしなければなりません。
@@ -1247,9 +1234,8 @@ chroot を指定する場合、ブローカを起動する前にパスを作っ�
 </div>
 
 <div id="outline-container-borker-message-max-bytes" class="outline-4">
-<h4 id="borker-message-max-bytes"><a id="sec-3-1-5" name="sec-3-1-5"></a><code>message.max.bytes</code></h4>
+<h4 id="borker-message-max-bytes"><a id="unnumbered-26"></a><code>message.max.bytes</code></h4>
 <div class="outline-text-4" id="text-borker-message-max-bytes">
-
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -1276,9 +1262,9 @@ chroot を指定する場合、ブローカを起動する前にパスを作っ�
 </div>
 
 
-<div id="outline-container-sec-3-1-6" class="outline-4">
-<h4 id="sec-3-1-6"><code>num.network.threads</code></h4>
-<div class="outline-text-4" id="text-3-1-6">
+<div id="outline-container-unnumbered-27" class="outline-4">
+<h4 id="unnumbered-27"><code>num.network.threads</code></h4>
+<div class="outline-text-4" id="text-unnumbered-27">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -1302,9 +1288,9 @@ chroot を指定する場合、ブローカを起動する前にパスを作っ�
 </div>
 </div>
 
-<div id="outline-container-sec-3-1-7" class="outline-4">
-<h4 id="sec-3-1-7"><code>num.io.threads</code></h4>
-<div class="outline-text-4" id="text-3-1-7">
+<div id="outline-container-unnumbered-28" class="outline-4">
+<h4 id="unnumbered-28"><code>num.io.threads</code></h4>
+<div class="outline-text-4" id="text-unnumbered-28">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -1328,9 +1314,9 @@ chroot を指定する場合、ブローカを起動する前にパスを作っ�
 </div>
 </div>
 
-<div id="outline-container-sec-3-1-8" class="outline-4">
-<h4 id="sec-3-1-8"><code>background.threads</code></h4>
-<div class="outline-text-4" id="text-3-1-8">
+<div id="outline-container-unnumbered-29" class="outline-4">
+<h4 id="unnumbered-29"><code>background.threads</code></h4>
+<div class="outline-text-4" id="text-unnumbered-29">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -1354,9 +1340,9 @@ chroot を指定する場合、ブローカを起動する前にパスを作っ�
 </div>
 </div>
 
-<div id="outline-container-sec-3-1-9" class="outline-4">
-<h4 id="sec-3-1-9"><code>queued.max.requests</code></h4>
-<div class="outline-text-4" id="text-3-1-9">
+<div id="outline-container-unnumbered-30" class="outline-4">
+<h4 id="unnumbered-30"><code>queued.max.requests</code></h4>
+<div class="outline-text-4" id="text-unnumbered-30">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -1380,9 +1366,9 @@ I/O スレッドが処理する為にキューに詰まれる最大リクエス�
 </div>
 </div>
 
-<div id="outline-container-sec-3-1-10" class="outline-4">
-<h4 id="sec-3-1-10"><code>host.name</code></h4>
-<div class="outline-text-4" id="text-3-1-10">
+<div id="outline-container-unnumbered-31" class="outline-4">
+<h4 id="unnumbered-31"><code>host.name</code></h4>
+<div class="outline-text-4" id="text-unnumbered-31">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -1408,9 +1394,9 @@ I/O スレッドが処理する為にキューに詰まれる最大リクエス�
 </div>
 </div>
 
-<div id="outline-container-sec-3-1-11" class="outline-4">
-<h4 id="sec-3-1-11"><code>advertised.host.name</code></h4>
-<div class="outline-text-4" id="text-3-1-11">
+<div id="outline-container-unnumbered-32" class="outline-4">
+<h4 id="unnumbered-32"><code>advertised.host.name</code></h4>
+<div class="outline-text-4" id="text-unnumbered-32">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -1432,14 +1418,14 @@ I/O スレッドが処理する為にキューに詰まれる最大リクエス�
 </p>
 
 <p>
-<sup><a id="fnr.5" name="fnr.5" class="footref" href="#fn.5">5</a></sup>
+<sup><a id="fnr.5" class="footref" href="#fn.5">5</a></sup>
 </p>
 </div>
 </div>
 
-<div id="outline-container-sec-3-1-12" class="outline-4">
-<h4 id="sec-3-1-12"><code>advertised.port</code></h4>
-<div class="outline-text-4" id="text-3-1-12">
+<div id="outline-container-unnumbered-33" class="outline-4">
+<h4 id="unnumbered-33"><code>advertised.port</code></h4>
+<div class="outline-text-4" id="text-unnumbered-33">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -1463,9 +1449,9 @@ I/O スレッドが処理する為にキューに詰まれる最大リクエス�
 </div>
 </div>
 
-<div id="outline-container-sec-3-1-13" class="outline-4">
-<h4 id="sec-3-1-13"><code>socket.send.buffer.bytes</code></h4>
-<div class="outline-text-4" id="text-3-1-13">
+<div id="outline-container-unnumbered-34" class="outline-4">
+<h4 id="unnumbered-34"><code>socket.send.buffer.bytes</code></h4>
+<div class="outline-text-4" id="text-unnumbered-34">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -1488,9 +1474,9 @@ I/O スレッドが処理する為にキューに詰まれる最大リクエス�
 </div>
 </div>
 
-<div id="outline-container-sec-3-1-14" class="outline-4">
-<h4 id="sec-3-1-14"><code>socket.receive.buffer.bytes</code></h4>
-<div class="outline-text-4" id="text-3-1-14">
+<div id="outline-container-unnumbered-35" class="outline-4">
+<h4 id="unnumbered-35"><code>socket.receive.buffer.bytes</code></h4>
+<div class="outline-text-4" id="text-unnumbered-35">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -1513,9 +1499,9 @@ I/O スレッドが処理する為にキューに詰まれる最大リクエス�
 </div>
 </div>
 
-<div id="outline-container-sec-3-1-15" class="outline-4">
-<h4 id="sec-3-1-15"><code>socket.request.max.bytes</code></h4>
-<div class="outline-text-4" id="text-3-1-15">
+<div id="outline-container-unnumbered-36" class="outline-4">
+<h4 id="unnumbered-36"><code>socket.request.max.bytes</code></h4>
+<div class="outline-text-4" id="text-unnumbered-36">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -1539,9 +1525,9 @@ I/O スレッドが処理する為にキューに詰まれる最大リクエス�
 </div>
 </div>
 
-<div id="outline-container-sec-3-1-16" class="outline-4">
-<h4 id="sec-3-1-16"><code>num.partitions</code></h4>
-<div class="outline-text-4" id="text-3-1-16">
+<div id="outline-container-unnumbered-37" class="outline-4">
+<h4 id="unnumbered-37"><code>num.partitions</code></h4>
+<div class="outline-text-4" id="text-unnumbered-37">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -1565,9 +1551,9 @@ I/O スレッドが処理する為にキューに詰まれる最大リクエス�
 </div>
 
 
-<div id="outline-container-sec-3-1-17" class="outline-4">
-<h4 id="sec-3-1-17"><code>log.segment.bytes</code></h4>
-<div class="outline-text-4" id="text-3-1-17">
+<div id="outline-container-unnumbered-38" class="outline-4">
+<h4 id="unnumbered-38"><code>log.segment.bytes</code></h4>
+<div class="outline-text-4" id="text-unnumbered-38">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -1587,15 +1573,15 @@ I/O スレッドが処理する為にキューに詰まれる最大リクエス�
 <p>
 トピックパーティションのログは、セグメントファイルのディレクトリとして保存されています。
 1セグメントのファイルサイズがこの値に達すると、新しいセグメントファイルが作成されます。
-<sup><a id="fnr.6" name="fnr.6" class="footref" href="#fn.6">6</a></sup>
+<sup><a id="fnr.6" class="footref" href="#fn.6">6</a></sup>
 この設定値はトピック毎に上書き可能です( <a href="#topic-config">トピックレベルの設定</a> を参照)。
 </p>
 </div>
 </div>
 
-<div id="outline-container-sec-3-1-18" class="outline-4">
-<h4 id="sec-3-1-18"><code>log.roll.{ms,hours}</code></h4>
-<div class="outline-text-4" id="text-3-1-18">
+<div id="outline-container-unnumbered-39" class="outline-4">
+<h4 id="unnumbered-39"><code>log.roll.{ms,hours}</code></h4>
+<div class="outline-text-4" id="text-unnumbered-39">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -1620,9 +1606,9 @@ I/O スレッドが処理する為にキューに詰まれる最大リクエス�
 </div>
 </div>
 
-<div id="outline-container-sec-3-1-19" class="outline-4">
-<h4 id="sec-3-1-19"><code>log.cleanup.policy</code></h4>
-<div class="outline-text-4" id="text-3-1-19">
+<div id="outline-container-unnumbered-40" class="outline-4">
+<h4 id="unnumbered-40"><code>log.cleanup.policy</code></h4>
+<div class="outline-text-4" id="text-unnumbered-40">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -1648,9 +1634,9 @@ I/O スレッドが処理する為にキューに詰まれる最大リクエス�
 </div>
 </div>
 
-<div id="outline-container-sec-3-1-20" class="outline-4">
-<h4 id="sec-3-1-20"><code>log.retention.{ms,minutes,hours}</code></h4>
-<div class="outline-text-4" id="text-3-1-20">
+<div id="outline-container-unnumbered-41" class="outline-4">
+<h4 id="unnumbered-41"><code>log.retention.{ms,minutes,hours}</code></h4>
+<div class="outline-text-4" id="text-unnumbered-41">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -1671,7 +1657,7 @@ I/O スレッドが処理する為にキューに詰まれる最大リクエス�
 ログセグメントを削除するまでの時間、つまりトピックのデフォルト保持期間です。
 </p>
 
-<div class="note">
+<div class="NOTE">
 <p>
 <code>log.retention.minutes</code> と <code>log.retention.bytes</code> が両方セットされていた場合、
 いずれかの上限に達した時点でクリーンアップを行ないます。
@@ -1685,9 +1671,9 @@ I/O スレッドが処理する為にキューに詰まれる最大リクエス�
 </div>
 </div>
 
-<div id="outline-container-sec-3-1-21" class="outline-4">
-<h4 id="sec-3-1-21">log.retention.bytes</h4>
-<div class="outline-text-4" id="text-3-1-21">
+<div id="outline-container-unnumbered-42" class="outline-4">
+<h4 id="unnumbered-42">log.retention.bytes</h4>
+<div class="outline-text-4" id="text-unnumbered-42">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -1708,9 +1694,9 @@ The amount of data to retain in the log for each topic-partitions. Note that thi
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-1-22" class="outline-4">
-<h4 id="sec-3-1-22">log.retention.check.interval.ms</h4>
-<div class="outline-text-4" id="text-3-1-22">
+<div id="outline-container-unnumbered-43" class="outline-4">
+<h4 id="unnumbered-43">log.retention.check.interval.ms</h4>
+<div class="outline-text-4" id="text-unnumbered-43">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -1731,9 +1717,9 @@ The period with which we check whether any log segment is eligible for deletion 
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-1-23" class="outline-4">
-<h4 id="sec-3-1-23">log.cleaner.enable</h4>
-<div class="outline-text-4" id="text-3-1-23">
+<div id="outline-container-unnumbered-44" class="outline-4">
+<h4 id="unnumbered-44">log.cleaner.enable</h4>
+<div class="outline-text-4" id="text-unnumbered-44">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -1754,9 +1740,9 @@ This configuration must be set to true for log compaction to run.
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-1-24" class="outline-4">
-<h4 id="sec-3-1-24">log.cleaner.threads</h4>
-<div class="outline-text-4" id="text-3-1-24">
+<div id="outline-container-unnumbered-45" class="outline-4">
+<h4 id="unnumbered-45">log.cleaner.threads</h4>
+<div class="outline-text-4" id="text-unnumbered-45">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -1777,9 +1763,9 @@ The number of threads to use for cleaning logs in log compaction.
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-1-25" class="outline-4">
-<h4 id="sec-3-1-25">log.cleaner.io.max.bytes.per.second</h4>
-<div class="outline-text-4" id="text-3-1-25">
+<div id="outline-container-unnumbered-46" class="outline-4">
+<h4 id="unnumbered-46">log.cleaner.io.max.bytes.per.second</h4>
+<div class="outline-text-4" id="text-unnumbered-46">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -1800,9 +1786,9 @@ The maximum amount of I/O the log cleaner can do while performing log compaction
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-1-26" class="outline-4">
-<h4 id="sec-3-1-26">log.cleaner.dedupe.buffer.size</h4>
-<div class="outline-text-4" id="text-3-1-26">
+<div id="outline-container-unnumbered-47" class="outline-4">
+<h4 id="unnumbered-47">log.cleaner.dedupe.buffer.size</h4>
+<div class="outline-text-4" id="text-unnumbered-47">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -1823,9 +1809,9 @@ The size of the buffer the log cleaner uses for indexing and deduplicating logs 
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-1-27" class="outline-4">
-<h4 id="sec-3-1-27">log.cleaner.io.buffer.size</h4>
-<div class="outline-text-4" id="text-3-1-27">
+<div id="outline-container-unnumbered-48" class="outline-4">
+<h4 id="unnumbered-48">log.cleaner.io.buffer.size</h4>
+<div class="outline-text-4" id="text-unnumbered-48">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -1846,9 +1832,9 @@ The size of the I/O chunk used during log cleaning. You probably don't need to c
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-1-28" class="outline-4">
-<h4 id="sec-3-1-28">log.cleaner.io.buffer.load.factor</h4>
-<div class="outline-text-4" id="text-3-1-28">
+<div id="outline-container-unnumbered-49" class="outline-4">
+<h4 id="unnumbered-49">log.cleaner.io.buffer.load.factor</h4>
+<div class="outline-text-4" id="text-unnumbered-49">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -1869,9 +1855,9 @@ The load factor of the hash table used in log cleaning. You probably don't need 
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-1-29" class="outline-4">
-<h4 id="sec-3-1-29">log.cleaner.backoff.ms</h4>
-<div class="outline-text-4" id="text-3-1-29">
+<div id="outline-container-unnumbered-50" class="outline-4">
+<h4 id="unnumbered-50">log.cleaner.backoff.ms</h4>
+<div class="outline-text-4" id="text-unnumbered-50">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -1892,9 +1878,9 @@ The interval between checks to see if any logs need cleaning.
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-1-30" class="outline-4">
-<h4 id="sec-3-1-30">log.cleaner.min.cleanable.ratio</h4>
-<div class="outline-text-4" id="text-3-1-30">
+<div id="outline-container-unnumbered-51" class="outline-4">
+<h4 id="unnumbered-51">log.cleaner.min.cleanable.ratio</h4>
+<div class="outline-text-4" id="text-unnumbered-51">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -1915,9 +1901,9 @@ This configuration controls how frequently the log compactor will attempt to cle
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-1-31" class="outline-4">
-<h4 id="sec-3-1-31">log.cleaner.delete.retention.ms</h4>
-<div class="outline-text-4" id="text-3-1-31">
+<div id="outline-container-unnumbered-52" class="outline-4">
+<h4 id="unnumbered-52">log.cleaner.delete.retention.ms</h4>
+<div class="outline-text-4" id="text-unnumbered-52">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -1938,9 +1924,9 @@ The amount of time to retain delete tombstone markers for log compacted topics. 
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-1-32" class="outline-4">
-<h4 id="sec-3-1-32">log.index.size.max.bytes</h4>
-<div class="outline-text-4" id="text-3-1-32">
+<div id="outline-container-unnumbered-53" class="outline-4">
+<h4 id="unnumbered-53">log.index.size.max.bytes</h4>
+<div class="outline-text-4" id="text-unnumbered-53">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -1961,9 +1947,9 @@ The maximum size in bytes we allow for the offset index for each log segment. No
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-1-33" class="outline-4">
-<h4 id="sec-3-1-33">log.index.interval.bytes</h4>
-<div class="outline-text-4" id="text-3-1-33">
+<div id="outline-container-unnumbered-54" class="outline-4">
+<h4 id="unnumbered-54">log.index.interval.bytes</h4>
+<div class="outline-text-4" id="text-unnumbered-54">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -1984,9 +1970,9 @@ The byte interval at which we add an entry to the offset index. When executing a
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-1-34" class="outline-4">
-<h4 id="sec-3-1-34">log.flush.interval.messages</h4>
-<div class="outline-text-4" id="text-3-1-34">
+<div id="outline-container-unnumbered-55" class="outline-4">
+<h4 id="unnumbered-55">log.flush.interval.messages</h4>
+<div class="outline-text-4" id="text-unnumbered-55">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -2007,9 +1993,9 @@ The number of messages written to a log partition before we force an fsync on th
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-1-35" class="outline-4">
-<h4 id="sec-3-1-35">log.flush.scheduler.interval.ms</h4>
-<div class="outline-text-4" id="text-3-1-35">
+<div id="outline-container-unnumbered-56" class="outline-4">
+<h4 id="unnumbered-56">log.flush.scheduler.interval.ms</h4>
+<div class="outline-text-4" id="text-unnumbered-56">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -2030,9 +2016,9 @@ The frequency in ms that the log flusher checks whether any log is eligible to b
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-1-36" class="outline-4">
-<h4 id="sec-3-1-36">log.flush.interval.ms</h4>
-<div class="outline-text-4" id="text-3-1-36">
+<div id="outline-container-unnumbered-57" class="outline-4">
+<h4 id="unnumbered-57">log.flush.interval.ms</h4>
+<div class="outline-text-4" id="text-unnumbered-57">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -2053,9 +2039,9 @@ The maximum time between fsync calls on the log. If used in conjuction with log.
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-1-37" class="outline-4">
-<h4 id="sec-3-1-37">log.delete.delay.ms</h4>
-<div class="outline-text-4" id="text-3-1-37">
+<div id="outline-container-unnumbered-58" class="outline-4">
+<h4 id="unnumbered-58">log.delete.delay.ms</h4>
+<div class="outline-text-4" id="text-unnumbered-58">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -2076,9 +2062,9 @@ The period of time we hold log files around after they are removed from the in-m
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-1-38" class="outline-4">
-<h4 id="sec-3-1-38">log.flush.offset.checkpoint.interval.ms</h4>
-<div class="outline-text-4" id="text-3-1-38">
+<div id="outline-container-unnumbered-59" class="outline-4">
+<h4 id="unnumbered-59">log.flush.offset.checkpoint.interval.ms</h4>
+<div class="outline-text-4" id="text-unnumbered-59">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -2099,9 +2085,9 @@ The frequency with which we checkpoint the last flush point for logs for recover
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-1-39" class="outline-4">
-<h4 id="sec-3-1-39">log.segment.delete.delay.ms</h4>
-<div class="outline-text-4" id="text-3-1-39">
+<div id="outline-container-unnumbered-60" class="outline-4">
+<h4 id="unnumbered-60">log.segment.delete.delay.ms</h4>
+<div class="outline-text-4" id="text-unnumbered-60">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -2122,9 +2108,9 @@ the amount of time to wait before deleting a file from the filesystem.
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-1-40" class="outline-4">
-<h4 id="sec-3-1-40">auto.create.topics.enable</h4>
-<div class="outline-text-4" id="text-3-1-40">
+<div id="outline-container-unnumbered-61" class="outline-4">
+<h4 id="unnumbered-61">auto.create.topics.enable</h4>
+<div class="outline-text-4" id="text-unnumbered-61">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -2145,9 +2131,9 @@ Enable auto creation of topic on the server. If this is set to true then attempt
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-1-41" class="outline-4">
-<h4 id="sec-3-1-41">controller.socket.timeout.ms</h4>
-<div class="outline-text-4" id="text-3-1-41">
+<div id="outline-container-unnumbered-62" class="outline-4">
+<h4 id="unnumbered-62">controller.socket.timeout.ms</h4>
+<div class="outline-text-4" id="text-unnumbered-62">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -2168,9 +2154,9 @@ The socket timeout for commands from the partition management controller to the 
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-1-42" class="outline-4">
-<h4 id="sec-3-1-42">controller.message.queue.size</h4>
-<div class="outline-text-4" id="text-3-1-42">
+<div id="outline-container-unnumbered-63" class="outline-4">
+<h4 id="unnumbered-63">controller.message.queue.size</h4>
+<div class="outline-text-4" id="text-unnumbered-63">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -2191,9 +2177,9 @@ The buffer size for controller-to-broker-channels
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-1-43" class="outline-4">
-<h4 id="sec-3-1-43">default.replication.factor</h4>
-<div class="outline-text-4" id="text-3-1-43">
+<div id="outline-container-unnumbered-64" class="outline-4">
+<h4 id="unnumbered-64">default.replication.factor</h4>
+<div class="outline-text-4" id="text-unnumbered-64">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -2214,9 +2200,9 @@ The default replication factor for automatically created topics.
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-1-44" class="outline-4">
-<h4 id="sec-3-1-44">replica.lag.time.max.ms</h4>
-<div class="outline-text-4" id="text-3-1-44">
+<div id="outline-container-unnumbered-65" class="outline-4">
+<h4 id="unnumbered-65">replica.lag.time.max.ms</h4>
+<div class="outline-text-4" id="text-unnumbered-65">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -2237,9 +2223,9 @@ If a follower hasn't sent any fetch requests for this window of time, the leader
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-1-45" class="outline-4">
-<h4 id="sec-3-1-45">replica.lag.max.messages</h4>
-<div class="outline-text-4" id="text-3-1-45">
+<div id="outline-container-unnumbered-66" class="outline-4">
+<h4 id="unnumbered-66">replica.lag.max.messages</h4>
+<div class="outline-text-4" id="text-unnumbered-66">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -2260,9 +2246,9 @@ If a replica falls more than this many messages behind the leader, the leader wi
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-1-46" class="outline-4">
-<h4 id="sec-3-1-46">replica.socket.timeout.ms</h4>
-<div class="outline-text-4" id="text-3-1-46">
+<div id="outline-container-unnumbered-67" class="outline-4">
+<h4 id="unnumbered-67">replica.socket.timeout.ms</h4>
+<div class="outline-text-4" id="text-unnumbered-67">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -2283,9 +2269,9 @@ The socket timeout for network requests to the leader for replicating data.
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-1-47" class="outline-4">
-<h4 id="sec-3-1-47">replica.socket.receive.buffer.bytes</h4>
-<div class="outline-text-4" id="text-3-1-47">
+<div id="outline-container-unnumbered-68" class="outline-4">
+<h4 id="unnumbered-68">replica.socket.receive.buffer.bytes</h4>
+<div class="outline-text-4" id="text-unnumbered-68">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -2306,9 +2292,9 @@ The socket receive buffer for network requests to the leader for replicating dat
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-1-48" class="outline-4">
-<h4 id="sec-3-1-48">replica.fetch.max.bytes</h4>
-<div class="outline-text-4" id="text-3-1-48">
+<div id="outline-container-unnumbered-69" class="outline-4">
+<h4 id="unnumbered-69">replica.fetch.max.bytes</h4>
+<div class="outline-text-4" id="text-unnumbered-69">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -2329,9 +2315,9 @@ The number of byes of messages to attempt to fetch for each partition in the fet
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-1-49" class="outline-4">
-<h4 id="sec-3-1-49">replica.fetch.wait.max.ms</h4>
-<div class="outline-text-4" id="text-3-1-49">
+<div id="outline-container-unnumbered-70" class="outline-4">
+<h4 id="unnumbered-70">replica.fetch.wait.max.ms</h4>
+<div class="outline-text-4" id="text-unnumbered-70">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -2352,9 +2338,9 @@ The maximum amount of time to wait time for data to arrive on the leader in the 
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-1-50" class="outline-4">
-<h4 id="sec-3-1-50">replica.fetch.min.bytes</h4>
-<div class="outline-text-4" id="text-3-1-50">
+<div id="outline-container-unnumbered-71" class="outline-4">
+<h4 id="unnumbered-71">replica.fetch.min.bytes</h4>
+<div class="outline-text-4" id="text-unnumbered-71">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -2375,9 +2361,9 @@ Minimum bytes expected for each fetch response for the fetch requests from the r
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-1-51" class="outline-4">
-<h4 id="sec-3-1-51">num.replica.fetchers</h4>
-<div class="outline-text-4" id="text-3-1-51">
+<div id="outline-container-unnumbered-72" class="outline-4">
+<h4 id="unnumbered-72">num.replica.fetchers</h4>
+<div class="outline-text-4" id="text-unnumbered-72">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -2398,9 +2384,9 @@ Number of threads used to replicate messages from leaders. Increasing this value
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-1-52" class="outline-4">
-<h4 id="sec-3-1-52">replica.high.watermark.checkpoint.interval.ms</h4>
-<div class="outline-text-4" id="text-3-1-52">
+<div id="outline-container-unnumbered-73" class="outline-4">
+<h4 id="unnumbered-73">replica.high.watermark.checkpoint.interval.ms</h4>
+<div class="outline-text-4" id="text-unnumbered-73">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -2421,9 +2407,9 @@ The frequency with which each replica saves its high watermark to disk to handle
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-1-53" class="outline-4">
-<h4 id="sec-3-1-53">fetch.purgatory.purge.interval.requests</h4>
-<div class="outline-text-4" id="text-3-1-53">
+<div id="outline-container-unnumbered-74" class="outline-4">
+<h4 id="unnumbered-74">fetch.purgatory.purge.interval.requests</h4>
+<div class="outline-text-4" id="text-unnumbered-74">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -2444,9 +2430,9 @@ The purge interval (in number of requests) of the fetch request purgatory.
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-1-54" class="outline-4">
-<h4 id="sec-3-1-54">producer.purgatory.purge.interval.requests</h4>
-<div class="outline-text-4" id="text-3-1-54">
+<div id="outline-container-unnumbered-75" class="outline-4">
+<h4 id="unnumbered-75">producer.purgatory.purge.interval.requests</h4>
+<div class="outline-text-4" id="text-unnumbered-75">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -2467,9 +2453,9 @@ The purge interval (in number of requests) of the producer request purgatory.
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-1-55" class="outline-4">
-<h4 id="sec-3-1-55">zookeeper.session.timeout.ms</h4>
-<div class="outline-text-4" id="text-3-1-55">
+<div id="outline-container-unnumbered-76" class="outline-4">
+<h4 id="unnumbered-76">zookeeper.session.timeout.ms</h4>
+<div class="outline-text-4" id="text-unnumbered-76">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -2490,9 +2476,9 @@ ZooKeeper session timeout. If the server fails to heartbeat to ZooKeeper within 
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-1-56" class="outline-4">
-<h4 id="sec-3-1-56">zookeeper.connection.timeout.ms</h4>
-<div class="outline-text-4" id="text-3-1-56">
+<div id="outline-container-unnumbered-77" class="outline-4">
+<h4 id="unnumbered-77">zookeeper.connection.timeout.ms</h4>
+<div class="outline-text-4" id="text-unnumbered-77">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -2513,9 +2499,9 @@ The maximum amount of time that the client waits to establish a connection to zo
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-1-57" class="outline-4">
-<h4 id="sec-3-1-57">zookeeper.sync.time.ms</h4>
-<div class="outline-text-4" id="text-3-1-57">
+<div id="outline-container-unnumbered-78" class="outline-4">
+<h4 id="unnumbered-78">zookeeper.sync.time.ms</h4>
+<div class="outline-text-4" id="text-unnumbered-78">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -2536,9 +2522,9 @@ How far a ZK follower can be behind a ZK leader.
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-1-58" class="outline-4">
-<h4 id="sec-3-1-58">controlled.shutdown.enable</h4>
-<div class="outline-text-4" id="text-3-1-58">
+<div id="outline-container-unnumbered-79" class="outline-4">
+<h4 id="unnumbered-79">controlled.shutdown.enable</h4>
+<div class="outline-text-4" id="text-unnumbered-79">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -2559,9 +2545,9 @@ Enable controlled shutdown of the broker. If enabled, the broker will move all l
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-1-59" class="outline-4">
-<h4 id="sec-3-1-59">controlled.shutdown.max.retries</h4>
-<div class="outline-text-4" id="text-3-1-59">
+<div id="outline-container-unnumbered-80" class="outline-4">
+<h4 id="unnumbered-80">controlled.shutdown.max.retries</h4>
+<div class="outline-text-4" id="text-unnumbered-80">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -2582,9 +2568,9 @@ Number of retries to complete the controlled shutdown successfully before execut
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-1-60" class="outline-4">
-<h4 id="sec-3-1-60">controlled.shutdown.retry.backoff.ms</h4>
-<div class="outline-text-4" id="text-3-1-60">
+<div id="outline-container-unnumbered-81" class="outline-4">
+<h4 id="unnumbered-81">controlled.shutdown.retry.backoff.ms</h4>
+<div class="outline-text-4" id="text-unnumbered-81">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -2605,9 +2591,9 @@ Backoff time between shutdown retries.
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-1-61" class="outline-4">
-<h4 id="sec-3-1-61">auto.leader.rebalance.enable</h4>
-<div class="outline-text-4" id="text-3-1-61">
+<div id="outline-container-unnumbered-82" class="outline-4">
+<h4 id="unnumbered-82">auto.leader.rebalance.enable</h4>
+<div class="outline-text-4" id="text-unnumbered-82">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -2628,9 +2614,9 @@ If this is enabled the controller will automatically try to balance leadership f
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-1-62" class="outline-4">
-<h4 id="sec-3-1-62">leader.imbalance.per.broker.percentage</h4>
-<div class="outline-text-4" id="text-3-1-62">
+<div id="outline-container-unnumbered-83" class="outline-4">
+<h4 id="unnumbered-83">leader.imbalance.per.broker.percentage</h4>
+<div class="outline-text-4" id="text-unnumbered-83">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -2651,9 +2637,9 @@ The percentage of leader imbalance allowed per broker. The controller will rebal
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-1-63" class="outline-4">
-<h4 id="sec-3-1-63">leader.imbalance.check.interval.seconds</h4>
-<div class="outline-text-4" id="text-3-1-63">
+<div id="outline-container-unnumbered-84" class="outline-4">
+<h4 id="unnumbered-84">leader.imbalance.check.interval.seconds</h4>
+<div class="outline-text-4" id="text-unnumbered-84">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -2674,9 +2660,9 @@ The frequency with which to check for leader imbalance.
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-1-64" class="outline-4">
-<h4 id="sec-3-1-64">offset.metadata.max.bytes</h4>
-<div class="outline-text-4" id="text-3-1-64">
+<div id="outline-container-unnumbered-85" class="outline-4">
+<h4 id="unnumbered-85">offset.metadata.max.bytes</h4>
+<div class="outline-text-4" id="text-unnumbered-85">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -2697,9 +2683,9 @@ The maximum amount of metadata to allow clients to save with their offsets.
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-1-65" class="outline-4">
-<h4 id="sec-3-1-65">max.connections.per.ip</h4>
-<div class="outline-text-4" id="text-3-1-65">
+<div id="outline-container-unnumbered-86" class="outline-4">
+<h4 id="unnumbered-86">max.connections.per.ip</h4>
+<div class="outline-text-4" id="text-unnumbered-86">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -2720,9 +2706,9 @@ The maximum number of connections that a broker allows from each ip address.
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-1-66" class="outline-4">
-<h4 id="sec-3-1-66">max.connections.per.ip.overrides</h4>
-<div class="outline-text-4" id="text-3-1-66">
+<div id="outline-container-unnumbered-87" class="outline-4">
+<h4 id="unnumbered-87">max.connections.per.ip.overrides</h4>
+<div class="outline-text-4" id="text-unnumbered-87">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -2743,9 +2729,9 @@ Per-ip or hostname overrides to the default maximum number of connections.
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-1-67" class="outline-4">
-<h4 id="sec-3-1-67">connections.max.idle.ms</h4>
-<div class="outline-text-4" id="text-3-1-67">
+<div id="outline-container-unnumbered-88" class="outline-4">
+<h4 id="unnumbered-88">connections.max.idle.ms</h4>
+<div class="outline-text-4" id="text-unnumbered-88">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -2766,9 +2752,9 @@ Idle connections timeout: the server socket processor threads close the connecti
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-1-68" class="outline-4">
-<h4 id="sec-3-1-68">log.roll.jitter.{ms,hours}</h4>
-<div class="outline-text-4" id="text-3-1-68">
+<div id="outline-container-unnumbered-89" class="outline-4">
+<h4 id="unnumbered-89">log.roll.jitter.{ms,hours}</h4>
+<div class="outline-text-4" id="text-unnumbered-89">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -2789,9 +2775,9 @@ The maximum jitter to subtract from logRollTimeMillis.
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-1-69" class="outline-4">
-<h4 id="sec-3-1-69">num.recovery.threads.per.data.dir</h4>
-<div class="outline-text-4" id="text-3-1-69">
+<div id="outline-container-unnumbered-90" class="outline-4">
+<h4 id="unnumbered-90">num.recovery.threads.per.data.dir</h4>
+<div class="outline-text-4" id="text-unnumbered-90">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -2812,9 +2798,9 @@ The number of threads per data directory to be used for log recovery at startup 
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-1-70" class="outline-4">
-<h4 id="sec-3-1-70">unclean.leader.election.enable</h4>
-<div class="outline-text-4" id="text-3-1-70">
+<div id="outline-container-unnumbered-91" class="outline-4">
+<h4 id="unnumbered-91">unclean.leader.election.enable</h4>
+<div class="outline-text-4" id="text-unnumbered-91">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -2835,9 +2821,9 @@ Indicates whether to enable replicas not in the ISR set to be elected as leader 
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-1-71" class="outline-4">
-<h4 id="sec-3-1-71">delete.topic.enable</h4>
-<div class="outline-text-4" id="text-3-1-71">
+<div id="outline-container-unnumbered-92" class="outline-4">
+<h4 id="unnumbered-92">delete.topic.enable</h4>
+<div class="outline-text-4" id="text-unnumbered-92">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -2858,9 +2844,9 @@ Enable delete topic.
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-1-72" class="outline-4">
-<h4 id="sec-3-1-72">offsets.topic.num.partitions</h4>
-<div class="outline-text-4" id="text-3-1-72">
+<div id="outline-container-unnumbered-93" class="outline-4">
+<h4 id="unnumbered-93">offsets.topic.num.partitions</h4>
+<div class="outline-text-4" id="text-unnumbered-93">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -2881,9 +2867,9 @@ The number of partitions for the offset commit topic. Since changing this after 
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-1-73" class="outline-4">
-<h4 id="sec-3-1-73">offsets.topic.retention.minutes</h4>
-<div class="outline-text-4" id="text-3-1-73">
+<div id="outline-container-unnumbered-94" class="outline-4">
+<h4 id="unnumbered-94">offsets.topic.retention.minutes</h4>
+<div class="outline-text-4" id="text-unnumbered-94">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -2904,9 +2890,9 @@ Offsets that are older than this age will be marked for deletion. The actual pur
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-1-74" class="outline-4">
-<h4 id="sec-3-1-74">offsets.retention.check.interval.ms</h4>
-<div class="outline-text-4" id="text-3-1-74">
+<div id="outline-container-unnumbered-95" class="outline-4">
+<h4 id="unnumbered-95">offsets.retention.check.interval.ms</h4>
+<div class="outline-text-4" id="text-unnumbered-95">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -2927,9 +2913,9 @@ The frequency at which the offset manager checks for stale offsets.
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-1-75" class="outline-4">
-<h4 id="sec-3-1-75">offsets.topic.replication.factor</h4>
-<div class="outline-text-4" id="text-3-1-75">
+<div id="outline-container-unnumbered-96" class="outline-4">
+<h4 id="unnumbered-96">offsets.topic.replication.factor</h4>
+<div class="outline-text-4" id="text-unnumbered-96">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -2950,9 +2936,9 @@ The replication factor for the offset commit topic. A higher setting (e.g., thre
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-1-76" class="outline-4">
-<h4 id="sec-3-1-76">offsets.topic.segment.bytes</h4>
-<div class="outline-text-4" id="text-3-1-76">
+<div id="outline-container-unnumbered-97" class="outline-4">
+<h4 id="unnumbered-97">offsets.topic.segment.bytes</h4>
+<div class="outline-text-4" id="text-unnumbered-97">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -2973,9 +2959,9 @@ Segment size for the offsets topic. Since it uses a compacted topic, this should
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-1-77" class="outline-4">
-<h4 id="sec-3-1-77">offsets.load.buffer.size</h4>
-<div class="outline-text-4" id="text-3-1-77">
+<div id="outline-container-unnumbered-98" class="outline-4">
+<h4 id="unnumbered-98">offsets.load.buffer.size</h4>
+<div class="outline-text-4" id="text-unnumbered-98">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -2996,9 +2982,9 @@ An offset load occurs when a broker becomes the offset manager for a set of cons
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-1-78" class="outline-4">
-<h4 id="sec-3-1-78">offsets.commit.required.acks</h4>
-<div class="outline-text-4" id="text-3-1-78">
+<div id="outline-container-unnumbered-99" class="outline-4">
+<h4 id="unnumbered-99">offsets.commit.required.acks</h4>
+<div class="outline-text-4" id="text-unnumbered-99">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -3019,9 +3005,9 @@ The number of acknowledgements that are required before the offset commit can be
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-1-79" class="outline-4">
-<h4 id="sec-3-1-79">offsets.commit.timeout.ms</h4>
-<div class="outline-text-4" id="text-3-1-79">
+<div id="outline-container-unnumbered-100" class="outline-4">
+<h4 id="unnumbered-100">offsets.commit.timeout.ms</h4>
+<div class="outline-text-4" id="text-unnumbered-100">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -3044,9 +3030,8 @@ The offset commit will be delayed until this timeout or the required number of r
 </div>
 
 <div id="outline-container-topic-config" class="outline-4">
-<h4 id="topic-config"><a id="sec-3-1-80" name="sec-3-1-80"></a>Topic-level configuration</h4>
+<h4 id="topic-config"><a id="unnumbered-101"></a>Topic-level configuration</h4>
 <div class="outline-text-4" id="text-topic-config">
-
 <p>
 Configurations pertinent to topics have both a global default as well an optional per-topic override.
 If no per-topic configuration is given the global default is used.
@@ -3084,7 +3069,7 @@ The following are the topic-level configurations. The server's default configura
 </div>
 
 
-<ul class="org-ul"><li><a id="sec-3-1-80-1" name="sec-3-1-80-1"></a>cleanup.policy<br  /><div class="outline-text-5" id="text-3-1-80-1">
+<ul class="org-ul"><li><a id="unnumbered-102"></a>cleanup.policy<br  /><div class="outline-text-5" id="text-unnumbered-102">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -3108,9 +3093,8 @@ The following are the topic-level configurations. The server's default configura
 <p>
 A string that is either "delete" or "compact". This string designates the retention policy to use on old log segments. The default policy ("delete") will discard old segments when their retention time or size limit has been reached. The "compact" setting will enable log compaction on the topic.
 </p>
-</div>
-</li>
-<li><a id="sec-3-1-80-2" name="sec-3-1-80-2"></a>delete.retention.ms<br  /><div class="outline-text-5" id="text-3-1-80-2">
+</div></li>
+<li><a id="unnumbered-103"></a>delete.retention.ms<br  /><div class="outline-text-5" id="text-unnumbered-103">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -3134,9 +3118,8 @@ A string that is either "delete" or "compact". This string designates the retent
 <p>
 The amount of time to retain delete tombstone markers for log compacted topics. This setting also gives a bound on the time in which a consumer must complete a read if they begin from offset 0 to ensure that they get a valid snapshot of the final stage (otherwise delete tombstones may be collected before they complete their scan).
 </p>
-</div>
-</li>
-<li><a id="sec-3-1-80-3" name="sec-3-1-80-3"></a>flush.messages<br  /><div class="outline-text-5" id="text-3-1-80-3">
+</div></li>
+<li><a id="unnumbered-104"></a>flush.messages<br  /><div class="outline-text-5" id="text-unnumbered-104">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -3160,9 +3143,8 @@ The amount of time to retain delete tombstone markers for log compacted topics. 
 <p>
 This setting allows specifying an interval at which we will force an fsync of data written to the log. For example if this was set to 1 we would fsync after every message; if it were 5 we would fsync after every five messages. In general we recommend you not set this and use replication for durability and allow the operating system's background flush capabilities as it is more efficient. This setting can be overridden on a per-topic basis (see the per-topic configuration section).
 </p>
-</div>
-</li>
-<li><a id="sec-3-1-80-4" name="sec-3-1-80-4"></a>flush.ms<br  /><div class="outline-text-5" id="text-3-1-80-4">
+</div></li>
+<li><a id="unnumbered-105"></a>flush.ms<br  /><div class="outline-text-5" id="text-unnumbered-105">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -3186,9 +3168,8 @@ This setting allows specifying an interval at which we will force an fsync of da
 <p>
 This setting allows specifying a time interval at which we will force an fsync of data written to the log. For example if this was set to 1000 we would fsync after 1000 ms had passed. In general we recommend you not set this and use replication for durability and allow the operating system's background flush capabilities as it is more efficient.
 </p>
-</div>
-</li>
-<li><a id="sec-3-1-80-5" name="sec-3-1-80-5"></a>index.interval.bytes<br  /><div class="outline-text-5" id="text-3-1-80-5">
+</div></li>
+<li><a id="unnumbered-106"></a>index.interval.bytes<br  /><div class="outline-text-5" id="text-unnumbered-106">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -3212,9 +3193,8 @@ This setting allows specifying a time interval at which we will force an fsync o
 <p>
 This setting controls how frequently Kafka adds an index entry to it's offset index. The default setting ensures that we index a message roughly every 4096 bytes. More indexing allows reads to jump closer to the exact position in the log but makes the index larger. You probably don't need to change this.
 </p>
-</div>
-</li>
-<li><a id="sec-3-1-80-6" name="sec-3-1-80-6"></a>max.message.bytes<br  /><div class="outline-text-5" id="text-3-1-80-6">
+</div></li>
+<li><a id="unnumbered-107"></a>max.message.bytes<br  /><div class="outline-text-5" id="text-unnumbered-107">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -3238,9 +3218,8 @@ This setting controls how frequently Kafka adds an index entry to it's offset in
 <p>
 This is largest message size Kafka will allow to be appended to this topic. Note that if you increase this size you must also increase your consumer's fetch size so they can fetch messages this large.
 </p>
-</div>
-</li>
-<li><a id="sec-3-1-80-7" name="sec-3-1-80-7"></a>min.cleanable.dirty.ratio<br  /><div class="outline-text-5" id="text-3-1-80-7">
+</div></li>
+<li><a id="unnumbered-108"></a>min.cleanable.dirty.ratio<br  /><div class="outline-text-5" id="text-unnumbered-108">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -3264,9 +3243,8 @@ This is largest message size Kafka will allow to be appended to this topic. Note
 <p>
 This configuration controls how frequently the log compactor will attempt to clean the log (assuming log compaction is enabled). By default we will avoid cleaning a log where more than 50% of the log has been compacted. This ratio bounds the maximum space wasted in the log by duplicates (at 50% at most 50% of the log could be duplicates). A higher ratio will mean fewer, more efficient cleanings but will mean more wasted space in the log.
 </p>
-</div>
-</li>
-<li><a id="sec-3-1-80-8" name="sec-3-1-80-8"></a>min.insync.replicas<br  /><div class="outline-text-5" id="text-3-1-80-8">
+</div></li>
+<li><a id="unnumbered-109"></a>min.insync.replicas<br  /><div class="outline-text-5" id="text-unnumbered-109">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -3294,9 +3272,8 @@ When a producer sets request.required.acks to -1, min.insync.replicas specifies 
 <p>
 When used together, min.insync.replicas and request.required.acks allow you to enforce greater durability guarantees. A typical scenario would be to create a topic with a replication factor of 3, set min.insync.replicas to 2, and produce with request.required.acks of -1. This will ensure that the producer raises an exception if a majority of replicas do not receive a write.
 </p>
-</div>
-</li>
-<li><a id="sec-3-1-80-9" name="sec-3-1-80-9"></a>retention.bytes<br  /><div class="outline-text-5" id="text-3-1-80-9">
+</div></li>
+<li><a id="unnumbered-110"></a>retention.bytes<br  /><div class="outline-text-5" id="text-unnumbered-110">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -3320,9 +3297,8 @@ When used together, min.insync.replicas and request.required.acks allow you to e
 <p>
 This configuration controls the maximum size a log can grow to before we will discard old log segments to free up space if we are using the "delete" retention policy. By default there is no size limit only a time limit.
 </p>
-</div>
-</li>
-<li><a id="sec-3-1-80-10" name="sec-3-1-80-10"></a>retention.ms<br  /><div class="outline-text-5" id="text-3-1-80-10">
+</div></li>
+<li><a id="unnumbered-111"></a>retention.ms<br  /><div class="outline-text-5" id="text-unnumbered-111">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -3346,9 +3322,8 @@ This configuration controls the maximum size a log can grow to before we will di
 <p>
 This configuration controls the maximum time we will retain a log before we will discard old log segments to free up space if we are using the "delete" retention policy. This represents an SLA on how soon consumers must read their data.
 </p>
-</div>
-</li>
-<li><a id="sec-3-1-80-11" name="sec-3-1-80-11"></a>segment.bytes<br  /><div class="outline-text-5" id="text-3-1-80-11">
+</div></li>
+<li><a id="unnumbered-112"></a>segment.bytes<br  /><div class="outline-text-5" id="text-unnumbered-112">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -3372,9 +3347,8 @@ This configuration controls the maximum time we will retain a log before we will
 <p>
 This configuration controls the segment file size for the log. Retention and cleaning is always done a file at a time so a larger segment size means fewer files but less granular control over retention.
 </p>
-</div>
-</li>
-<li><a id="sec-3-1-80-12" name="sec-3-1-80-12"></a>segment.index.bytes<br  /><div class="outline-text-5" id="text-3-1-80-12">
+</div></li>
+<li><a id="unnumbered-113"></a>segment.index.bytes<br  /><div class="outline-text-5" id="text-unnumbered-113">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -3398,9 +3372,8 @@ This configuration controls the segment file size for the log. Retention and cle
 <p>
 This configuration controls the size of the index that maps offsets to file positions. We preallocate this index file and shrink it only after log rolls. You generally should not need to change this setting.
 </p>
-</div>
-</li>
-<li><a id="sec-3-1-80-13" name="sec-3-1-80-13"></a>segment.ms<br  /><div class="outline-text-5" id="text-3-1-80-13">
+</div></li>
+<li><a id="unnumbered-114"></a>segment.ms<br  /><div class="outline-text-5" id="text-unnumbered-114">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -3424,9 +3397,8 @@ This configuration controls the size of the index that maps offsets to file posi
 <p>
 This configuration controls the period of time after which Kafka will force the log to roll even if the segment file isn't full to ensure that retention can delete or compact old data.
 </p>
-</div>
-</li>
-<li><a id="sec-3-1-80-14" name="sec-3-1-80-14"></a>segment.jitter.ms<br  /><div class="outline-text-5" id="text-3-1-80-14">
+</div></li>
+<li><a id="unnumbered-115"></a>segment.jitter.ms<br  /><div class="outline-text-5" id="text-unnumbered-115">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -3450,8 +3422,7 @@ This configuration controls the period of time after which Kafka will force the 
 <p>
 The maximum jitter to subtract from logRollTimeMillis.
 </p>
-</div>
-</li></ul>
+</div></li></ul>
 </div>
 </div>
 
@@ -3463,10 +3434,8 @@ The essential consumer configurations are the following:
 </p>
 
 <ul class="org-ul">
-<li><code>group.id</code>
-</li>
-<li><code>zookeeper.connect</code>
-</li>
+<li><code>group.id</code></li>
+<li><code>zookeeper.connect</code></li>
 </ul>
 
 <p>
@@ -3474,9 +3443,9 @@ More details about consumer configuration can be found in the scala class <code>
 </p>
 </div>
 
-<div id="outline-container-sec-3-2-1" class="outline-4">
-<h4 id="sec-3-2-1">group.id</h4>
-<div class="outline-text-4" id="text-3-2-1">
+<div id="outline-container-unnumbered-116" class="outline-4">
+<h4 id="unnumbered-116">group.id</h4>
+<div class="outline-text-4" id="text-unnumbered-116">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -3497,9 +3466,9 @@ A string that uniquely identifies the group of consumer processes to which this 
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-2-2" class="outline-4">
-<h4 id="sec-3-2-2">zookeeper.connect</h4>
-<div class="outline-text-4" id="text-3-2-2">
+<div id="outline-container-unnumbered-117" class="outline-4">
+<h4 id="unnumbered-117">zookeeper.connect</h4>
+<div class="outline-text-4" id="text-unnumbered-117">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -3520,9 +3489,9 @@ Specifies the ZooKeeper connection string in the form <code>hostname:port</code>
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-2-3" class="outline-4">
-<h4 id="sec-3-2-3">consumer.id</h4>
-<div class="outline-text-4" id="text-3-2-3">
+<div id="outline-container-unnumbered-118" class="outline-4">
+<h4 id="unnumbered-118">consumer.id</h4>
+<div class="outline-text-4" id="text-unnumbered-118">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -3543,9 +3512,9 @@ Generated automatically if not set.
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-2-4" class="outline-4">
-<h4 id="sec-3-2-4">socket.timeout.ms</h4>
-<div class="outline-text-4" id="text-3-2-4">
+<div id="outline-container-unnumbered-119" class="outline-4">
+<h4 id="unnumbered-119">socket.timeout.ms</h4>
+<div class="outline-text-4" id="text-unnumbered-119">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -3566,9 +3535,9 @@ The socket timeout for network requests. The actual timeout set will be max.fetc
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-2-5" class="outline-4">
-<h4 id="sec-3-2-5">socket.receive.buffer.bytes</h4>
-<div class="outline-text-4" id="text-3-2-5">
+<div id="outline-container-unnumbered-120" class="outline-4">
+<h4 id="unnumbered-120">socket.receive.buffer.bytes</h4>
+<div class="outline-text-4" id="text-unnumbered-120">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -3590,9 +3559,8 @@ The socket receive buffer for network requests
 </div>
 </div>
 <div id="outline-container-consumer-fetch-message-max-bytes" class="outline-4">
-<h4 id="consumer-fetch-message-max-bytes"><a id="sec-3-2-6" name="sec-3-2-6"></a>fetch.message.max.bytes</h4>
+<h4 id="consumer-fetch-message-max-bytes"><a id="unnumbered-121"></a>fetch.message.max.bytes</h4>
 <div class="outline-text-4" id="text-consumer-fetch-message-max-bytes">
-
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -3619,9 +3587,9 @@ The socket receive buffer for network requests
 </div>
 </div>
 
-<div id="outline-container-sec-3-2-7" class="outline-4">
-<h4 id="sec-3-2-7">num.consumer.fetchers</h4>
-<div class="outline-text-4" id="text-3-2-7">
+<div id="outline-container-unnumbered-122" class="outline-4">
+<h4 id="unnumbered-122">num.consumer.fetchers</h4>
+<div class="outline-text-4" id="text-unnumbered-122">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -3642,9 +3610,9 @@ The number fetcher threads used to fetch data.
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-2-8" class="outline-4">
-<h4 id="sec-3-2-8">auto.commit.enable</h4>
-<div class="outline-text-4" id="text-3-2-8">
+<div id="outline-container-unnumbered-123" class="outline-4">
+<h4 id="unnumbered-123">auto.commit.enable</h4>
+<div class="outline-text-4" id="text-unnumbered-123">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -3665,9 +3633,9 @@ If true, periodically commit to ZooKeeper the offset of messages already fetched
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-2-9" class="outline-4">
-<h4 id="sec-3-2-9">auto.commit.interval.ms</h4>
-<div class="outline-text-4" id="text-3-2-9">
+<div id="outline-container-unnumbered-124" class="outline-4">
+<h4 id="unnumbered-124">auto.commit.interval.ms</h4>
+<div class="outline-text-4" id="text-unnumbered-124">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -3688,9 +3656,9 @@ The frequency in ms that the consumer offsets are committed to zookeeper.
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-2-10" class="outline-4">
-<h4 id="sec-3-2-10">queued.max.message.chunks</h4>
-<div class="outline-text-4" id="text-3-2-10">
+<div id="outline-container-unnumbered-125" class="outline-4">
+<h4 id="unnumbered-125">queued.max.message.chunks</h4>
+<div class="outline-text-4" id="text-unnumbered-125">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -3711,9 +3679,9 @@ Max number of message chunks buffered for consumption. Each chunk can be up to f
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-2-11" class="outline-4">
-<h4 id="sec-3-2-11">rebalance.max.retries</h4>
-<div class="outline-text-4" id="text-3-2-11">
+<div id="outline-container-unnumbered-126" class="outline-4">
+<h4 id="unnumbered-126">rebalance.max.retries</h4>
+<div class="outline-text-4" id="text-unnumbered-126">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -3734,9 +3702,9 @@ When a new consumer joins a consumer group the set of consumers attempt to "reba
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-2-12" class="outline-4">
-<h4 id="sec-3-2-12">fetch.min.bytes</h4>
-<div class="outline-text-4" id="text-3-2-12">
+<div id="outline-container-unnumbered-127" class="outline-4">
+<h4 id="unnumbered-127">fetch.min.bytes</h4>
+<div class="outline-text-4" id="text-unnumbered-127">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -3757,9 +3725,9 @@ The minimum amount of data the server should return for a fetch request. If insu
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-2-13" class="outline-4">
-<h4 id="sec-3-2-13">fetch.wait.max.ms</h4>
-<div class="outline-text-4" id="text-3-2-13">
+<div id="outline-container-unnumbered-128" class="outline-4">
+<h4 id="unnumbered-128">fetch.wait.max.ms</h4>
+<div class="outline-text-4" id="text-unnumbered-128">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -3780,9 +3748,9 @@ The maximum amount of time the server will block before answering the fetch requ
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-2-14" class="outline-4">
-<h4 id="sec-3-2-14">rebalance.backoff.ms</h4>
-<div class="outline-text-4" id="text-3-2-14">
+<div id="outline-container-unnumbered-129" class="outline-4">
+<h4 id="unnumbered-129">rebalance.backoff.ms</h4>
+<div class="outline-text-4" id="text-unnumbered-129">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -3803,9 +3771,9 @@ Backoff time between retries during rebalance.
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-2-15" class="outline-4">
-<h4 id="sec-3-2-15">refresh.leader.backoff.ms</h4>
-<div class="outline-text-4" id="text-3-2-15">
+<div id="outline-container-unnumbered-130" class="outline-4">
+<h4 id="unnumbered-130">refresh.leader.backoff.ms</h4>
+<div class="outline-text-4" id="text-unnumbered-130">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -3826,9 +3794,9 @@ Backoff time to wait before trying to determine the leader of a partition that h
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-2-16" class="outline-4">
-<h4 id="sec-3-2-16">auto.offset.reset</h4>
-<div class="outline-text-4" id="text-3-2-16">
+<div id="outline-container-unnumbered-131" class="outline-4">
+<h4 id="unnumbered-131">auto.offset.reset</h4>
+<div class="outline-text-4" id="text-unnumbered-131">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -3849,19 +3817,16 @@ What to do when there is no initial offset in ZooKeeper or if an offset is out o
 </p>
 
 <dl class="org-dl">
-<dt> smallest </dt><dd>automatically reset the offset to the smallest offset
-</dd>
-<dt> largest </dt><dd>automatically reset the offset to the largest offset
-</dd>
-<dt> anything else </dt><dd>throw exception to the consumer
-</dd>
+<dt>smallest</dt><dd>automatically reset the offset to the smallest offset</dd>
+<dt>largest</dt><dd>automatically reset the offset to the largest offset</dd>
+<dt>anything else</dt><dd>throw exception to the consumer</dd>
 </dl>
 </div>
 </div>
 
-<div id="outline-container-sec-3-2-17" class="outline-4">
-<h4 id="sec-3-2-17">consumer.timeout.ms</h4>
-<div class="outline-text-4" id="text-3-2-17">
+<div id="outline-container-unnumbered-132" class="outline-4">
+<h4 id="unnumbered-132">consumer.timeout.ms</h4>
+<div class="outline-text-4" id="text-unnumbered-132">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -3882,9 +3847,9 @@ Throw a timeout exception to the consumer if no message is available for consump
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-2-18" class="outline-4">
-<h4 id="sec-3-2-18">exclude.internal.topics</h4>
-<div class="outline-text-4" id="text-3-2-18">
+<div id="outline-container-unnumbered-133" class="outline-4">
+<h4 id="unnumbered-133">exclude.internal.topics</h4>
+<div class="outline-text-4" id="text-unnumbered-133">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -3905,9 +3870,9 @@ Whether messages from internal topics (such as offsets) should be exposed to the
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-2-19" class="outline-4">
-<h4 id="sec-3-2-19">partition.assignment.strategy</h4>
-<div class="outline-text-4" id="text-3-2-19">
+<div id="outline-container-unnumbered-134" class="outline-4">
+<h4 id="unnumbered-134">partition.assignment.strategy</h4>
+<div class="outline-text-4" id="text-unnumbered-134">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -3928,9 +3893,9 @@ Select a strategy for assigning partitions to consumer streams. Possible values:
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-2-20" class="outline-4">
-<h4 id="sec-3-2-20">client.id</h4>
-<div class="outline-text-4" id="text-3-2-20">
+<div id="outline-container-unnumbered-135" class="outline-4">
+<h4 id="unnumbered-135">client.id</h4>
+<div class="outline-text-4" id="text-unnumbered-135">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -3951,9 +3916,9 @@ The client id is a user-specified string sent in each request to help trace call
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-2-21" class="outline-4">
-<h4 id="sec-3-2-21">zookeeper.session.timeout.ms</h4>
-<div class="outline-text-4" id="text-3-2-21">
+<div id="outline-container-unnumbered-136" class="outline-4">
+<h4 id="unnumbered-136">zookeeper.session.timeout.ms</h4>
+<div class="outline-text-4" id="text-unnumbered-136">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -3974,9 +3939,9 @@ ZooKeeper session timeout. If the consumer fails to heartbeat to ZooKeeper for t
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-2-22" class="outline-4">
-<h4 id="sec-3-2-22">zookeeper.connection.timeout.ms</h4>
-<div class="outline-text-4" id="text-3-2-22">
+<div id="outline-container-unnumbered-137" class="outline-4">
+<h4 id="unnumbered-137">zookeeper.connection.timeout.ms</h4>
+<div class="outline-text-4" id="text-unnumbered-137">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -3997,9 +3962,9 @@ The max time that the client waits while establishing a connection to zookeeper.
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-2-23" class="outline-4">
-<h4 id="sec-3-2-23">zookeeper.sync.time.ms</h4>
-<div class="outline-text-4" id="text-3-2-23">
+<div id="outline-container-unnumbered-138" class="outline-4">
+<h4 id="unnumbered-138">zookeeper.sync.time.ms</h4>
+<div class="outline-text-4" id="text-unnumbered-138">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -4020,9 +3985,9 @@ How far a ZK follower can be behind a ZK leader
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-2-24" class="outline-4">
-<h4 id="sec-3-2-24">offsets.storage</h4>
-<div class="outline-text-4" id="text-3-2-24">
+<div id="outline-container-unnumbered-139" class="outline-4">
+<h4 id="unnumbered-139">offsets.storage</h4>
+<div class="outline-text-4" id="text-unnumbered-139">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -4043,9 +4008,9 @@ Select where offsets should be stored (zookeeper or kafka).
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-2-25" class="outline-4">
-<h4 id="sec-3-2-25">offsets.channel.backoff.ms</h4>
-<div class="outline-text-4" id="text-3-2-25">
+<div id="outline-container-unnumbered-140" class="outline-4">
+<h4 id="unnumbered-140">offsets.channel.backoff.ms</h4>
+<div class="outline-text-4" id="text-unnumbered-140">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -4066,9 +4031,9 @@ The backoff period when reconnecting the offsets channel or retrying failed offs
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-2-26" class="outline-4">
-<h4 id="sec-3-2-26">offsets.channel.socket.timeout.ms</h4>
-<div class="outline-text-4" id="text-3-2-26">
+<div id="outline-container-unnumbered-141" class="outline-4">
+<h4 id="unnumbered-141">offsets.channel.socket.timeout.ms</h4>
+<div class="outline-text-4" id="text-unnumbered-141">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -4089,9 +4054,9 @@ Socket timeout when reading responses for offset fetch/commit requests. This tim
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-2-27" class="outline-4">
-<h4 id="sec-3-2-27">offsets.commit.max.retries</h4>
-<div class="outline-text-4" id="text-3-2-27">
+<div id="outline-container-unnumbered-142" class="outline-4">
+<h4 id="unnumbered-142">offsets.commit.max.retries</h4>
+<div class="outline-text-4" id="text-unnumbered-142">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -4112,9 +4077,9 @@ Retry the offset commit up to this many times on failure. This retry count only 
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-2-28" class="outline-4">
-<h4 id="sec-3-2-28">dual.commit.enabled</h4>
-<div class="outline-text-4" id="text-3-2-28">
+<div id="outline-container-unnumbered-143" class="outline-4">
+<h4 id="unnumbered-143">dual.commit.enabled</h4>
+<div class="outline-text-4" id="text-unnumbered-143">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -4135,9 +4100,9 @@ If you are using "kafka" as offsets.storage, you can dual commit offsets to ZooK
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-2-29" class="outline-4">
-<h4 id="sec-3-2-29">partition.assignment.strategy</h4>
-<div class="outline-text-4" id="text-3-2-29">
+<div id="outline-container-unnumbered-144" class="outline-4">
+<h4 id="unnumbered-144">partition.assignment.strategy</h4>
+<div class="outline-text-4" id="text-unnumbered-144">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -4176,14 +4141,10 @@ Essential configuration properties for the producer include:
 </p>
 
 <ul class="org-ul">
-<li><code>metadata.broker.list</code>
-</li>
-<li><code>request.required.acks</code>
-</li>
-<li><code>producer.type</code>
-</li>
-<li><code>serializer.class</code>
-</li>
+<li><code>metadata.broker.list</code></li>
+<li><code>request.required.acks</code></li>
+<li><code>producer.type</code></li>
+<li><code>serializer.class</code></li>
 </ul>
 
 <p>
@@ -4191,9 +4152,9 @@ More details about producer configuration can be found in the scala class <code>
 </p>
 </div>
 
-<div id="outline-container-sec-3-3-1" class="outline-4">
-<h4 id="sec-3-3-1">metadata.broker.list</h4>
-<div class="outline-text-4" id="text-3-3-1">
+<div id="outline-container-unnumbered-145" class="outline-4">
+<h4 id="unnumbered-145">metadata.broker.list</h4>
+<div class="outline-text-4" id="text-unnumbered-145">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -4215,9 +4176,9 @@ This is for bootstrapping and the producer will only use it for getting metadata
 </div>
 </div>
 
-<div id="outline-container-sec-3-3-2" class="outline-4">
-<h4 id="sec-3-3-2">request.required.acks</h4>
-<div class="outline-text-4" id="text-3-3-2">
+<div id="outline-container-unnumbered-146" class="outline-4">
+<h4 id="unnumbered-146">request.required.acks</h4>
+<div class="outline-text-4" id="text-unnumbered-146">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -4239,23 +4200,20 @@ This value controls when a produce request is considered completed. Specifically
 
 <ul class="org-ul">
 <li>0, which means that the producer never waits for an acknowledgement from the broker (the same behavior as 0.7).
-This option provides the lowest latency but the weakest durability guarantees (some data will be lost when a server fails).
-</li>
+This option provides the lowest latency but the weakest durability guarantees (some data will be lost when a server fails).</li>
 <li>1, which means that the producer gets an acknowledgement after the leader replica has received the data. 
-This option provides better durability as the client waits until the server acknowledges the request as successful (only messages that were written to the now-dead leader but not yet replicated will be lost).
-</li>
+This option provides better durability as the client waits until the server acknowledges the request as successful (only messages that were written to the now-dead leader but not yet replicated will be lost).</li>
 <li>-1, The producer gets an acknowledgement after all in-sync replicas have received the data.
 This option provides the greatest level of durability.
 However, it does not completely eliminate the risk of message loss because the number of in sync replicas may, in rare cases, shrink to 1.
 If you want to ensure that some minimum number of replicas (typically a majority) receive a write, then you must set the topic-level min.insync.replicas setting.
-Please read the Replication section of the design documentation for a more in-depth discussion.
-</li>
+Please read the Replication section of the design documentation for a more in-depth discussion.</li>
 </ul>
 </div>
 </div>
-<div id="outline-container-sec-3-3-3" class="outline-4">
-<h4 id="sec-3-3-3">request.timeout.ms</h4>
-<div class="outline-text-4" id="text-3-3-3">
+<div id="outline-container-unnumbered-147" class="outline-4">
+<h4 id="unnumbered-147">request.timeout.ms</h4>
+<div class="outline-text-4" id="text-unnumbered-147">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -4276,9 +4234,9 @@ The amount of time the broker will wait trying to meet the request.required.acks
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-3-4" class="outline-4">
-<h4 id="sec-3-3-4">producer.type</h4>
-<div class="outline-text-4" id="text-3-3-4">
+<div id="outline-container-unnumbered-148" class="outline-4">
+<h4 id="unnumbered-148">producer.type</h4>
+<div class="outline-text-4" id="text-unnumbered-148">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -4299,9 +4257,9 @@ This parameter specifies whether the messages are sent asynchronously in a backg
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-3-5" class="outline-4">
-<h4 id="sec-3-3-5">serializer.class</h4>
-<div class="outline-text-4" id="text-3-3-5">
+<div id="outline-container-unnumbered-149" class="outline-4">
+<h4 id="unnumbered-149">serializer.class</h4>
+<div class="outline-text-4" id="text-unnumbered-149">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -4322,9 +4280,9 @@ The serializer class for messages. The default encoder takes a byte[] and return
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-3-6" class="outline-4">
-<h4 id="sec-3-3-6">key.serializer.class</h4>
-<div class="outline-text-4" id="text-3-3-6">
+<div id="outline-container-unnumbered-150" class="outline-4">
+<h4 id="unnumbered-150">key.serializer.class</h4>
+<div class="outline-text-4" id="text-unnumbered-150">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -4345,9 +4303,9 @@ The serializer class for keys (defaults to the same as for messages if nothing i
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-3-7" class="outline-4">
-<h4 id="sec-3-3-7">partitioner.class</h4>
-<div class="outline-text-4" id="text-3-3-7">
+<div id="outline-container-unnumbered-151" class="outline-4">
+<h4 id="unnumbered-151">partitioner.class</h4>
+<div class="outline-text-4" id="text-unnumbered-151">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -4368,9 +4326,9 @@ The partitioner class for partitioning messages amongst sub-topics. The default 
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-3-8" class="outline-4">
-<h4 id="sec-3-3-8">compression.codec</h4>
-<div class="outline-text-4" id="text-3-3-8">
+<div id="outline-container-unnumbered-152" class="outline-4">
+<h4 id="unnumbered-152">compression.codec</h4>
+<div class="outline-text-4" id="text-unnumbered-152">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -4391,9 +4349,9 @@ This parameter allows you to specify the compression codec for all data generate
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-3-9" class="outline-4">
-<h4 id="sec-3-3-9">compressed.topics</h4>
-<div class="outline-text-4" id="text-3-3-9">
+<div id="outline-container-unnumbered-153" class="outline-4">
+<h4 id="unnumbered-153">compressed.topics</h4>
+<div class="outline-text-4" id="text-unnumbered-153">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -4414,9 +4372,9 @@ This parameter allows you to set whether compression should be turned on for par
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-3-10" class="outline-4">
-<h4 id="sec-3-3-10">message.send.max.retries</h4>
-<div class="outline-text-4" id="text-3-3-10">
+<div id="outline-container-unnumbered-154" class="outline-4">
+<h4 id="unnumbered-154">message.send.max.retries</h4>
+<div class="outline-text-4" id="text-unnumbered-154">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -4437,9 +4395,9 @@ This property will cause the producer to automatically retry a failed send reque
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-3-11" class="outline-4">
-<h4 id="sec-3-3-11">retry.backoff.ms</h4>
-<div class="outline-text-4" id="text-3-3-11">
+<div id="outline-container-unnumbered-155" class="outline-4">
+<h4 id="unnumbered-155">retry.backoff.ms</h4>
+<div class="outline-text-4" id="text-unnumbered-155">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -4460,9 +4418,9 @@ Before each retry, the producer refreshes the metadata of relevant topics to see
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-3-12" class="outline-4">
-<h4 id="sec-3-3-12">topic.metadata.refresh.interval.ms</h4>
-<div class="outline-text-4" id="text-3-3-12">
+<div id="outline-container-unnumbered-156" class="outline-4">
+<h4 id="unnumbered-156">topic.metadata.refresh.interval.ms</h4>
+<div class="outline-text-4" id="text-unnumbered-156">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -4483,9 +4441,9 @@ The producer generally refreshes the topic metadata from brokers when there is a
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-3-13" class="outline-4">
-<h4 id="sec-3-3-13">queue.buffering.max.ms</h4>
-<div class="outline-text-4" id="text-3-3-13">
+<div id="outline-container-unnumbered-157" class="outline-4">
+<h4 id="unnumbered-157">queue.buffering.max.ms</h4>
+<div class="outline-text-4" id="text-unnumbered-157">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -4506,9 +4464,9 @@ Maximum time to buffer data when using async mode. For example a setting of 100 
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-3-14" class="outline-4">
-<h4 id="sec-3-3-14">queue.buffering.max.messages</h4>
-<div class="outline-text-4" id="text-3-3-14">
+<div id="outline-container-unnumbered-158" class="outline-4">
+<h4 id="unnumbered-158">queue.buffering.max.messages</h4>
+<div class="outline-text-4" id="text-unnumbered-158">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -4529,9 +4487,9 @@ The maximum number of unsent messages that can be queued up the producer when us
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-3-15" class="outline-4">
-<h4 id="sec-3-3-15">queue.enqueue.timeout.ms</h4>
-<div class="outline-text-4" id="text-3-3-15">
+<div id="outline-container-unnumbered-159" class="outline-4">
+<h4 id="unnumbered-159">queue.enqueue.timeout.ms</h4>
+<div class="outline-text-4" id="text-unnumbered-159">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -4552,9 +4510,9 @@ The amount of time to block before dropping messages when running in async mode 
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-3-16" class="outline-4">
-<h4 id="sec-3-3-16">batch.num.messages</h4>
-<div class="outline-text-4" id="text-3-3-16">
+<div id="outline-container-unnumbered-160" class="outline-4">
+<h4 id="unnumbered-160">batch.num.messages</h4>
+<div class="outline-text-4" id="text-unnumbered-160">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -4575,9 +4533,9 @@ The number of messages to send in one batch when using async mode. The producer 
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-3-17" class="outline-4">
-<h4 id="sec-3-3-17">send.buffer.bytes</h4>
-<div class="outline-text-4" id="text-3-3-17">
+<div id="outline-container-unnumbered-161" class="outline-4">
+<h4 id="unnumbered-161">send.buffer.bytes</h4>
+<div class="outline-text-4" id="text-unnumbered-161">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -4598,9 +4556,9 @@ Socket write buffer size
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-3-18" class="outline-4">
-<h4 id="sec-3-3-18">client.id</h4>
-<div class="outline-text-4" id="text-3-3-18">
+<div id="outline-container-unnumbered-162" class="outline-4">
+<h4 id="unnumbered-162">client.id</h4>
+<div class="outline-text-4" id="text-unnumbered-162">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -4631,9 +4589,9 @@ We are working on a replacement for our existing producer. The code is available
 </p>
 </div>
 
-<div id="outline-container-sec-3-4-1" class="outline-4">
-<h4 id="sec-3-4-1">bootstrap.servers</h4>
-<div class="outline-text-4" id="text-3-4-1">
+<div id="outline-container-unnumbered-163" class="outline-4">
+<h4 id="unnumbered-163">bootstrap.servers</h4>
+<div class="outline-text-4" id="text-unnumbered-163">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -4664,9 +4622,9 @@ A list of host/port pairs to use for establishing the initial connection to the 
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-4-2" class="outline-4">
-<h4 id="sec-3-4-2">acks</h4>
-<div class="outline-text-4" id="text-3-4-2">
+<div id="outline-container-unnumbered-164" class="outline-4">
+<h4 id="unnumbered-164">acks</h4>
+<div class="outline-text-4" id="text-unnumbered-164">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -4697,20 +4655,16 @@ The number of acknowledgments the producer requires the leader to have received 
 </p>
 
 <ul class="org-ul">
-<li><code>acks=0</code> If set to zero then the producer will not wait for any acknowledgment from the server at all. The record will be immediately added to the socket buffer and considered sent. No guarantee can be made that the server has received the record in this case, and the <code>retries</code> configuration will not take effect (as the client won't generally know of any failures). The offset given back for each record will always be set to -1.
-</li>
-<li><code>acks=1</code> This will mean the leader will write the record to its local log but will respond without awaiting full acknowledgement from all followers. In this case should the leader fail immediately after acknowledging the record but before the followers have replicated it then the record will be lost.
-</li>
-<li><code>acks=all</code> This means the leader will wait for the full set of in-sync replicas to acknowledge the record. This guarantees that the record will not be lost as long as at least one in-sync replica remains alive. This is the strongest available guarantee.
-</li>
-<li>Other settings such as <code>acks=2</code> are also possible, and will require the given number of acknowledgements but this is generally less useful.
-</li>
+<li><code>acks=0</code> If set to zero then the producer will not wait for any acknowledgment from the server at all. The record will be immediately added to the socket buffer and considered sent. No guarantee can be made that the server has received the record in this case, and the <code>retries</code> configuration will not take effect (as the client won't generally know of any failures). The offset given back for each record will always be set to -1.</li>
+<li><code>acks=1</code> This will mean the leader will write the record to its local log but will respond without awaiting full acknowledgement from all followers. In this case should the leader fail immediately after acknowledging the record but before the followers have replicated it then the record will be lost.</li>
+<li><code>acks=all</code> This means the leader will wait for the full set of in-sync replicas to acknowledge the record. This guarantees that the record will not be lost as long as at least one in-sync replica remains alive. This is the strongest available guarantee.</li>
+<li>Other settings such as <code>acks=2</code> are also possible, and will require the given number of acknowledgements but this is generally less useful.</li>
 </ul>
 </div>
 </div>
-<div id="outline-container-sec-3-4-3" class="outline-4">
-<h4 id="sec-3-4-3">buffer.memory</h4>
-<div class="outline-text-4" id="text-3-4-3">
+<div id="outline-container-unnumbered-165" class="outline-4">
+<h4 id="unnumbered-165">buffer.memory</h4>
+<div class="outline-text-4" id="text-unnumbered-165">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -4745,9 +4699,9 @@ This setting should correspond roughly to the total memory the producer will use
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-4-4" class="outline-4">
-<h4 id="sec-3-4-4">compression.type</h4>
-<div class="outline-text-4" id="text-3-4-4">
+<div id="outline-container-unnumbered-166" class="outline-4">
+<h4 id="unnumbered-166">compression.type</h4>
+<div class="outline-text-4" id="text-unnumbered-166">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -4778,9 +4732,9 @@ The compression type for all data generated by the producer. The default is none
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-4-5" class="outline-4">
-<h4 id="sec-3-4-5">retries</h4>
-<div class="outline-text-4" id="text-3-4-5">
+<div id="outline-container-unnumbered-167" class="outline-4">
+<h4 id="unnumbered-167">retries</h4>
+<div class="outline-text-4" id="text-unnumbered-167">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -4811,9 +4765,9 @@ Setting a value greater than zero will cause the client to resend any record who
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-4-6" class="outline-4">
-<h4 id="sec-3-4-6">batch.size</h4>
-<div class="outline-text-4" id="text-3-4-6">
+<div id="outline-container-unnumbered-168" class="outline-4">
+<h4 id="unnumbered-168">batch.size</h4>
+<div class="outline-text-4" id="text-unnumbered-168">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -4857,9 +4811,9 @@ A small batch size will make batching less common and may reduce throughput (a b
 </div>
 </div>
 
-<div id="outline-container-sec-3-4-7" class="outline-4">
-<h4 id="sec-3-4-7">client.id</h4>
-<div class="outline-text-4" id="text-3-4-7">
+<div id="outline-container-unnumbered-169" class="outline-4">
+<h4 id="unnumbered-169">client.id</h4>
+<div class="outline-text-4" id="text-unnumbered-169">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -4890,9 +4844,9 @@ The id string to pass to the server when making requests. The purpose of this is
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-4-8" class="outline-4">
-<h4 id="sec-3-4-8">linger.ms</h4>
-<div class="outline-text-4" id="text-3-4-8">
+<div id="outline-container-unnumbered-170" class="outline-4">
+<h4 id="unnumbered-170">linger.ms</h4>
+<div class="outline-text-4" id="text-unnumbered-170">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -4923,9 +4877,9 @@ The producer groups together any records that arrive in between request transmis
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-4-9" class="outline-4">
-<h4 id="sec-3-4-9">max.request.size</h4>
-<div class="outline-text-4" id="text-3-4-9">
+<div id="outline-container-unnumbered-171" class="outline-4">
+<h4 id="unnumbered-171">max.request.size</h4>
+<div class="outline-text-4" id="text-unnumbered-171">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -4956,9 +4910,9 @@ The maximum size of a request. This is also effectively a cap on the maximum rec
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-4-10" class="outline-4">
-<h4 id="sec-3-4-10">receive.buffer.bytes</h4>
-<div class="outline-text-4" id="text-3-4-10">
+<div id="outline-container-unnumbered-172" class="outline-4">
+<h4 id="unnumbered-172">receive.buffer.bytes</h4>
+<div class="outline-text-4" id="text-unnumbered-172">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -4989,9 +4943,9 @@ The size of the TCP receive buffer to use when reading data
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-4-11" class="outline-4">
-<h4 id="sec-3-4-11">send.buffer.bytes</h4>
-<div class="outline-text-4" id="text-3-4-11">
+<div id="outline-container-unnumbered-173" class="outline-4">
+<h4 id="unnumbered-173">send.buffer.bytes</h4>
+<div class="outline-text-4" id="text-unnumbered-173">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -5022,9 +4976,9 @@ The size of the TCP send buffer to use when sending data
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-4-12" class="outline-4">
-<h4 id="sec-3-4-12">timeout.ms</h4>
-<div class="outline-text-4" id="text-3-4-12">
+<div id="outline-container-unnumbered-174" class="outline-4">
+<h4 id="unnumbered-174">timeout.ms</h4>
+<div class="outline-text-4" id="text-unnumbered-174">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -5055,9 +5009,9 @@ The configuration controls the maximum amount of time the server will wait for a
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-4-13" class="outline-4">
-<h4 id="sec-3-4-13">block.on.buffer.full</h4>
-<div class="outline-text-4" id="text-3-4-13">
+<div id="outline-container-unnumbered-175" class="outline-4">
+<h4 id="unnumbered-175">block.on.buffer.full</h4>
+<div class="outline-text-4" id="text-unnumbered-175">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -5088,9 +5042,9 @@ When our memory buffer is exhausted we must either stop accepting new records (b
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-4-14" class="outline-4">
-<h4 id="sec-3-4-14">metadata.fetch.timeout.ms</h4>
-<div class="outline-text-4" id="text-3-4-14">
+<div id="outline-container-unnumbered-176" class="outline-4">
+<h4 id="unnumbered-176">metadata.fetch.timeout.ms</h4>
+<div class="outline-text-4" id="text-unnumbered-176">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -5121,9 +5075,9 @@ The first time data is sent to a topic we must fetch metadata about that topic t
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-4-15" class="outline-4">
-<h4 id="sec-3-4-15">metadata.max.age.ms</h4>
-<div class="outline-text-4" id="text-3-4-15">
+<div id="outline-container-unnumbered-177" class="outline-4">
+<h4 id="unnumbered-177">metadata.max.age.ms</h4>
+<div class="outline-text-4" id="text-unnumbered-177">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -5154,9 +5108,9 @@ The period of time in milliseconds after which we force a refresh of metadata ev
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-4-16" class="outline-4">
-<h4 id="sec-3-4-16">metric.reporters</h4>
-<div class="outline-text-4" id="text-3-4-16">
+<div id="outline-container-unnumbered-178" class="outline-4">
+<h4 id="unnumbered-178">metric.reporters</h4>
+<div class="outline-text-4" id="text-unnumbered-178">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -5187,9 +5141,9 @@ A list of classes to use as metrics reporters. Implementing the <code>MetricRepo
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-4-17" class="outline-4">
-<h4 id="sec-3-4-17">metrics.num.samples</h4>
-<div class="outline-text-4" id="text-3-4-17">
+<div id="outline-container-unnumbered-179" class="outline-4">
+<h4 id="unnumbered-179">metrics.num.samples</h4>
+<div class="outline-text-4" id="text-unnumbered-179">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -5220,9 +5174,9 @@ The number of samples maintained to compute metrics.
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-4-18" class="outline-4">
-<h4 id="sec-3-4-18">metrics.sample.window.ms</h4>
-<div class="outline-text-4" id="text-3-4-18">
+<div id="outline-container-unnumbered-180" class="outline-4">
+<h4 id="unnumbered-180">metrics.sample.window.ms</h4>
+<div class="outline-text-4" id="text-unnumbered-180">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -5253,9 +5207,9 @@ The metrics system maintains a configurable number of samples over a fixed windo
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-4-19" class="outline-4">
-<h4 id="sec-3-4-19">reconnect.backoff.ms</h4>
-<div class="outline-text-4" id="text-3-4-19">
+<div id="outline-container-unnumbered-181" class="outline-4">
+<h4 id="unnumbered-181">reconnect.backoff.ms</h4>
+<div class="outline-text-4" id="text-unnumbered-181">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -5286,9 +5240,9 @@ The amount of time to wait before attempting to reconnect to a given host when a
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-4-20" class="outline-4">
-<h4 id="sec-3-4-20">retry.backoff.ms</h4>
-<div class="outline-text-4" id="text-3-4-20">
+<div id="outline-container-unnumbered-182" class="outline-4">
+<h4 id="unnumbered-182">retry.backoff.ms</h4>
+<div class="outline-text-4" id="text-unnumbered-182">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -5325,24 +5279,24 @@ The amount of time to wait before attempting to retry a failed produce request t
 <h2 class="footnotes">Footnotes: </h2>
 <div id="text-footnotes">
 
-<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p>(訳注) 警告は無視してよさそうです。 <a href="https://issues.apache.org/jira/browse/KAFKA-1711">0.8.3で修正される見込みのようです</a> 。</p></div>
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p>(訳注) 警告は無視してよさそうです。 <a href="https://issues.apache.org/jira/browse/KAFKA-1711">0.8.3で修正される見込みのようです</a> 。</p></div>
 
-<div class="footdef"><sup><a id="fn.2" name="fn.2" class="footnum" href="#fnr.2">2</a></sup> <p>(訳注) 0.8.2 のリリースにconsumerも一部既に含まれていますが、正式には 0.9 で利用可能なようです( <a href="http://mail-archives.apache.org/mod_mbox/kafka-users/201505.mbox/<7D2658D6A1CA594AAD4246FFB16B38786FED5F7A@LCA1-MB04.linkedin.biz>">RE: Java Consumer API</a> 、 <a href="http://mail-archives.apache.org/mod_mbox/kafka-users/201503.mbox/<D13F868B.15C38%25jqin@linkedin.com>">Re: Consumer in Java client</a> )</p></div>
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2">2</a></sup> <p>(訳注) 0.8.2 のリリースにconsumerも一部既に含まれていますが、正式には 0.9 で利用可能なようです( <a href="http://mail-archives.apache.org/mod_mbox/kafka-users/201505.mbox/%3C7D2658D6A1CA594AAD4246FFB16B38786FED5F7A@LCA1-MB04.linkedin.biz%3E">RE: Java Consumer API</a> 、 <a href="http://mail-archives.apache.org/mod_mbox/kafka-users/201503.mbox/%3CD13F868B.15C38%jqin@linkedin.com%3E">Re: Consumer in Java client</a> )</p></div>
 
-<div class="footdef"><sup><a id="fn.3" name="fn.3" class="footnum" href="#fnr.3">3</a></sup> <p>(訳注) 関連ソース <a href="https://github.com/apache/kafka/blob/0.8.2/core/src/main/scala/kafka/consumer/ConsumerConnector.scala">ConsumerConnector</a> 、<a href="https://github.com/apache/kafka/blob/0.8.2/core/src/main/scala/kafka/consumer/KafkaStream.scala">KafkaStream</a> 、 <a href="https://github.com/apache/kafka/blob/0.8.2/core/src/main/scala/kafka/message/MessageAndMetadata.scala">MessageAndMetadata</a></p></div>
+<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3">3</a></sup> <p>(訳注) 関連ソース <a href="https://github.com/apache/kafka/blob/0.8.2/core/src/main/scala/kafka/consumer/ConsumerConnector.scala">ConsumerConnector</a> 、<a href="https://github.com/apache/kafka/blob/0.8.2/core/src/main/scala/kafka/consumer/KafkaStream.scala">KafkaStream</a> 、 <a href="https://github.com/apache/kafka/blob/0.8.2/core/src/main/scala/kafka/message/MessageAndMetadata.scala">MessageAndMetadata</a></p></div>
 
-<div class="footdef"><sup><a id="fn.4" name="fn.4" class="footnum" href="#fnr.4">4</a></sup> <p>(訳注) 関連ソース <a href="https://github.com/apache/kafka/blob/0.8.2/core/src/main/scala/kafka/consumer/SimpleConsumer.scala">SimpleConsumer</a> 、 <a href="https://github.com/apache/kafka/blob/0.8.2/core/src/main/scala/kafka/api/FetchRequest.scala">FetchRequest</a> 、 <a href="https://github.com/apache/kafka/blob/0.8.2/core/src/main/scala/kafka/api/FetchResponse.scala">FetchResponse</a> 、 <a href="https://github.com/apache/kafka/blob/0.8.2/core/src/main/scala/kafka/api/TopicMetadataRequest.scala">TopicMetadataRequest</a> 、 <a href="https://github.com/apache/kafka/blob/0.8.2/core/src/main/scala/kafka/api/TopicMetadataResponse.scala">TopicMetadataResponse</a> 、<a href="https://github.com/apache/kafka/blob/0.8.2/core/src/main/scala/kafka/api/OffsetRequest.scala">OffsetRequest</a> 、<a href="https://github.com/apache/kafka/blob/0.8.2/core/src/main/scala/kafka/api/OffsetResponse.scala">OffsetResponse</a></p></div>
+<div class="footdef"><sup><a id="fn.4" class="footnum" href="#fnr.4">4</a></sup> <p>(訳注) 関連ソース <a href="https://github.com/apache/kafka/blob/0.8.2/core/src/main/scala/kafka/consumer/SimpleConsumer.scala">SimpleConsumer</a> 、 <a href="https://github.com/apache/kafka/blob/0.8.2/core/src/main/scala/kafka/api/FetchRequest.scala">FetchRequest</a> 、 <a href="https://github.com/apache/kafka/blob/0.8.2/core/src/main/scala/kafka/api/FetchResponse.scala">FetchResponse</a> 、 <a href="https://github.com/apache/kafka/blob/0.8.2/core/src/main/scala/kafka/api/TopicMetadataRequest.scala">TopicMetadataRequest</a> 、 <a href="https://github.com/apache/kafka/blob/0.8.2/core/src/main/scala/kafka/api/TopicMetadataResponse.scala">TopicMetadataResponse</a> 、<a href="https://github.com/apache/kafka/blob/0.8.2/core/src/main/scala/kafka/api/OffsetRequest.scala">OffsetRequest</a> 、<a href="https://github.com/apache/kafka/blob/0.8.2/core/src/main/scala/kafka/api/OffsetResponse.scala">OffsetResponse</a></p></div>
 
-<div class="footdef"><sup><a id="fn.5" name="fn.5" class="footnum" href="#fnr.5">5</a></sup> <p>(訳注) 関連 issue <a href="https://issues.apache.org/jira/browse/KAFKA-1092">KAFKA-1092</a></p></div>
+<div class="footdef"><sup><a id="fn.5" class="footnum" href="#fnr.5">5</a></sup> <p>(訳注) 関連 issue <a href="https://issues.apache.org/jira/browse/KAFKA-1092">KAFKA-1092</a></p></div>
 
-<div class="footdef"><sup><a id="fn.6" name="fn.6" class="footnum" href="#fnr.6">6</a></sup> <p>(訳注) <code>log_dirs</code> に、 <code>&lt;トピック名&gt;-&lt;パーティション番号&gt;/000...000.log</code> の様に保存されています。</p></div>
+<div class="footdef"><sup><a id="fn.6" class="footnum" href="#fnr.6">6</a></sup> <p>(訳注) <code>log_dirs</code> に、 <code>&lt;トピック名&gt;-&lt;パーティション番号&gt;/000...000.log</code> の様に保存されています。</p></div>
 
 
 </div>
 </div></div>
 <div id="postamble" class="status">
 <p class="author">Author: yewton</p>
-<p class="date">Created: 2015-05-19 火 17:20</p>
+<p class="date">Created: 2015-05-19 火 22:44</p>
 <p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.4.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
