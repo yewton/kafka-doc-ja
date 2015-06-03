@@ -166,7 +166,7 @@ Kafka はより良いスループット、組込みのパーティショニン�
 経験上、メッセージングは比較的低いスループットで、しかしエンドツーエンドの低いレイテンシを要求し、
 また、Kafka が提供する強い堅牢性に関する保証に依存するという場合が多いです。
 
-このドメインでは、 [[http://activemq.apache.org/][ActiveMQ]] や [[http://activemq.apache.org/][ActiveMQ]] のような伝統的なメッセージングシステムと Kafka を比較することが出来ます。
+このドメインでは、 [[http://activemq.apache.org/][ActiveMQ]] や [[https://www.rabbitmq.com][RabbitMQ]] のような伝統的なメッセージングシステムと Kafka を比較することが出来ます。
 
 ** Web サイトのアクティビティトラッキング
 
