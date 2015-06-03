@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 <title>Apache Kafka</title>
-<!-- 2015-05-19 火 22:44 -->
+<!-- 2015-06-03 水 22:41 -->
 <meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta  name="generator" content="Org-mode" />
 <meta  name="author" content="yewton" />
@@ -443,7 +443,7 @@ Kafka はより良いスループット、組込みのパーティショニン�
 </p>
 
 <p>
-このドメインでは、 <a href="http://activemq.apache.org/">ActiveMQ</a> や <a href="http://activemq.apache.org/">ActiveMQ</a> のような伝統的なメッセージングシステムと Kafka を比較することが出来ます。
+このドメインでは、 <a href="http://activemq.apache.org/">ActiveMQ</a> や <a href="https://www.rabbitmq.com/">RabbitMQ</a> のような伝統的なメッセージングシステムと Kafka を比較することが出来ます。
 </p>
 </div>
 </div>
@@ -1672,7 +1672,7 @@ I/O スレッドが処理する為にキューに詰まれる最大リクエス�
 </div>
 
 <div id="outline-container-unnumbered-42" class="outline-4">
-<h4 id="unnumbered-42">log.retention.bytes</h4>
+<h4 id="unnumbered-42"><code>log.retention.bytes</code></h4>
 <div class="outline-text-4" id="text-unnumbered-42">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -1689,13 +1689,28 @@ I/O スレッドが処理する為にキューに詰まれる最大リクエス�
 </tr>
 </tbody>
 </table>
+
 <p>
-The amount of data to retain in the log for each topic-partitions. Note that this is the limit per-partition so multiply by the number of partitions to get the total data retained for the topic. Also note that if both log.retention.hours and log.retention.bytes are both set we delete a segment when either limit is exceeded. This setting can be overridden on a per-topic basis (see the per-topic configuration section).
+各トピックパーティションログの総サイズ制限です。
+これはパーティション毎の制限なので、トピックが必要とするトータルのデータ容量は、これにパーティション数を掛けた値になります。
+</p>
+
+<div class="NOTE">
+<p>
+<code>log.retention.minutes</code> と <code>log.retention.bytes</code> が両方セットされていた場合、
+いずれかの上限に達した時点でクリーンアップを行ないます。
+</p>
+
+</div>
+
+<p>
+この設定値はトピック毎に上書き可能です( <a href="#topic-config">トピックレベルの設定</a> を参照)。
 </p>
 </div>
 </div>
+
 <div id="outline-container-unnumbered-43" class="outline-4">
-<h4 id="unnumbered-43">log.retention.check.interval.ms</h4>
+<h4 id="unnumbered-43"><code>log.retention.check.interval.ms</code></h4>
 <div class="outline-text-4" id="text-unnumbered-43">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -1712,13 +1727,15 @@ The amount of data to retain in the log for each topic-partitions. Note that thi
 </tr>
 </tbody>
 </table>
+
 <p>
-The period with which we check whether any log segment is eligible for deletion to meet the retention policies.
+ログの保持ポリシーと照らし合わせて、削除対象となるログセグメントがあるかどうかを確認する間隔です。
 </p>
 </div>
 </div>
+
 <div id="outline-container-unnumbered-44" class="outline-4">
-<h4 id="unnumbered-44">log.cleaner.enable</h4>
+<h4 id="unnumbered-44"><code>log.cleaner.enable</code></h4>
 <div class="outline-text-4" id="text-unnumbered-44">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -1735,13 +1752,15 @@ The period with which we check whether any log segment is eligible for deletion 
 </tr>
 </tbody>
 </table>
+
 <p>
-This configuration must be set to true for log compaction to run.
+ログコンパクションを実行するためには、この設定は必ず <code>true</code> にしなければなりません。
 </p>
 </div>
 </div>
+
 <div id="outline-container-unnumbered-45" class="outline-4">
-<h4 id="unnumbered-45">log.cleaner.threads</h4>
+<h4 id="unnumbered-45"><code>log.cleaner.threads</code></h4>
 <div class="outline-text-4" id="text-unnumbered-45">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -1758,13 +1777,15 @@ This configuration must be set to true for log compaction to run.
 </tr>
 </tbody>
 </table>
+
 <p>
-The number of threads to use for cleaning logs in log compaction.
+ログコンパクション実行時のログクリーニングに使われるスレッド数です。
 </p>
 </div>
 </div>
+
 <div id="outline-container-unnumbered-46" class="outline-4">
-<h4 id="unnumbered-46">log.cleaner.io.max.bytes.per.second</h4>
+<h4 id="unnumbered-46"><code>log.cleaner.io.max.bytes.per.second</code></h4>
 <div class="outline-text-4" id="text-unnumbered-46">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -1781,13 +1802,16 @@ The number of threads to use for cleaning logs in log compaction.
 </tr>
 </tbody>
 </table>
+
 <p>
-The maximum amount of I/O the log cleaner can do while performing log compaction. This setting allows setting a limit for the cleaner to avoid impacting live request serving.
+ログクリーナがログコンパクション実行時に発生する I/O の最大総サイズです。
+この制限を設けることで、クリーナが運用中のサービスに影響を与えることを避けることが出来ます。
 </p>
 </div>
 </div>
+
 <div id="outline-container-unnumbered-47" class="outline-4">
-<h4 id="unnumbered-47">log.cleaner.dedupe.buffer.size</h4>
+<h4 id="unnumbered-47"><code>log.cleaner.dedupe.buffer.size</code></h4>
 <div class="outline-text-4" id="text-unnumbered-47">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -1804,13 +1828,16 @@ The maximum amount of I/O the log cleaner can do while performing log compaction
 </tr>
 </tbody>
 </table>
+
 <p>
-The size of the buffer the log cleaner uses for indexing and deduplicating logs during cleaning. Larger is better provided you have sufficient memory.
+ログクリーナがクリーニング中にインデクシングとログの重複除去のために使用するバッファサイズです。
+十分なメモリがあるならば、より大きな値の方が望ましいです。
 </p>
 </div>
 </div>
+
 <div id="outline-container-unnumbered-48" class="outline-4">
-<h4 id="unnumbered-48">log.cleaner.io.buffer.size</h4>
+<h4 id="unnumbered-48"><code>log.cleaner.io.buffer.size</code></h4>
 <div class="outline-text-4" id="text-unnumbered-48">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -1827,13 +1854,16 @@ The size of the buffer the log cleaner uses for indexing and deduplicating logs 
 </tr>
 </tbody>
 </table>
+
 <p>
-The size of the I/O chunk used during log cleaning. You probably don't need to change this.
+ログクリーニング中に使用される I/O チャンクのサイズです。
+恐らく変更する必要はないでしょう。
 </p>
 </div>
 </div>
+
 <div id="outline-container-unnumbered-49" class="outline-4">
-<h4 id="unnumbered-49">log.cleaner.io.buffer.load.factor</h4>
+<h4 id="unnumbered-49"><code>log.cleaner.io.buffer.load.factor</code></h4>
 <div class="outline-text-4" id="text-unnumbered-49">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -1850,13 +1880,16 @@ The size of the I/O chunk used during log cleaning. You probably don't need to c
 </tr>
 </tbody>
 </table>
+
 <p>
-The load factor of the hash table used in log cleaning. You probably don't need to change this.
+ログクリーニング中に使用されるハッシュテーブルの load factor です。
+恐らく変更する必要はないでしょう。
 </p>
 </div>
 </div>
+
 <div id="outline-container-unnumbered-50" class="outline-4">
-<h4 id="unnumbered-50">log.cleaner.backoff.ms</h4>
+<h4 id="unnumbered-50"><code>log.cleaner.backoff.ms</code></h4>
 <div class="outline-text-4" id="text-unnumbered-50">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -1873,13 +1906,15 @@ The load factor of the hash table used in log cleaning. You probably don't need 
 </tr>
 </tbody>
 </table>
+
 <p>
-The interval between checks to see if any logs need cleaning.
+クリーニングが必要なログが無いか確認する間隔です。
 </p>
 </div>
 </div>
+
 <div id="outline-container-unnumbered-51" class="outline-4">
-<h4 id="unnumbered-51">log.cleaner.min.cleanable.ratio</h4>
+<h4 id="unnumbered-51"><code>log.cleaner.min.cleanable.ratio</code></h4>
 <div class="outline-text-4" id="text-unnumbered-51">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -1896,11 +1931,28 @@ The interval between checks to see if any logs need cleaning.
 </tr>
 </tbody>
 </table>
+
 <p>
-This configuration controls how frequently the log compactor will attempt to clean the log (assuming log compaction is enabled). By default we will avoid cleaning a log where more than 50% of the log has been compacted. This ratio bounds the maximum space wasted in the log by duplicates (at 50% at most 50% of the log could be duplicates). A higher ratio will mean fewer, more efficient cleanings but will mean more wasted space in the log. This setting can be overridden on a per-topic basis (see the per-topic configuration section).
+<a href="http://kafka.apache.org/documentation.html#compaction">ログコンパクション</a> が有効なときの、ログコンパクタがログをクリーンする頻度を設定します。
+デフォルトでは50%以上のログがコンパクションされていた場合はクリーニングを行ないません。
+この比率はログの重複により消費される最大スペースを設定します
+(50%だと、多くて50%のログが重複している可能性がある、ということです)。
+より高い比率に設定すれば、より少なく、効率的なクリーニングが行われることになりますが、
+</p>
+
+
+<p>
+By default we will avoid cleaning a log where more than 50% of the log has been compacted. 
+This ratio bounds the maximum space wasted in the log by duplicates (at 50% at most 50% of the log could be duplicates). 
+A higher ratio will mean fewer, more efficient cleanings but will mean more wasted space in the log.
+</p>
+
+<p>
+この設定値はトピック毎に上書き可能です( <a href="#topic-config">トピックレベルの設定</a> を参照)。
 </p>
 </div>
 </div>
+
 <div id="outline-container-unnumbered-52" class="outline-4">
 <h4 id="unnumbered-52">log.cleaner.delete.retention.ms</h4>
 <div class="outline-text-4" id="text-unnumbered-52">
@@ -5296,7 +5348,7 @@ The amount of time to wait before attempting to retry a failed produce request t
 </div></div>
 <div id="postamble" class="status">
 <p class="author">Author: yewton</p>
-<p class="date">Created: 2015-05-19 火 22:44</p>
+<p class="date">Created: 2015-06-03 水 22:41</p>
 <p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.4.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
