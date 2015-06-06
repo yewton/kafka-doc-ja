@@ -1,3 +1,4 @@
+#+MACRO: otb この設定値はトピック毎に上書き可能です( [[#topic-config][トピックレベルの設定]] を参照)。
 * =broker.id=
 | デフォルト |   |
 
@@ -34,10 +35,10 @@ ZooKeeper では "chroot" パスを追加することも出来、
 具体的には、 =hostname1:port1,hostname2:port2,hostname3:port3/chroot/path= のように指定することで、
 全 Kafka クラスタのデータが =/chroot/path= 以下に配置されるように出来ます。
 
-#+BEGIN_NOTE
+#+begin_note
 chroot を指定する場合、ブローカを起動する前にパスを作っておく必要があります。
 また、全コンシューマが同じ接続情報文字列を利用するようにしなければなりません。
-#+END_NOTE
+#+end_note
 
 * =message.max.bytes=
 :PROPERTIES:
@@ -125,14 +126,14 @@ I/O スレッドが処理する為にキューに詰まれる最大リクエス�
 トピックパーティションのログは、セグメントファイルのディレクトリとして保存されています。
 1セグメントのファイルサイズがこの値に達すると、新しいセグメントファイルが作成されます。
 [fn:: (訳注) =log_dirs= に、 =<トピック名>-<パーティション番号>/000...000.log= の様に保存されています。 ]
-この設定値はトピック毎に上書き可能です( [[#topic-config][トピックレベルの設定]] を参照)。
+{{{otb}}}
 
 * =log.roll.{ms,hours}=
 | デフォルト | 24 * 7 hours |
 
 セグメントファイルサイズが =log.segment.bytes= に到達していない場合でも、
 この設定値の時間が経過した場合に強制的に新たなログセグメントを作成するよう設定します。
-この設定値はトピック毎に上書き可能です( [[#topic-config][トピックレベルの設定]] を参照)。
+{{{otb}}}
 
 * =log.cleanup.policy=
 | デフォルト | delete |
@@ -140,19 +141,19 @@ I/O スレッドが処理する為にキューに詰まれる最大リクエス�
 =delete= または =compact= を設定出来ます。
 ログセグメントがサイズや時間の上限に達した際に、
 =delete= の場合は削除され、 =compact= の場合は [[http://kafka.apache.org/documentation.html#compaction][ログコンパクション]] が行なわれます。
-この設定値はトピック毎に上書き可能です( [[#topic-config][トピックレベルの設定]] を参照)。
+{{{otb}}}
 
 * =log.retention.{ms,minutes,hours}=
 | デフォルト | 7 days |
 
 ログセグメントを削除するまでの時間、つまりトピックのデフォルト保持期間です。
 
-#+BEGIN_NOTE
+#+begin_note
 =log.retention.minutes= と =log.retention.bytes= が両方セットされていた場合、
 いずれかの上限に達した時点でクリーンアップを行ないます。
-#+END_NOTE
+#+end_note
 
-この設定値はトピック毎に上書き可能です( [[#topic-config][トピックレベルの設定]] を参照)。
+{{{otb}}}
 
 * =log.retention.bytes=
 | デフォルト | -1 |
@@ -160,12 +161,12 @@ I/O スレッドが処理する為にキューに詰まれる最大リクエス�
 各トピックパーティションログの総サイズ制限です。
 これはパーティション毎の制限なので、トピックが必要とするトータルのデータ容量は、これにパーティション数を掛けた値になります。
 
-#+BEGIN_NOTE
+#+begin_note
 =log.retention.minutes= と =log.retention.bytes= が両方セットされていた場合、
 いずれかの上限に達した時点でクリーンアップを行ないます。
-#+END_NOTE
+#+end_note
 
-この設定値はトピック毎に上書き可能です( [[#topic-config][トピックレベルの設定]] を参照)。
+{{{otb}}}
 
 * =log.retention.check.interval.ms=
 | デフォルト | 5 minutes |
@@ -216,65 +217,120 @@ I/O スレッドが処理する為にキューに詰まれる最大リクエス�
 
 [[http://kafka.apache.org/documentation.html#compaction][ログコンパクション]] が有効なときの、ログコンパクタがログをクリーンする頻度を設定します。
 デフォルトでは50%以上のログがコンパクションされていた場合はクリーニングを行ないません。
-この比率はログの重複により消費される最大スペースを設定します
+この比率はログの重複により無駄に使用される最大スペースを設定します
 (50%だと、多くて50%のログが重複している可能性がある、ということです)。
-より高い比率に設定すれば、より少なく、効率的なクリーニングが行われることになりますが、
+より高い比率に設定すれば、少ない回数で、より効率的なクリーニングが行われることになりますが、
+それは同時にログが無駄に使用するスペースがより多くなるということにもなります。
+{{{otb}}}
 
+* =log.cleaner.delete.retention.ms=
+| デフォルト | 1 day |
 
-By default we will avoid cleaning a log where more than 50% of the log has been compacted. 
-This ratio bounds the maximum space wasted in the log by duplicates (at 50% at most 50% of the log could be duplicates). 
-A higher ratio will mean fewer, more efficient cleanings but will mean more wasted space in the log.
+[[http://kafka.apache.org/documentation.html#compaction][ログコンパクション]] されたトピックの削除トゥームストーンマーカを保持する期間です。
+最終段階の有効なスナップショットを確実に得る為にオフセット 0 から読み込みを開始する場合、
+コンシューマはこの期間内に読み込みを完了させる必要があります。
+{{{otb}}}
 
-この設定値はトピック毎に上書き可能です( [[#topic-config][トピックレベルの設定]] を参照)。
+* =log.index.size.max.bytes=
+| デフォルト | 10 * 1024 * 1024 |
 
-* log.cleaner.delete.retention.ms
-| デフォルト |1 day|
-The amount of time to retain delete tombstone markers for log compacted topics. This setting also gives a bound on the time in which a consumer must complete a read if they begin from offset 0 to ensure that they get a valid snapshot of the final stage (otherwise delete tombstones may be collected before they complete their scan). This setting can be overridden on a per-topic basis (see the per-topic configuration section).
-* log.index.size.max.bytes
-| デフォルト |10 * 1024 * 1024|
-The maximum size in bytes we allow for the offset index for each log segment. Note that we will always pre-allocate a sparse file with this much space and shrink it down when the log rolls. If the index fills up we will roll a new log segment even if we haven't reached the log.segment.bytes limit. This setting can be overridden on a per-topic basis (see the per-topic configuration section).
-* log.index.interval.bytes
-| デフォルト |4096|
-The byte interval at which we add an entry to the offset index. When executing a fetch request the server must do a linear scan for up to this many bytes to find the correct position in the log to begin and end the fetch. So setting this value to be larger will mean larger index files (and a bit more memory usage) but less scanning. However the server will never add more than one index entry per log append (even if more than log.index.interval worth of messages are appended). In general you probably don't need to mess with this value.
-* log.flush.interval.messages
-| デフォルト |Long.MaxValue|
-The number of messages written to a log partition before we force an fsync on the log. Setting this lower will sync data to disk more often but will have a major impact on performance. We generally recommend that people make use of replication for durability rather than depending on single-server fsync, however this setting can be used to be extra certain.
-* log.flush.scheduler.interval.ms
-| デフォルト |Long.MaxValue|
-The frequency in ms that the log flusher checks whether any log is eligible to be flushed to disk.
-* log.flush.interval.ms
-| デフォルト |Long.MaxValue|
-The maximum time between fsync calls on the log. If used in conjuction with log.flush.interval.messages the log will be flushed when either criteria is met.
-* log.delete.delay.ms
-| デフォルト |60000|
-The period of time we hold log files around after they are removed from the in-memory segment index. This period of time allows any in-progress reads to complete uninterrupted without locking. You generally don't need to change this.
-* log.flush.offset.checkpoint.interval.ms
-| デフォルト |60000|
-The frequency with which we checkpoint the last flush point for logs for recovery. You should not need to change this.
-* log.segment.delete.delay.ms
-| デフォルト |60000|
-the amount of time to wait before deleting a file from the filesystem.
-* auto.create.topics.enable
-| デフォルト |true|
-Enable auto creation of topic on the server. If this is set to true then attempts to produce data or fetch metadata for a non-existent topic will automatically create it with the default replication factor and number of partitions.
-* controller.socket.timeout.ms
-| デフォルト |30000|
-The socket timeout for commands from the partition management controller to the replicas.
-* controller.message.queue.size
-| デフォルト |Int.MaxValue|
-The buffer size for controller-to-broker-channels
-* default.replication.factor
-| デフォルト |1|
-The default replication factor for automatically created topics.
-* replica.lag.time.max.ms
-| デフォルト |10000|
-If a follower hasn't sent any fetch requests for this window of time, the leader will remove the follower from ISR (in-sync replicas) and treat it as dead.
-* replica.lag.max.messages
-| デフォルト |4000|
-If a replica falls more than this many messages behind the leader, the leader will remove the follower from ISR and treat it as dead.
-* replica.socket.timeout.ms
-| デフォルト |30 * 1000|
-The socket timeout for network requests to the leader for replicating data.
+各ログセグメントのオフセットインデックスが使用する容量の最大バイト数です。
+ここで設定した容量のスパースファイルを事前に確保して、
+新たなログセグメント作成のタイミングで実容量まで縮める、という動作をする点に注意してください。
+インデックスがいっぱいになってしまった場合は、
+=log.segment.bytes= を超過していない場合でも新たなログセグメントを作成します。
+{{{otb}}}
+
+* =log.index.interval.bytes=
+| デフォルト | 4096 |
+
+オフセットインデックスにエントリを追加するバイト間隔です。
+取得リクエストを実行する際、サーバは取得を開始、あるいは終了するために、
+正しいログ内の位置を見つけるため、ここで設定したバイト数まで線形走査する必要があります。
+そのためこの値を大きくすればする程インデックスファイルは大きくなり
+(そしてもう少しだけメモリを使用するようになり)ますが、走査回数は少なくなります。
+[fn:: (訳注)何言ってんのかよく分かんない]
+ただ、サーバはログ追加毎に2つ以上インデックスエントリを追加することは決してありません
+(たとえ =log.index.interval= を上回るメッセージが追加されたとしても)。
+普通はこの値をいじる必要は無いでしょう。
+
+* =log.flush.interval.messages=
+| デフォルト | Long.MaxValue |
+
+ここで設定された数までメッセージをログパーティションに書き込んだら、強制的にログを fsync します。
+この値を小さくすれば頻繁にディスクにデータを同期するようになりますが、パフォーマンスに多大な影響を与えます。
+耐久性を得るためには、単一サーバの fsync に依存するよりもレプリケーションを利用することを通常は推奨しますが、
+さらなる確実性を求める場合はこの設定を利用することも出来ます。
+
+* =log.flush.scheduler.interval.ms=
+| デフォルト | Long.MaxValue |
+ログフラッシャがディスクにフラッシュするのに適したログがあるかをチェックする頻度をミリ秒で設定します.
+
+* =log.flush.interval.ms=
+| デフォルト | Long.MaxValue |
+
+ログの fsync がコールされるまでの最大時間です。
+
+=log.flush.interval.messages= と合わせて設定された場合は、
+どちらかの条件を満たした時点でログがフラッシュされます。
+
+* =log.delete.delay.ms=
+| デフォルト | 60000 |
+
+メモリ上のセグメントインデックスから除去された後にログファイルを保持しておく期間です。
+この期間はロックせずとも進行中の読み込みを中断することなく完了することが出来ます。
+[fn:: 何言ってんのかよく分かんない]
+通常はこの値を変更する必要は無いでしょう。
+
+* =log.flush.offset.checkpoint.interval.ms=
+| デフォルト | 60000 |
+
+リカバリのためにログの最終フラッシュのチェックポイントをセットする頻度です。
+これは変更すべきではありません。
+
+* =log.segment.delete.delay.ms=
+| デフォルト | 60000 |
+
+ファイルシステムからログセグメントファイルを削除するまでの時間です。
+
+* =auto.create.topics.enable=
+| デフォルト | true |
+
+サーバに自動でトピックを作成可能にします。
+この設定が有効な場合、存在しないトピックを作成、あるいはそのメタデータを取得しようとした際に、
+デフォルトのレプリケーションファクタとパーティション数で自動的にトピックが作成されます。
+
+* =controller.socket.timeout.ms=
+| デフォルト | 30000 |
+
+レプリカに対するパーティション管理コントローラのソケットタイムアウトです。
+
+* =controller.message.queue.size=
+| デフォルト | Int.MaxValue |
+
+コントローラからブローカへの接続チャネル( =controller-to-broker-channels= )のバッファサイズです。
+
+* =default.replication.factor=
+| デフォルト | 1 |
+自動作成されたトピックのデフォルトレプリケーションファクタです。
+
+* =replica.lag.time.max.ms=
+| デフォルト | 10000 |
+
+フォロワがここで設定した時間内に取得リクエストを送信しなかった場合、
+リーダはそのフォロワを ISR (in-sync replicas) から除去し、死んだものとして扱います。
+
+* =replica.lag.max.messages=
+| デフォルト | 4000 |
+
+ここで設定したメッセージ数よりレプリケーションが遅れた場合、
+リーダはそのフォロワを ISR (in-sync replicas) から除去し、死んだものとして扱います。
+
+* =replica.socket.timeout.ms=
+| デフォルト | 30 * 1000 |
+
+データ複製の為のリーダへのネットワークリクエストのソケットタイムアウトです。
+
 * replica.socket.receive.buffer.bytes
 | デフォルト |64 * 1024|
 The socket receive buffer for network requests to the leader for replicating data.

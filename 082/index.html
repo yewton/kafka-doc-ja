@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 <title>Apache Kafka</title>
-<!-- 2015-06-03 水 22:41 -->
+<!-- 2015-06-07 日 01:00 -->
 <meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta  name="generator" content="Org-mode" />
 <meta  name="author" content="yewton" />
@@ -1104,7 +1104,6 @@ Kafka は  <a href="http://en.wikipedia.org/wiki/.properties">プロパティフ
 トピックレベルの設定とデフォルト値の詳細については <a href="#topic-config">後述</a> します。
 </p>
 </div>
-
 <div id="outline-container-unnumbered-22" class="outline-4">
 <h4 id="unnumbered-22"><code>broker.id</code></h4>
 <div class="outline-text-4" id="text-unnumbered-22">
@@ -1223,7 +1222,7 @@ ZooKeeper では "chroot" パスを追加することも出来、
 全 Kafka クラスタのデータが <code>/chroot/path</code> 以下に配置されるように出来ます。
 </p>
 
-<div class="NOTE">
+<div class="note">
 <p>
 chroot を指定する場合、ブローカを起動する前にパスを作っておく必要があります。
 また、全コンシューマが同じ接続情報文字列を利用するようにしなければなりません。
@@ -1657,7 +1656,7 @@ I/O スレッドが処理する為にキューに詰まれる最大リクエス�
 ログセグメントを削除するまでの時間、つまりトピックのデフォルト保持期間です。
 </p>
 
-<div class="NOTE">
+<div class="note">
 <p>
 <code>log.retention.minutes</code> と <code>log.retention.bytes</code> が両方セットされていた場合、
 いずれかの上限に達した時点でクリーンアップを行ないます。
@@ -1695,7 +1694,7 @@ I/O スレッドが処理する為にキューに詰まれる最大リクエス�
 これはパーティション毎の制限なので、トピックが必要とするトータルのデータ容量は、これにパーティション数を掛けた値になります。
 </p>
 
-<div class="NOTE">
+<div class="note">
 <p>
 <code>log.retention.minutes</code> と <code>log.retention.bytes</code> が両方セットされていた場合、
 いずれかの上限に達した時点でクリーンアップを行ないます。
@@ -1935,26 +1934,17 @@ I/O スレッドが処理する為にキューに詰まれる最大リクエス�
 <p>
 <a href="http://kafka.apache.org/documentation.html#compaction">ログコンパクション</a> が有効なときの、ログコンパクタがログをクリーンする頻度を設定します。
 デフォルトでは50%以上のログがコンパクションされていた場合はクリーニングを行ないません。
-この比率はログの重複により消費される最大スペースを設定します
+この比率はログの重複により無駄に使用される最大スペースを設定します
 (50%だと、多くて50%のログが重複している可能性がある、ということです)。
-より高い比率に設定すれば、より少なく、効率的なクリーニングが行われることになりますが、
-</p>
-
-
-<p>
-By default we will avoid cleaning a log where more than 50% of the log has been compacted. 
-This ratio bounds the maximum space wasted in the log by duplicates (at 50% at most 50% of the log could be duplicates). 
-A higher ratio will mean fewer, more efficient cleanings but will mean more wasted space in the log.
-</p>
-
-<p>
+より高い比率に設定すれば、少ない回数で、より効率的なクリーニングが行われることになりますが、
+それは同時にログが無駄に使用するスペースがより多くなるということにもなります。
 この設定値はトピック毎に上書き可能です( <a href="#topic-config">トピックレベルの設定</a> を参照)。
 </p>
 </div>
 </div>
 
 <div id="outline-container-unnumbered-52" class="outline-4">
-<h4 id="unnumbered-52">log.cleaner.delete.retention.ms</h4>
+<h4 id="unnumbered-52"><code>log.cleaner.delete.retention.ms</code></h4>
 <div class="outline-text-4" id="text-unnumbered-52">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -1971,13 +1961,18 @@ A higher ratio will mean fewer, more efficient cleanings but will mean more wast
 </tr>
 </tbody>
 </table>
+
 <p>
-The amount of time to retain delete tombstone markers for log compacted topics. This setting also gives a bound on the time in which a consumer must complete a read if they begin from offset 0 to ensure that they get a valid snapshot of the final stage (otherwise delete tombstones may be collected before they complete their scan). This setting can be overridden on a per-topic basis (see the per-topic configuration section).
+<a href="http://kafka.apache.org/documentation.html#compaction">ログコンパクション</a> されたトピックの削除トゥームストーンマーカを保持する期間です。
+最終段階の有効なスナップショットを確実に得る為にオフセット 0 から読み込みを開始する場合、
+コンシューマはこの期間内に読み込みを完了させる必要があります。
+この設定値はトピック毎に上書き可能です( <a href="#topic-config">トピックレベルの設定</a> を参照)。
 </p>
 </div>
 </div>
+
 <div id="outline-container-unnumbered-53" class="outline-4">
-<h4 id="unnumbered-53">log.index.size.max.bytes</h4>
+<h4 id="unnumbered-53"><code>log.index.size.max.bytes</code></h4>
 <div class="outline-text-4" id="text-unnumbered-53">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -1994,13 +1989,20 @@ The amount of time to retain delete tombstone markers for log compacted topics. 
 </tr>
 </tbody>
 </table>
+
 <p>
-The maximum size in bytes we allow for the offset index for each log segment. Note that we will always pre-allocate a sparse file with this much space and shrink it down when the log rolls. If the index fills up we will roll a new log segment even if we haven't reached the log.segment.bytes limit. This setting can be overridden on a per-topic basis (see the per-topic configuration section).
+各ログセグメントのオフセットインデックスが使用する容量の最大バイト数です。
+ここで設定した容量のスパースファイルを事前に確保して、
+新たなログセグメント作成のタイミングで実容量まで縮める、という動作をする点に注意してください。
+インデックスがいっぱいになってしまった場合は、
+<code>log.segment.bytes</code> を超過していない場合でも新たなログセグメントを作成します。
+この設定値はトピック毎に上書き可能です( <a href="#topic-config">トピックレベルの設定</a> を参照)。
 </p>
 </div>
 </div>
+
 <div id="outline-container-unnumbered-54" class="outline-4">
-<h4 id="unnumbered-54">log.index.interval.bytes</h4>
+<h4 id="unnumbered-54"><code>log.index.interval.bytes</code></h4>
 <div class="outline-text-4" id="text-unnumbered-54">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -2017,13 +2019,23 @@ The maximum size in bytes we allow for the offset index for each log segment. No
 </tr>
 </tbody>
 </table>
+
 <p>
-The byte interval at which we add an entry to the offset index. When executing a fetch request the server must do a linear scan for up to this many bytes to find the correct position in the log to begin and end the fetch. So setting this value to be larger will mean larger index files (and a bit more memory usage) but less scanning. However the server will never add more than one index entry per log append (even if more than log.index.interval worth of messages are appended). In general you probably don't need to mess with this value.
+オフセットインデックスにエントリを追加するバイト間隔です。
+取得リクエストを実行する際、サーバは取得を開始、あるいは終了するために、
+正しいログ内の位置を見つけるため、ここで設定したバイト数まで線形走査する必要があります。
+そのためこの値を大きくすればする程インデックスファイルは大きくなり
+(そしてもう少しだけメモリを使用するようになり)ますが、走査回数は少なくなります。
+<sup><a id="fnr.7" class="footref" href="#fn.7">7</a></sup>
+ただ、サーバはログ追加毎に2つ以上インデックスエントリを追加することは決してありません
+(たとえ <code>log.index.interval</code> を上回るメッセージが追加されたとしても)。
+普通はこの値をいじる必要は無いでしょう。
 </p>
 </div>
 </div>
+
 <div id="outline-container-unnumbered-55" class="outline-4">
-<h4 id="unnumbered-55">log.flush.interval.messages</h4>
+<h4 id="unnumbered-55"><code>log.flush.interval.messages</code></h4>
 <div class="outline-text-4" id="text-unnumbered-55">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -2040,13 +2052,18 @@ The byte interval at which we add an entry to the offset index. When executing a
 </tr>
 </tbody>
 </table>
+
 <p>
-The number of messages written to a log partition before we force an fsync on the log. Setting this lower will sync data to disk more often but will have a major impact on performance. We generally recommend that people make use of replication for durability rather than depending on single-server fsync, however this setting can be used to be extra certain.
+ここで設定された数までメッセージをログパーティションに書き込んだら、強制的にログを fsync します。
+この値を小さくすれば頻繁にディスクにデータを同期するようになりますが、パフォーマンスに多大な影響を与えます。
+耐久性を得るためには、単一サーバの fsync に依存するよりもレプリケーションを利用することを通常は推奨しますが、
+さらなる確実性を求める場合はこの設定を利用することも出来ます。
 </p>
 </div>
 </div>
+
 <div id="outline-container-unnumbered-56" class="outline-4">
-<h4 id="unnumbered-56">log.flush.scheduler.interval.ms</h4>
+<h4 id="unnumbered-56"><code>log.flush.scheduler.interval.ms</code></h4>
 <div class="outline-text-4" id="text-unnumbered-56">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -2064,12 +2081,13 @@ The number of messages written to a log partition before we force an fsync on th
 </tbody>
 </table>
 <p>
-The frequency in ms that the log flusher checks whether any log is eligible to be flushed to disk.
+ログフラッシャがディスクにフラッシュするのに適したログがあるかをチェックする頻度をミリ秒で設定します.
 </p>
 </div>
 </div>
+
 <div id="outline-container-unnumbered-57" class="outline-4">
-<h4 id="unnumbered-57">log.flush.interval.ms</h4>
+<h4 id="unnumbered-57"><code>log.flush.interval.ms</code></h4>
 <div class="outline-text-4" id="text-unnumbered-57">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -2086,13 +2104,20 @@ The frequency in ms that the log flusher checks whether any log is eligible to b
 </tr>
 </tbody>
 </table>
+
 <p>
-The maximum time between fsync calls on the log. If used in conjuction with log.flush.interval.messages the log will be flushed when either criteria is met.
+ログの fsync がコールされるまでの最大時間です。
+</p>
+
+<p>
+<code>log.flush.interval.messages</code> と合わせて設定された場合は、
+どちらかの条件を満たした時点でログがフラッシュされます。
 </p>
 </div>
 </div>
+
 <div id="outline-container-unnumbered-58" class="outline-4">
-<h4 id="unnumbered-58">log.delete.delay.ms</h4>
+<h4 id="unnumbered-58"><code>log.delete.delay.ms</code></h4>
 <div class="outline-text-4" id="text-unnumbered-58">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -2109,13 +2134,18 @@ The maximum time between fsync calls on the log. If used in conjuction with log.
 </tr>
 </tbody>
 </table>
+
 <p>
-The period of time we hold log files around after they are removed from the in-memory segment index. This period of time allows any in-progress reads to complete uninterrupted without locking. You generally don't need to change this.
+メモリ上のセグメントインデックスから除去された後にログファイルを保持しておく期間です。
+この期間はロックせずとも進行中の読み込みを中断することなく完了することが出来ます。
+<sup><a id="fnr.8" class="footref" href="#fn.8">8</a></sup>
+通常はこの値を変更する必要は無いでしょう。
 </p>
 </div>
 </div>
+
 <div id="outline-container-unnumbered-59" class="outline-4">
-<h4 id="unnumbered-59">log.flush.offset.checkpoint.interval.ms</h4>
+<h4 id="unnumbered-59"><code>log.flush.offset.checkpoint.interval.ms</code></h4>
 <div class="outline-text-4" id="text-unnumbered-59">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -2132,13 +2162,16 @@ The period of time we hold log files around after they are removed from the in-m
 </tr>
 </tbody>
 </table>
+
 <p>
-The frequency with which we checkpoint the last flush point for logs for recovery. You should not need to change this.
+リカバリのためにログの最終フラッシュのチェックポイントをセットする頻度です。
+これは変更すべきではありません。
 </p>
 </div>
 </div>
+
 <div id="outline-container-unnumbered-60" class="outline-4">
-<h4 id="unnumbered-60">log.segment.delete.delay.ms</h4>
+<h4 id="unnumbered-60"><code>log.segment.delete.delay.ms</code></h4>
 <div class="outline-text-4" id="text-unnumbered-60">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -2155,13 +2188,15 @@ The frequency with which we checkpoint the last flush point for logs for recover
 </tr>
 </tbody>
 </table>
+
 <p>
-the amount of time to wait before deleting a file from the filesystem.
+ファイルシステムからログセグメントファイルを削除するまでの時間です。
 </p>
 </div>
 </div>
+
 <div id="outline-container-unnumbered-61" class="outline-4">
-<h4 id="unnumbered-61">auto.create.topics.enable</h4>
+<h4 id="unnumbered-61"><code>auto.create.topics.enable</code></h4>
 <div class="outline-text-4" id="text-unnumbered-61">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -2178,13 +2213,17 @@ the amount of time to wait before deleting a file from the filesystem.
 </tr>
 </tbody>
 </table>
+
 <p>
-Enable auto creation of topic on the server. If this is set to true then attempts to produce data or fetch metadata for a non-existent topic will automatically create it with the default replication factor and number of partitions.
+サーバに自動でトピックを作成可能にします。
+この設定が有効な場合、存在しないトピックを作成、あるいはそのメタデータを取得しようとした際に、
+デフォルトのレプリケーションファクタとパーティション数で自動的にトピックが作成されます。
 </p>
 </div>
 </div>
+
 <div id="outline-container-unnumbered-62" class="outline-4">
-<h4 id="unnumbered-62">controller.socket.timeout.ms</h4>
+<h4 id="unnumbered-62"><code>controller.socket.timeout.ms</code></h4>
 <div class="outline-text-4" id="text-unnumbered-62">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -2201,13 +2240,15 @@ Enable auto creation of topic on the server. If this is set to true then attempt
 </tr>
 </tbody>
 </table>
+
 <p>
-The socket timeout for commands from the partition management controller to the replicas.
+レプリカに対するパーティション管理コントローラのソケットタイムアウトです。
 </p>
 </div>
 </div>
+
 <div id="outline-container-unnumbered-63" class="outline-4">
-<h4 id="unnumbered-63">controller.message.queue.size</h4>
+<h4 id="unnumbered-63"><code>controller.message.queue.size</code></h4>
 <div class="outline-text-4" id="text-unnumbered-63">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -2224,13 +2265,15 @@ The socket timeout for commands from the partition management controller to the 
 </tr>
 </tbody>
 </table>
+
 <p>
-The buffer size for controller-to-broker-channels
+コントローラからブローカへの接続チャネル( <code>controller-to-broker-channels</code> )のバッファサイズです。
 </p>
 </div>
 </div>
+
 <div id="outline-container-unnumbered-64" class="outline-4">
-<h4 id="unnumbered-64">default.replication.factor</h4>
+<h4 id="unnumbered-64"><code>default.replication.factor</code></h4>
 <div class="outline-text-4" id="text-unnumbered-64">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -2248,12 +2291,13 @@ The buffer size for controller-to-broker-channels
 </tbody>
 </table>
 <p>
-The default replication factor for automatically created topics.
+自動作成されたトピックのデフォルトレプリケーションファクタです。
 </p>
 </div>
 </div>
+
 <div id="outline-container-unnumbered-65" class="outline-4">
-<h4 id="unnumbered-65">replica.lag.time.max.ms</h4>
+<h4 id="unnumbered-65"><code>replica.lag.time.max.ms</code></h4>
 <div class="outline-text-4" id="text-unnumbered-65">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -2270,13 +2314,16 @@ The default replication factor for automatically created topics.
 </tr>
 </tbody>
 </table>
+
 <p>
-If a follower hasn't sent any fetch requests for this window of time, the leader will remove the follower from ISR (in-sync replicas) and treat it as dead.
+フォロワがここで設定した時間内に取得リクエストを送信しなかった場合、
+リーダはそのフォロワを ISR (in-sync replicas) から除去し、死んだものとして扱います。
 </p>
 </div>
 </div>
+
 <div id="outline-container-unnumbered-66" class="outline-4">
-<h4 id="unnumbered-66">replica.lag.max.messages</h4>
+<h4 id="unnumbered-66"><code>replica.lag.max.messages</code></h4>
 <div class="outline-text-4" id="text-unnumbered-66">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -2293,13 +2340,16 @@ If a follower hasn't sent any fetch requests for this window of time, the leader
 </tr>
 </tbody>
 </table>
+
 <p>
-If a replica falls more than this many messages behind the leader, the leader will remove the follower from ISR and treat it as dead.
+ここで設定したメッセージ数よりレプリケーションが遅れた場合、
+リーダはそのフォロワを ISR (in-sync replicas) から除去し、死んだものとして扱います。
 </p>
 </div>
 </div>
+
 <div id="outline-container-unnumbered-67" class="outline-4">
-<h4 id="unnumbered-67">replica.socket.timeout.ms</h4>
+<h4 id="unnumbered-67"><code>replica.socket.timeout.ms</code></h4>
 <div class="outline-text-4" id="text-unnumbered-67">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -2316,11 +2366,13 @@ If a replica falls more than this many messages behind the leader, the leader wi
 </tr>
 </tbody>
 </table>
+
 <p>
-The socket timeout for network requests to the leader for replicating data.
+データ複製の為のリーダへのネットワークリクエストのソケットタイムアウトです。
 </p>
 </div>
 </div>
+
 <div id="outline-container-unnumbered-68" class="outline-4">
 <h4 id="unnumbered-68">replica.socket.receive.buffer.bytes</h4>
 <div class="outline-text-4" id="text-unnumbered-68">
@@ -5343,12 +5395,16 @@ The amount of time to wait before attempting to retry a failed produce request t
 
 <div class="footdef"><sup><a id="fn.6" class="footnum" href="#fnr.6">6</a></sup> <p>(訳注) <code>log_dirs</code> に、 <code>&lt;トピック名&gt;-&lt;パーティション番号&gt;/000...000.log</code> の様に保存されています。</p></div>
 
+<div class="footdef"><sup><a id="fn.7" class="footnum" href="#fnr.7">7</a></sup> <p>(訳注)何言ってんのかよく分かんない</p></div>
+
+<div class="footdef"><sup><a id="fn.8" class="footnum" href="#fnr.8">8</a></sup> <p>何言ってんのかよく分かんない</p></div>
+
 
 </div>
 </div></div>
 <div id="postamble" class="status">
 <p class="author">Author: yewton</p>
-<p class="date">Created: 2015-06-03 水 22:41</p>
+<p class="date">Created: 2015-06-07 日 01:00</p>
 <p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.4.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
