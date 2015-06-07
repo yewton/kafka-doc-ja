@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 <title>Apache Kafka</title>
-<!-- 2015-06-07 日 01:00 -->
+<!-- 2015-06-08 月 02:10 -->
 <meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta  name="generator" content="Org-mode" />
 <meta  name="author" content="yewton" />
@@ -198,10 +198,14 @@ Kafka は分散し、分割され、複製されるコミットログサービ�
 </p>
 
 <ul class="org-ul">
-<li>Kafka は <i>トピック</i> と呼ばれるカテゴリ毎にメッセージのフィードを保持しています</li>
-<li>Kafka のトピックに対してメッセージを発行するプロセスを <i>プロデューサ</i> と呼びます</li>
-<li>複数のトピックを購読し、発行されたメッセージのフィードを処理するプロセスを <i>コンシューマ</i> と呼びます</li>
-<li>Kafka はひとつ以上の <i>ブローカ</i> と呼ばれるサーバで構成されるクラスタとして動作します</li>
+<li>Kafka は <i>トピック</i> と呼ばれるカテゴリ毎にメッセージのフィードを保持しています
+</li>
+<li>Kafka のトピックに対してメッセージを発行するプロセスを <i>プロデューサ</i> と呼びます
+</li>
+<li>複数のトピックを購読し、発行されたメッセージのフィードを処理するプロセスを <i>コンシューマ</i> と呼びます
+</li>
+<li>Kafka はひとつ以上の <i>ブローカ</i> と呼ばれるサーバで構成されるクラスタとして動作します
+</li>
 </ul>
 
 <p>
@@ -403,10 +407,13 @@ Kafka はトピック内のパーティションの <i>中の</i> メッセー�
 <ul class="org-ul">
 <li>プロデューサから特定のトピックパーティションへと送られたメッセージは、送られた順に追記されます。
 つまり、メッセージ <code>M1</code> と <code>M2</code> が同じプロデューサから送られ、かつ <code>M1</code> が最初に送られていた場合、
-<code>M1</code> は <code>M2</code> よりも小さいオフセットを持ち、 <code>M2</code> よりも先にログに現れます。</li>
-<li>コンシューマインスタンスはログに保存されている順番にメッセージを読みます。</li>
+<code>M1</code> は <code>M2</code> よりも小さいオフセットを持ち、 <code>M2</code> よりも先にログに現れます。
+</li>
+<li>コンシューマインスタンスはログに保存されている順番にメッセージを読みます。
+</li>
 <li>レプリケーションファクタ <code>N</code> に設定されたトピックは、 <code>N-1</code> 個までのサーバ障害については、
-メッセージのロスト無く稼動することが出来ます。</li>
+メッセージのロスト無く稼動することが出来ます。
+</li>
 </ul>
 
 <p>
@@ -747,9 +754,12 @@ Topic:my-replicated-topic	PartitionCount:1	ReplicationFactor:3	Configs:
 </p>
 
 <ul class="org-ul">
-<li><code>Leader</code> はそのパーティションの全読み書きの責務を負うノードです。各ノードは、ランダムに選択されたパーティションのリーダになり得ます</li>
-<li><code>Replicas</code> はこのパーティションのログを複製しているノードのリストです。リーダか否か、現在生存しているノードかどうかにはかかわらず表示されます</li>
-<li><code>Isr</code> は「同期中」の複製を表します。 <code>Replicas</code> のリストのうち、現在生存しており、リーダに追い付いているノードが表示されます</li>
+<li><code>Leader</code> はそのパーティションの全読み書きの責務を負うノードです。各ノードは、ランダムに選択されたパーティションのリーダになり得ます
+</li>
+<li><code>Replicas</code> はこのパーティションのログを複製しているノードのリストです。リーダか否か、現在生存しているノードかどうかにはかかわらず表示されます
+</li>
+<li><code>Isr</code> は「同期中」の複製を表します。 <code>Replicas</code> のリストのうち、現在生存しており、リーダに追い付いているノードが表示されます
+</li>
 </ul>
 
 <p>
@@ -1095,9 +1105,12 @@ Kafka は  <a href="http://en.wikipedia.org/wiki/.properties">プロパティフ
 </p>
 
 <ul class="org-ul">
-<li><code>broker.id</code></li>
-<li><code>log.dirs</code></li>
-<li><code>zookeeper.connect</code></li>
+<li><code>broker.id</code>
+</li>
+<li><code>log.dirs</code>
+</li>
+<li><code>zookeeper.connect</code>
+</li>
 </ul>
 
 <p>
@@ -2374,7 +2387,7 @@ I/O スレッドが処理する為にキューに詰まれる最大リクエス�
 </div>
 
 <div id="outline-container-unnumbered-68" class="outline-4">
-<h4 id="unnumbered-68">replica.socket.receive.buffer.bytes</h4>
+<h4 id="unnumbered-68"><code>replica.socket.receive.buffer.bytes</code></h4>
 <div class="outline-text-4" id="text-unnumbered-68">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -2391,13 +2404,15 @@ I/O スレッドが処理する為にキューに詰まれる最大リクエス�
 </tr>
 </tbody>
 </table>
+
 <p>
-The socket receive buffer for network requests to the leader for replicating data.
+データ複製の為のリーダへのネットワークリクエストのソケット受信バッファです。
 </p>
 </div>
 </div>
+
 <div id="outline-container-unnumbered-69" class="outline-4">
-<h4 id="unnumbered-69">replica.fetch.max.bytes</h4>
+<h4 id="unnumbered-69"><code>replica.fetch.max.bytes</code></h4>
 <div class="outline-text-4" id="text-unnumbered-69">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -2414,13 +2429,16 @@ The socket receive buffer for network requests to the leader for replicating dat
 </tr>
 </tbody>
 </table>
+
 <p>
-The number of byes of messages to attempt to fetch for each partition in the fetch requests the replicas send to the leader.
+レプリカがリーダへ送信する取得リクエスト時の、
+各パーティションについて取得を試行するメッセージのバイト数です。
 </p>
 </div>
 </div>
+
 <div id="outline-container-unnumbered-70" class="outline-4">
-<h4 id="unnumbered-70">replica.fetch.wait.max.ms</h4>
+<h4 id="unnumbered-70"><code>replica.fetch.wait.max.ms</code></h4>
 <div class="outline-text-4" id="text-unnumbered-70">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -2437,13 +2455,15 @@ The number of byes of messages to attempt to fetch for each partition in the fet
 </tr>
 </tbody>
 </table>
+
 <p>
-The maximum amount of time to wait time for data to arrive on the leader in the fetch requests sent by the replicas to the leader.
+レプリカがリーダへ送信する取得リクエスト時の、リーダへデータが到達するまでの待機時間です。
 </p>
 </div>
 </div>
+
 <div id="outline-container-unnumbered-71" class="outline-4">
-<h4 id="unnumbered-71">replica.fetch.min.bytes</h4>
+<h4 id="unnumbered-71"><code>replica.fetch.min.bytes</code></h4>
 <div class="outline-text-4" id="text-unnumbered-71">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -2460,13 +2480,16 @@ The maximum amount of time to wait time for data to arrive on the leader in the 
 </tr>
 </tbody>
 </table>
+
 <p>
-Minimum bytes expected for each fetch response for the fetch requests from the replica to the leader. If not enough bytes, wait up to replica.fetch.wait.max.ms for this many bytes to arrive.
+レプリカがリーダへ送信する取得リクエストに対する各取得レスポンスが想定する最小バイトです。
+この設定に満たない場合は、 <code>replica.fetch.wait.max.ms</code> まで待機します。
 </p>
 </div>
 </div>
+
 <div id="outline-container-unnumbered-72" class="outline-4">
-<h4 id="unnumbered-72">num.replica.fetchers</h4>
+<h4 id="unnumbered-72"><code>num.replica.fetchers</code></h4>
 <div class="outline-text-4" id="text-unnumbered-72">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -2483,13 +2506,16 @@ Minimum bytes expected for each fetch response for the fetch requests from the r
 </tr>
 </tbody>
 </table>
+
 <p>
-Number of threads used to replicate messages from leaders. Increasing this value can increase the degree of I/O parallelism in the follower broker.
+リーダからメッセージを複製するのに使うスレッド数です。
+この設定値を増やすとフォロワブローカの I/O 並列処理数が増加します。
 </p>
 </div>
 </div>
+
 <div id="outline-container-unnumbered-73" class="outline-4">
-<h4 id="unnumbered-73">replica.high.watermark.checkpoint.interval.ms</h4>
+<h4 id="unnumbered-73"><code>replica.high.watermark.checkpoint.interval.ms</code></h4>
 <div class="outline-text-4" id="text-unnumbered-73">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -2506,13 +2532,15 @@ Number of threads used to replicate messages from leaders. Increasing this value
 </tr>
 </tbody>
 </table>
+
 <p>
-The frequency with which each replica saves its high watermark to disk to handle recovery.
+各レプリカがリカバリ処理の為に自身のハイウォータマークを記録する頻度です。
 </p>
 </div>
 </div>
+
 <div id="outline-container-unnumbered-74" class="outline-4">
-<h4 id="unnumbered-74">fetch.purgatory.purge.interval.requests</h4>
+<h4 id="unnumbered-74"><code>fetch.purgatory.purge.interval.requests</code></h4>
 <div class="outline-text-4" id="text-unnumbered-74">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -2529,13 +2557,16 @@ The frequency with which each replica saves its high watermark to disk to handle
 </tr>
 </tbody>
 </table>
+
 <p>
-The purge interval (in number of requests) of the fetch request purgatory.
+取得リクエストパーガトリの <sup><a id="fnr.9" class="footref" href="#fn.9">9</a></sup>
+解放間隔(リクエスト数)です。
 </p>
 </div>
 </div>
+
 <div id="outline-container-unnumbered-75" class="outline-4">
-<h4 id="unnumbered-75">producer.purgatory.purge.interval.requests</h4>
+<h4 id="unnumbered-75"><code>producer.purgatory.purge.interval.requests</code></h4>
 <div class="outline-text-4" id="text-unnumbered-75">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -2552,13 +2583,15 @@ The purge interval (in number of requests) of the fetch request purgatory.
 </tr>
 </tbody>
 </table>
+
 <p>
-The purge interval (in number of requests) of the producer request purgatory.
+プロデューサリクエストパーガトリ <sup><a id="fnr.9.100" class="footref" href="#fn.9">9</a></sup> の解放間隔(リクエスト数)です。
 </p>
 </div>
 </div>
+
 <div id="outline-container-unnumbered-76" class="outline-4">
-<h4 id="unnumbered-76">zookeeper.session.timeout.ms</h4>
+<h4 id="unnumbered-76"><code>zookeeper.session.timeout.ms</code></h4>
 <div class="outline-text-4" id="text-unnumbered-76">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -2575,13 +2608,18 @@ The purge interval (in number of requests) of the producer request purgatory.
 </tr>
 </tbody>
 </table>
+
 <p>
-ZooKeeper session timeout. If the server fails to heartbeat to ZooKeeper within this period of time it is considered dead. If you set this too low the server may be falsely considered dead; if you set it too high it may take too long to recognize a truly dead server.
+ZooKeeper のセッションタイムアウトです。
+ZooKeeperへのハートビートがこの期間失敗すると、そのサーバは死んだものとされます。
+この値をあまりにも小さくしてしまうと、サーバが死んだと誤検知されてしまうかもしれませんし、
+かといって大きくし過ぎると、本当に死んだサーバを認識するのに時間がかかるようになってしまいます。
 </p>
 </div>
 </div>
+
 <div id="outline-container-unnumbered-77" class="outline-4">
-<h4 id="unnumbered-77">zookeeper.connection.timeout.ms</h4>
+<h4 id="unnumbered-77"><code>zookeeper.connection.timeout.ms</code></h4>
 <div class="outline-text-4" id="text-unnumbered-77">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -2598,13 +2636,15 @@ ZooKeeper session timeout. If the server fails to heartbeat to ZooKeeper within 
 </tr>
 </tbody>
 </table>
+
 <p>
-The maximum amount of time that the client waits to establish a connection to zookeeper.
+クライアントが ZooKeeper との接続を確立するまでの最大待機時間です。
 </p>
 </div>
 </div>
+
 <div id="outline-container-unnumbered-78" class="outline-4">
-<h4 id="unnumbered-78">zookeeper.sync.time.ms</h4>
+<h4 id="unnumbered-78"><code>zookeeper.sync.time.ms</code></h4>
 <div class="outline-text-4" id="text-unnumbered-78">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -2621,13 +2661,15 @@ The maximum amount of time that the client waits to establish a connection to zo
 </tr>
 </tbody>
 </table>
+
 <p>
-How far a ZK follower can be behind a ZK leader.
+ZooKeeper フォロワがリーダからどのくらい遅れ得るかです。
 </p>
 </div>
 </div>
+
 <div id="outline-container-unnumbered-79" class="outline-4">
-<h4 id="unnumbered-79">controlled.shutdown.enable</h4>
+<h4 id="unnumbered-79"><code>controlled.shutdown.enable</code></h4>
 <div class="outline-text-4" id="text-unnumbered-79">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -2644,13 +2686,17 @@ How far a ZK follower can be behind a ZK leader.
 </tr>
 </tbody>
 </table>
+
 <p>
-Enable controlled shutdown of the broker. If enabled, the broker will move all leaders on it to some other brokers before shutting itself down. This reduces the unavailability window during shutdown.
+ブローカの制御シャットダウンを有効にします。
+この設定が有効な場合、そのブローカはシャットダウン前に自身のリーダ権を全て他のブローカに移動させます。
+これによりシャットダウン中のサービス不能期間を減らすことが出来ます。
 </p>
 </div>
 </div>
+
 <div id="outline-container-unnumbered-80" class="outline-4">
-<h4 id="unnumbered-80">controlled.shutdown.max.retries</h4>
+<h4 id="unnumbered-80"><code>controlled.shutdown.max.retries</code></h4>
 <div class="outline-text-4" id="text-unnumbered-80">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -2667,13 +2713,16 @@ Enable controlled shutdown of the broker. If enabled, the broker will move all l
 </tr>
 </tbody>
 </table>
+
 <p>
-Number of retries to complete the controlled shutdown successfully before executing an unclean shutdown.
+制御シャットダウンが成功するまでのリトライ回数です。
+この回数を超えて失敗すると、強制シャットダウンされます。
 </p>
 </div>
 </div>
+
 <div id="outline-container-unnumbered-81" class="outline-4">
-<h4 id="unnumbered-81">controlled.shutdown.retry.backoff.ms</h4>
+<h4 id="unnumbered-81"><code>controlled.shutdown.retry.backoff.ms</code></h4>
 <div class="outline-text-4" id="text-unnumbered-81">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -2690,13 +2739,15 @@ Number of retries to complete the controlled shutdown successfully before execut
 </tr>
 </tbody>
 </table>
+
 <p>
-Backoff time between shutdown retries.
+シャットダウンのリトライ時のバックオフ時間です。
 </p>
 </div>
 </div>
+
 <div id="outline-container-unnumbered-82" class="outline-4">
-<h4 id="unnumbered-82">auto.leader.rebalance.enable</h4>
+<h4 id="unnumbered-82"><code>auto.leader.rebalance.enable</code></h4>
 <div class="outline-text-4" id="text-unnumbered-82">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -2713,13 +2764,16 @@ Backoff time between shutdown retries.
 </tr>
 </tbody>
 </table>
+
 <p>
-If this is enabled the controller will automatically try to balance leadership for partitions among the brokers by periodically returning leadership to the "preferred" replica for each partition if it is available.
+この設定が有効な場合、コントローラは自動的にブローカ間でパーティションのリーダ権のバランシングを試みます。
+バランシングは、定期的にリーダ権を各パーティションの「優先」レプリカに返却することによって行なわれます(「優先」レプリカが存在する場合)。
 </p>
 </div>
 </div>
+
 <div id="outline-container-unnumbered-83" class="outline-4">
-<h4 id="unnumbered-83">leader.imbalance.per.broker.percentage</h4>
+<h4 id="unnumbered-83"><code>leader.imbalance.per.broker.percentage</code></h4>
 <div class="outline-text-4" id="text-unnumbered-83">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -2736,13 +2790,16 @@ If this is enabled the controller will automatically try to balance leadership f
 </tr>
 </tbody>
 </table>
+
 <p>
-The percentage of leader imbalance allowed per broker. The controller will rebalance leadership if this ratio goes above the configured value per broker.
+リーダのブローカ毎の偏りのパーセンテージです。
+コントローラはブローカ毎にこの割合を超えた場合にリーダ権のリバランスを行います。
 </p>
 </div>
 </div>
+
 <div id="outline-container-unnumbered-84" class="outline-4">
-<h4 id="unnumbered-84">leader.imbalance.check.interval.seconds</h4>
+<h4 id="unnumbered-84"><code>leader.imbalance.check.interval.seconds</code></h4>
 <div class="outline-text-4" id="text-unnumbered-84">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -2759,13 +2816,15 @@ The percentage of leader imbalance allowed per broker. The controller will rebal
 </tr>
 </tbody>
 </table>
+
 <p>
-The frequency with which to check for leader imbalance.
+リーダの偏りを検査する頻度です。
 </p>
 </div>
 </div>
+
 <div id="outline-container-unnumbered-85" class="outline-4">
-<h4 id="unnumbered-85">offset.metadata.max.bytes</h4>
+<h4 id="unnumbered-85"><code>offset.metadata.max.bytes</code></h4>
 <div class="outline-text-4" id="text-unnumbered-85">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -2782,13 +2841,15 @@ The frequency with which to check for leader imbalance.
 </tr>
 </tbody>
 </table>
+
 <p>
-The maximum amount of metadata to allow clients to save with their offsets.
+クライアントが自身のオフセットを記録するためのメタデータの最大容量です。
 </p>
 </div>
 </div>
+
 <div id="outline-container-unnumbered-86" class="outline-4">
-<h4 id="unnumbered-86">max.connections.per.ip</h4>
+<h4 id="unnumbered-86"><code>max.connections.per.ip</code></h4>
 <div class="outline-text-4" id="text-unnumbered-86">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -2805,13 +2866,15 @@ The maximum amount of metadata to allow clients to save with their offsets.
 </tr>
 </tbody>
 </table>
+
 <p>
-The maximum number of connections that a broker allows from each ip address.
+ブローカが IP 毎に許可する接続数の最大値です。
 </p>
 </div>
 </div>
+
 <div id="outline-container-unnumbered-87" class="outline-4">
-<h4 id="unnumbered-87">max.connections.per.ip.overrides</h4>
+<h4 id="unnumbered-87"><code>max.connections.per.ip.overrides</code></h4>
 <div class="outline-text-4" id="text-unnumbered-87">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -2828,13 +2891,15 @@ The maximum number of connections that a broker allows from each ip address.
 </tr>
 </tbody>
 </table>
+
 <p>
-Per-ip or hostname overrides to the default maximum number of connections.
+IP またはホスト名を指定して、デフォルトの最大接続数を上書き出来ます。
 </p>
 </div>
 </div>
+
 <div id="outline-container-unnumbered-88" class="outline-4">
-<h4 id="unnumbered-88">connections.max.idle.ms</h4>
+<h4 id="unnumbered-88"><code>connections.max.idle.ms</code></h4>
 <div class="outline-text-4" id="text-unnumbered-88">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -2851,13 +2916,16 @@ Per-ip or hostname overrides to the default maximum number of connections.
 </tr>
 </tbody>
 </table>
+
 <p>
-Idle connections timeout: the server socket processor threads close the connections that idle more than this.
+アイドルコネクションタイムアウト、つまり、
+サーバソケットプロセッサスレッドがこの値以上アイドル状態だった場合に接続を閉じます。
 </p>
 </div>
 </div>
+
 <div id="outline-container-unnumbered-89" class="outline-4">
-<h4 id="unnumbered-89">log.roll.jitter.{ms,hours}</h4>
+<h4 id="unnumbered-89"><code>log.roll.jitter.{ms,hours}</code></h4>
 <div class="outline-text-4" id="text-unnumbered-89">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -2874,13 +2942,15 @@ Idle connections timeout: the server socket processor threads close the connecti
 </tr>
 </tbody>
 </table>
+
 <p>
-The maximum jitter to subtract from logRollTimeMillis.
+<code>logRollTimeMillis</code> から減じられる最大ジッタです。
 </p>
 </div>
 </div>
+
 <div id="outline-container-unnumbered-90" class="outline-4">
-<h4 id="unnumbered-90">num.recovery.threads.per.data.dir</h4>
+<h4 id="unnumbered-90"><code>num.recovery.threads.per.data.dir</code></h4>
 <div class="outline-text-4" id="text-unnumbered-90">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -2897,13 +2967,15 @@ The maximum jitter to subtract from logRollTimeMillis.
 </tr>
 </tbody>
 </table>
+
 <p>
-The number of threads per data directory to be used for log recovery at startup and flushing at shutdown.
+データディレクトリ毎に起動時のログリカバリやシャットダウン時のフラッシュに使用されるスレッド数です。
 </p>
 </div>
 </div>
+
 <div id="outline-container-unnumbered-91" class="outline-4">
-<h4 id="unnumbered-91">unclean.leader.election.enable</h4>
+<h4 id="unnumbered-91"><code>unclean.leader.election.enable</code></h4>
 <div class="outline-text-4" id="text-unnumbered-91">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -2920,13 +2992,16 @@ The number of threads per data directory to be used for log recovery at startup 
 </tr>
 </tbody>
 </table>
+
 <p>
-Indicates whether to enable replicas not in the ISR set to be elected as leader as a last resort, even though doing so may result in data loss.
+最終手段として ISR 以外のレプリカをリーダとして選択することを許可するかどうかを示します。
+これによりデータがロストする可能性があります。
 </p>
 </div>
 </div>
+
 <div id="outline-container-unnumbered-92" class="outline-4">
-<h4 id="unnumbered-92">delete.topic.enable</h4>
+<h4 id="unnumbered-92"><code>delete.topic.enable</code></h4>
 <div class="outline-text-4" id="text-unnumbered-92">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -2943,13 +3018,15 @@ Indicates whether to enable replicas not in the ISR set to be elected as leader 
 </tr>
 </tbody>
 </table>
+
 <p>
-Enable delete topic.
+トピックを削除出来るようにします。
 </p>
 </div>
 </div>
+
 <div id="outline-container-unnumbered-93" class="outline-4">
-<h4 id="unnumbered-93">offsets.topic.num.partitions</h4>
+<h4 id="unnumbered-93"><code>offsets.topic.num.partitions</code></h4>
 <div class="outline-text-4" id="text-unnumbered-93">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -2966,13 +3043,17 @@ Enable delete topic.
 </tr>
 </tbody>
 </table>
+
 <p>
-The number of partitions for the offset commit topic. Since changing this after deployment is currently unsupported, we recommend using a higher setting for production (e.g., 100-200).
+オフセットコミットトピックのパーティション数です。
+デプロイ後にこの値を変えることは現在サポートされていないため、
+プロダクション環境ではより大きい数値(例えば 100-200)に設定することを推奨します。
 </p>
 </div>
 </div>
+
 <div id="outline-container-unnumbered-94" class="outline-4">
-<h4 id="unnumbered-94">offsets.topic.retention.minutes</h4>
+<h4 id="unnumbered-94"><code>offsets.topic.retention.minutes</code></h4>
 <div class="outline-text-4" id="text-unnumbered-94">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -2989,13 +3070,16 @@ The number of partitions for the offset commit topic. Since changing this after 
 </tr>
 </tbody>
 </table>
+
 <p>
-Offsets that are older than this age will be marked for deletion. The actual purge will occur when the log cleaner compacts the offsets topic.
+この値よりも古いオフセットは削除対象としてマークされます。
+ログクリーナがオフセットトピックのコンパクションを実行した際に、実際に削除されます。
 </p>
 </div>
 </div>
+
 <div id="outline-container-unnumbered-95" class="outline-4">
-<h4 id="unnumbered-95">offsets.retention.check.interval.ms</h4>
+<h4 id="unnumbered-95"><code>offsets.retention.check.interval.ms</code></h4>
 <div class="outline-text-4" id="text-unnumbered-95">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -3012,13 +3096,15 @@ Offsets that are older than this age will be marked for deletion. The actual pur
 </tr>
 </tbody>
 </table>
+
 <p>
-The frequency at which the offset manager checks for stale offsets.
+オフセットマネージャが古くなったオフセットを検査する頻度です。
 </p>
 </div>
 </div>
+
 <div id="outline-container-unnumbered-96" class="outline-4">
-<h4 id="unnumbered-96">offsets.topic.replication.factor</h4>
+<h4 id="unnumbered-96"><code>offsets.topic.replication.factor</code></h4>
 <div class="outline-text-4" id="text-unnumbered-96">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -3035,13 +3121,18 @@ The frequency at which the offset manager checks for stale offsets.
 </tr>
 </tbody>
 </table>
+
 <p>
-The replication factor for the offset commit topic. A higher setting (e.g., three or four) is recommended in order to ensure higher availability. If the offsets topic is created when fewer brokers than the replication factor then the offsets topic will be created with fewer replicas.
+オフセットコミットトピックのレプリケーションファクタです。
+高可用性を保証するにはこの値をより高い値(3や4等)に設定することを推奨します。
+レプリケーションファクタよりも少ないブローカしかいな場合にオフセットトピックが作成された場合は、
+この設定よりも少ないレプリカしか作られません。
 </p>
 </div>
 </div>
+
 <div id="outline-container-unnumbered-97" class="outline-4">
-<h4 id="unnumbered-97">offsets.topic.segment.bytes</h4>
+<h4 id="unnumbered-97"><code>offsets.topic.segment.bytes</code></h4>
 <div class="outline-text-4" id="text-unnumbered-97">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -3058,13 +3149,18 @@ The replication factor for the offset commit topic. A higher setting (e.g., thre
 </tr>
 </tbody>
 </table>
+
 <p>
-Segment size for the offsets topic. Since it uses a compacted topic, this should be kept relatively low in order to facilitate faster log compaction and loads.
+オフセットトピックのセグメントサイズです。
+オフセットトピックはコンパクションされたトピックを使う為、
+ログコンパクションとロードを高速に行ない易くするためには
+この設定値は比較的小さな値にしておくべきです。
 </p>
 </div>
 </div>
+
 <div id="outline-container-unnumbered-98" class="outline-4">
-<h4 id="unnumbered-98">offsets.load.buffer.size</h4>
+<h4 id="unnumbered-98"><code>offsets.load.buffer.size</code></h4>
 <div class="outline-text-4" id="text-unnumbered-98">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -3081,13 +3177,18 @@ Segment size for the offsets topic. Since it uses a compacted topic, this should
 </tr>
 </tbody>
 </table>
+
 <p>
-An offset load occurs when a broker becomes the offset manager for a set of consumer groups (i.e., when it becomes a leader for an offsets topic partition). This setting corresponds to the batch size (in bytes) to use when reading from the offsets segments when loading offsets into the offset manager's cache.
+ブローカがあるコンシューマグループのオフセットマネージャになった時に
+(つまり、 オフセットトピックのリーダになった時に)、オフセットのロードが行なわれます。
+オフセットマネージャのキャッシュにオフセットをロードする際に、
+ここで設定したバッチサイズ(バイト数指定)を参照してオフセットセグメントからの読み込みを行ないます。
 </p>
 </div>
 </div>
+
 <div id="outline-container-unnumbered-99" class="outline-4">
-<h4 id="unnumbered-99">offsets.commit.required.acks</h4>
+<h4 id="unnumbered-99"><code>offsets.commit.required.acks</code></h4>
 <div class="outline-text-4" id="text-unnumbered-99">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -3104,13 +3205,17 @@ An offset load occurs when a broker becomes the offset manager for a set of cons
 </tr>
 </tbody>
 </table>
+
 <p>
-The number of acknowledgements that are required before the offset commit can be accepted. This is similar to the producer's acknowledgement setting. In general, the default should not be overridden.
+オフセットコミットが受け入れられる為に必要な Ack 数です。
+プロデューサの Ack 設定と似たようなものです。
+通常はデフォルト値から変更すべきではありません。
 </p>
 </div>
 </div>
+
 <div id="outline-container-unnumbered-100" class="outline-4">
-<h4 id="unnumbered-100">offsets.commit.timeout.ms</h4>
+<h4 id="unnumbered-100"><code>offsets.commit.timeout.ms</code></h4>
 <div class="outline-text-4" id="text-unnumbered-100">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -3127,8 +3232,10 @@ The number of acknowledgements that are required before the offset commit can be
 </tr>
 </tbody>
 </table>
+
 <p>
-The offset commit will be delayed until this timeout or the required number of replicas have received the offset commit. This is similar to the producer request timeout.
+このタイムアウト分か、必要なレプリカがオフセットコミットを受信するまでオフセットコミットは遅延されます。
+プロデューサのリクエストタイムアウトと似たようなものです。
 </p>
 </div>
 </div>
@@ -3197,7 +3304,8 @@ The following are the topic-level configurations. The server's default configura
 <p>
 A string that is either "delete" or "compact". This string designates the retention policy to use on old log segments. The default policy ("delete") will discard old segments when their retention time or size limit has been reached. The "compact" setting will enable log compaction on the topic.
 </p>
-</div></li>
+</div>
+</li>
 <li><a id="unnumbered-103"></a>delete.retention.ms<br  /><div class="outline-text-5" id="text-unnumbered-103">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -3222,7 +3330,8 @@ A string that is either "delete" or "compact". This string designates the retent
 <p>
 The amount of time to retain delete tombstone markers for log compacted topics. This setting also gives a bound on the time in which a consumer must complete a read if they begin from offset 0 to ensure that they get a valid snapshot of the final stage (otherwise delete tombstones may be collected before they complete their scan).
 </p>
-</div></li>
+</div>
+</li>
 <li><a id="unnumbered-104"></a>flush.messages<br  /><div class="outline-text-5" id="text-unnumbered-104">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -3247,7 +3356,8 @@ The amount of time to retain delete tombstone markers for log compacted topics. 
 <p>
 This setting allows specifying an interval at which we will force an fsync of data written to the log. For example if this was set to 1 we would fsync after every message; if it were 5 we would fsync after every five messages. In general we recommend you not set this and use replication for durability and allow the operating system's background flush capabilities as it is more efficient. This setting can be overridden on a per-topic basis (see the per-topic configuration section).
 </p>
-</div></li>
+</div>
+</li>
 <li><a id="unnumbered-105"></a>flush.ms<br  /><div class="outline-text-5" id="text-unnumbered-105">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -3272,7 +3382,8 @@ This setting allows specifying an interval at which we will force an fsync of da
 <p>
 This setting allows specifying a time interval at which we will force an fsync of data written to the log. For example if this was set to 1000 we would fsync after 1000 ms had passed. In general we recommend you not set this and use replication for durability and allow the operating system's background flush capabilities as it is more efficient.
 </p>
-</div></li>
+</div>
+</li>
 <li><a id="unnumbered-106"></a>index.interval.bytes<br  /><div class="outline-text-5" id="text-unnumbered-106">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -3297,7 +3408,8 @@ This setting allows specifying a time interval at which we will force an fsync o
 <p>
 This setting controls how frequently Kafka adds an index entry to it's offset index. The default setting ensures that we index a message roughly every 4096 bytes. More indexing allows reads to jump closer to the exact position in the log but makes the index larger. You probably don't need to change this.
 </p>
-</div></li>
+</div>
+</li>
 <li><a id="unnumbered-107"></a>max.message.bytes<br  /><div class="outline-text-5" id="text-unnumbered-107">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -3322,7 +3434,8 @@ This setting controls how frequently Kafka adds an index entry to it's offset in
 <p>
 This is largest message size Kafka will allow to be appended to this topic. Note that if you increase this size you must also increase your consumer's fetch size so they can fetch messages this large.
 </p>
-</div></li>
+</div>
+</li>
 <li><a id="unnumbered-108"></a>min.cleanable.dirty.ratio<br  /><div class="outline-text-5" id="text-unnumbered-108">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -3347,7 +3460,8 @@ This is largest message size Kafka will allow to be appended to this topic. Note
 <p>
 This configuration controls how frequently the log compactor will attempt to clean the log (assuming log compaction is enabled). By default we will avoid cleaning a log where more than 50% of the log has been compacted. This ratio bounds the maximum space wasted in the log by duplicates (at 50% at most 50% of the log could be duplicates). A higher ratio will mean fewer, more efficient cleanings but will mean more wasted space in the log.
 </p>
-</div></li>
+</div>
+</li>
 <li><a id="unnumbered-109"></a>min.insync.replicas<br  /><div class="outline-text-5" id="text-unnumbered-109">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -3376,7 +3490,8 @@ When a producer sets request.required.acks to -1, min.insync.replicas specifies 
 <p>
 When used together, min.insync.replicas and request.required.acks allow you to enforce greater durability guarantees. A typical scenario would be to create a topic with a replication factor of 3, set min.insync.replicas to 2, and produce with request.required.acks of -1. This will ensure that the producer raises an exception if a majority of replicas do not receive a write.
 </p>
-</div></li>
+</div>
+</li>
 <li><a id="unnumbered-110"></a>retention.bytes<br  /><div class="outline-text-5" id="text-unnumbered-110">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -3401,7 +3516,8 @@ When used together, min.insync.replicas and request.required.acks allow you to e
 <p>
 This configuration controls the maximum size a log can grow to before we will discard old log segments to free up space if we are using the "delete" retention policy. By default there is no size limit only a time limit.
 </p>
-</div></li>
+</div>
+</li>
 <li><a id="unnumbered-111"></a>retention.ms<br  /><div class="outline-text-5" id="text-unnumbered-111">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -3426,7 +3542,8 @@ This configuration controls the maximum size a log can grow to before we will di
 <p>
 This configuration controls the maximum time we will retain a log before we will discard old log segments to free up space if we are using the "delete" retention policy. This represents an SLA on how soon consumers must read their data.
 </p>
-</div></li>
+</div>
+</li>
 <li><a id="unnumbered-112"></a>segment.bytes<br  /><div class="outline-text-5" id="text-unnumbered-112">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -3451,7 +3568,8 @@ This configuration controls the maximum time we will retain a log before we will
 <p>
 This configuration controls the segment file size for the log. Retention and cleaning is always done a file at a time so a larger segment size means fewer files but less granular control over retention.
 </p>
-</div></li>
+</div>
+</li>
 <li><a id="unnumbered-113"></a>segment.index.bytes<br  /><div class="outline-text-5" id="text-unnumbered-113">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -3476,7 +3594,8 @@ This configuration controls the segment file size for the log. Retention and cle
 <p>
 This configuration controls the size of the index that maps offsets to file positions. We preallocate this index file and shrink it only after log rolls. You generally should not need to change this setting.
 </p>
-</div></li>
+</div>
+</li>
 <li><a id="unnumbered-114"></a>segment.ms<br  /><div class="outline-text-5" id="text-unnumbered-114">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -3501,7 +3620,8 @@ This configuration controls the size of the index that maps offsets to file posi
 <p>
 This configuration controls the period of time after which Kafka will force the log to roll even if the segment file isn't full to ensure that retention can delete or compact old data.
 </p>
-</div></li>
+</div>
+</li>
 <li><a id="unnumbered-115"></a>segment.jitter.ms<br  /><div class="outline-text-5" id="text-unnumbered-115">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -3526,7 +3646,8 @@ This configuration controls the period of time after which Kafka will force the 
 <p>
 The maximum jitter to subtract from logRollTimeMillis.
 </p>
-</div></li></ul>
+</div>
+</li></ul>
 </div>
 </div>
 
@@ -3538,8 +3659,10 @@ The essential consumer configurations are the following:
 </p>
 
 <ul class="org-ul">
-<li><code>group.id</code></li>
-<li><code>zookeeper.connect</code></li>
+<li><code>group.id</code>
+</li>
+<li><code>zookeeper.connect</code>
+</li>
 </ul>
 
 <p>
@@ -3921,9 +4044,12 @@ What to do when there is no initial offset in ZooKeeper or if an offset is out o
 </p>
 
 <dl class="org-dl">
-<dt>smallest</dt><dd>automatically reset the offset to the smallest offset</dd>
-<dt>largest</dt><dd>automatically reset the offset to the largest offset</dd>
-<dt>anything else</dt><dd>throw exception to the consumer</dd>
+<dt>smallest</dt><dd>automatically reset the offset to the smallest offset
+</dd>
+<dt>largest</dt><dd>automatically reset the offset to the largest offset
+</dd>
+<dt>anything else</dt><dd>throw exception to the consumer
+</dd>
 </dl>
 </div>
 </div>
@@ -4245,10 +4371,14 @@ Essential configuration properties for the producer include:
 </p>
 
 <ul class="org-ul">
-<li><code>metadata.broker.list</code></li>
-<li><code>request.required.acks</code></li>
-<li><code>producer.type</code></li>
-<li><code>serializer.class</code></li>
+<li><code>metadata.broker.list</code>
+</li>
+<li><code>request.required.acks</code>
+</li>
+<li><code>producer.type</code>
+</li>
+<li><code>serializer.class</code>
+</li>
 </ul>
 
 <p>
@@ -4304,14 +4434,17 @@ This value controls when a produce request is considered completed. Specifically
 
 <ul class="org-ul">
 <li>0, which means that the producer never waits for an acknowledgement from the broker (the same behavior as 0.7).
-This option provides the lowest latency but the weakest durability guarantees (some data will be lost when a server fails).</li>
+This option provides the lowest latency but the weakest durability guarantees (some data will be lost when a server fails).
+</li>
 <li>1, which means that the producer gets an acknowledgement after the leader replica has received the data. 
-This option provides better durability as the client waits until the server acknowledges the request as successful (only messages that were written to the now-dead leader but not yet replicated will be lost).</li>
+This option provides better durability as the client waits until the server acknowledges the request as successful (only messages that were written to the now-dead leader but not yet replicated will be lost).
+</li>
 <li>-1, The producer gets an acknowledgement after all in-sync replicas have received the data.
 This option provides the greatest level of durability.
 However, it does not completely eliminate the risk of message loss because the number of in sync replicas may, in rare cases, shrink to 1.
 If you want to ensure that some minimum number of replicas (typically a majority) receive a write, then you must set the topic-level min.insync.replicas setting.
-Please read the Replication section of the design documentation for a more in-depth discussion.</li>
+Please read the Replication section of the design documentation for a more in-depth discussion.
+</li>
 </ul>
 </div>
 </div>
@@ -4759,10 +4892,14 @@ The number of acknowledgments the producer requires the leader to have received 
 </p>
 
 <ul class="org-ul">
-<li><code>acks=0</code> If set to zero then the producer will not wait for any acknowledgment from the server at all. The record will be immediately added to the socket buffer and considered sent. No guarantee can be made that the server has received the record in this case, and the <code>retries</code> configuration will not take effect (as the client won't generally know of any failures). The offset given back for each record will always be set to -1.</li>
-<li><code>acks=1</code> This will mean the leader will write the record to its local log but will respond without awaiting full acknowledgement from all followers. In this case should the leader fail immediately after acknowledging the record but before the followers have replicated it then the record will be lost.</li>
-<li><code>acks=all</code> This means the leader will wait for the full set of in-sync replicas to acknowledge the record. This guarantees that the record will not be lost as long as at least one in-sync replica remains alive. This is the strongest available guarantee.</li>
-<li>Other settings such as <code>acks=2</code> are also possible, and will require the given number of acknowledgements but this is generally less useful.</li>
+<li><code>acks=0</code> If set to zero then the producer will not wait for any acknowledgment from the server at all. The record will be immediately added to the socket buffer and considered sent. No guarantee can be made that the server has received the record in this case, and the <code>retries</code> configuration will not take effect (as the client won't generally know of any failures). The offset given back for each record will always be set to -1.
+</li>
+<li><code>acks=1</code> This will mean the leader will write the record to its local log but will respond without awaiting full acknowledgement from all followers. In this case should the leader fail immediately after acknowledging the record but before the followers have replicated it then the record will be lost.
+</li>
+<li><code>acks=all</code> This means the leader will wait for the full set of in-sync replicas to acknowledge the record. This guarantees that the record will not be lost as long as at least one in-sync replica remains alive. This is the strongest available guarantee.
+</li>
+<li>Other settings such as <code>acks=2</code> are also possible, and will require the given number of acknowledgements but this is generally less useful.
+</li>
 </ul>
 </div>
 </div>
@@ -5395,16 +5532,18 @@ The amount of time to wait before attempting to retry a failed produce request t
 
 <div class="footdef"><sup><a id="fn.6" class="footnum" href="#fnr.6">6</a></sup> <p>(訳注) <code>log_dirs</code> に、 <code>&lt;トピック名&gt;-&lt;パーティション番号&gt;/000...000.log</code> の様に保存されています。</p></div>
 
-<div class="footdef"><sup><a id="fn.7" class="footnum" href="#fnr.7">7</a></sup> <p>(訳注)何言ってんのかよく分かんない</p></div>
+<div class="footdef"><sup><a id="fn.7" class="footnum" href="#fnr.7">7</a></sup> <p>(訳注) 何言ってんのかよく分かんない</p></div>
 
-<div class="footdef"><sup><a id="fn.8" class="footnum" href="#fnr.8">8</a></sup> <p>何言ってんのかよく分かんない</p></div>
+<div class="footdef"><sup><a id="fn.8" class="footnum" href="#fnr.8">8</a></sup> <p>(訳注) 何言ってんのかよく分かんない</p></div>
+
+<div class="footdef"><sup><a id="fn.9" class="footnum" href="#fnr.9">9</a></sup> <p>(訳注) <a href="https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=34839465">Request Purgatory (0.8) - Apache Kafka - Apache Software Foundation</a></p></div>
 
 
 </div>
 </div></div>
 <div id="postamble" class="status">
 <p class="author">Author: yewton</p>
-<p class="date">Created: 2015-06-07 日 01:00</p>
+<p class="date">Created: 2015-06-08 月 02:10</p>
 <p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.4.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
