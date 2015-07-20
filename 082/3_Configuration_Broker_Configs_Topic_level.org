@@ -1,86 +1,170 @@
-Configurations pertinent to topics have both a global default as well an optional per-topic override.
-If no per-topic configuration is given the global default is used.
-The override can be set at topic creation time by giving one or more =--config= options.
-This example creates a topic named /my-topic/ with a custom max message size and flush rate:
+トピック関連の設定には、
+グローバルなデフォルト設定と、
+トピック毎にオーバライドするための設定の二つが有ります。
+トピック毎の設定が与えられなければグローバルデフォルト値が使用されます。
+トピック作成時に一つ以上の =--config= オプションを与えることでオーバライド出来ます。
+/my-topic/ という名前のトピックを、
+最大メッセージサイズとフラッシュレートをカスタマイズして作成する例を以下に示します:
 
 #+BEGIN_SRC
  > bin/kafka-topics.sh --zookeeper localhost:2181 --create --topic my-topic --partitions 1
         --replication-factor 1 --config max.message.bytes=64000 --config flush.messages=1
 #+END_SRC
 
-Overrides can also be changed or set later using the alter topic command. This example updates the max message size for /my-topic/:
+オーバライドはオルター(変更)コマンドを利用することで後から変更・設定することも出来ます。
+/my-topic/ の最大メッセージサイズを更新する例を以下に示します:
 
 #+BEGIN_SRC
  > bin/kafka-topics.sh --zookeeper localhost:2181 --alter --topic my-topic
     --config max.message.bytes=128000
 #+END_SRC
 
-To remove an override you can do
+オーバライド設定を削除するには以下のようにします:
 
 #+BEGIN_SRC
  > bin/kafka-topics.sh --zookeeper localhost:2181 --alter --topic my-topic
     --deleteConfig max.message.bytes
 #+END_SRC
 
+以下はトピックレベルの設定です。
+プロパティに対応するサーバのデフォルト設定は「サーバデフォルトプロパティ」の列にあります。
+このサーバ設定を変更することで、オーバライド未指定時にトピックに設定されるデフォルト値を変更することが出来ます。
 
-The following are the topic-level configurations. The server's default configuration for this property is given under the Server Default Property heading, setting this default in the server config allows you to change the default given to topics that have no override specified.
+* =cleanup.policy=
+| デフォルト                 | =delete=           |
+| サーバデフォルトプロパティ | =log.cleanup.policy= |
 
+ =delete= または =compact= を設定出来ます。
+古くなったログセグメントに適用される保持ポリシーを指定します。
+デフォルトポリシー( =delete= )では、保持期限を過ぎるか容量制限に達した場合に、古いセグメントは破棄されます。
+=compact= ポリシーではトピックに対して [[http://kafka.apache.org/documentation.html#compaction][ログコンパクション]] が行われます。
 
-* cleanup.policy
-|Default |delete|
-|Server Default Property|log.cleanup.policy|
-A string that is either "delete" or "compact". This string designates the retention policy to use on old log segments. The default policy ("delete") will discard old segments when their retention time or size limit has been reached. The "compact" setting will enable log compaction on the topic.
-* delete.retention.ms
-|Default|86400000 (24 hours)|
-|Server Default Property|log.cleaner.delete.retention.ms|
-The amount of time to retain delete tombstone markers for log compacted topics. This setting also gives a bound on the time in which a consumer must complete a read if they begin from offset 0 to ensure that they get a valid snapshot of the final stage (otherwise delete tombstones may be collected before they complete their scan).
-* flush.messages
-|Default|None|
-|Server Default Property|log.flush.interval.messages|
-This setting allows specifying an interval at which we will force an fsync of data written to the log. For example if this was set to 1 we would fsync after every message; if it were 5 we would fsync after every five messages. In general we recommend you not set this and use replication for durability and allow the operating system's background flush capabilities as it is more efficient. This setting can be overridden on a per-topic basis (see the per-topic configuration section).
-* flush.ms
-|Default|None|
-|Server Default Property|log.flush.interval.ms|
-This setting allows specifying a time interval at which we will force an fsync of data written to the log. For example if this was set to 1000 we would fsync after 1000 ms had passed. In general we recommend you not set this and use replication for durability and allow the operating system's background flush capabilities as it is more efficient.
-* index.interval.bytes
-|Default|4096|
-|Server Default Property|log.index.interval.bytes|
-This setting controls how frequently Kafka adds an index entry to it's offset index. The default setting ensures that we index a message roughly every 4096 bytes. More indexing allows reads to jump closer to the exact position in the log but makes the index larger. You probably don't need to change this.
-* max.message.bytes
-|Default|1,000,000|
-|Server Default Property|message.max.bytes|
-This is largest message size Kafka will allow to be appended to this topic. Note that if you increase this size you must also increase your consumer's fetch size so they can fetch messages this large.
-* min.cleanable.dirty.ratio
-|Default|0.5|
-|Server Default Property|log.cleaner.min.cleanable.ratio|
-This configuration controls how frequently the log compactor will attempt to clean the log (assuming log compaction is enabled). By default we will avoid cleaning a log where more than 50% of the log has been compacted. This ratio bounds the maximum space wasted in the log by duplicates (at 50% at most 50% of the log could be duplicates). A higher ratio will mean fewer, more efficient cleanings but will mean more wasted space in the log.
-* min.insync.replicas
-|Default|1|
-|Server Default Property|min.insync.replicas|
-When a producer sets request.required.acks to -1, min.insync.replicas specifies the minimum number of replicas that must acknowledge a write for the write to be considered successful. If this minimum cannot be met, then the producer will raise an exception (either NotEnoughReplicas or NotEnoughReplicasAfterAppend).
+* =delete.retention.ms=
+| デフォルト                 | 86400000 (24 時間)                |
+| サーバデフォルトプロパティ | =log.cleaner.delete.retention.ms= |
 
-When used together, min.insync.replicas and request.required.acks allow you to enforce greater durability guarantees. A typical scenario would be to create a topic with a replication factor of 3, set min.insync.replicas to 2, and produce with request.required.acks of -1. This will ensure that the producer raises an exception if a majority of replicas do not receive a write.
-* retention.bytes
-|Default|None|
-|Server Default Property|log.retention.bytes|
-This configuration controls the maximum size a log can grow to before we will discard old log segments to free up space if we are using the "delete" retention policy. By default there is no size limit only a time limit.
-* retention.ms
-|Default|7 days|
-|Server Default Property|log.retention.minutes|
-This configuration controls the maximum time we will retain a log before we will discard old log segments to free up space if we are using the "delete" retention policy. This represents an SLA on how soon consumers must read their data.
-* segment.bytes
-|Default|1 GB|
-|Server Default Property|log.segment.bytes|
-This configuration controls the segment file size for the log. Retention and cleaning is always done a file at a time so a larger segment size means fewer files but less granular control over retention.
-* segment.index.bytes
-|Default|10 MB|
-|Server Default Property|log.index.size.max.bytes|
-This configuration controls the size of the index that maps offsets to file positions. We preallocate this index file and shrink it only after log rolls. You generally should not need to change this setting.
-* segment.ms
-|Default|7 days|
-|Server Default Property|log.roll.hours|
-This configuration controls the period of time after which Kafka will force the log to roll even if the segment file isn't full to ensure that retention can delete or compact old data.
-* segment.jitter.ms
-|Default|0|
-|Server Default Property|log.roll.jitter.{ms,hours}|
-The maximum jitter to subtract from logRollTimeMillis.
+ログコンパクションされたトピックの削除トゥームストーンマーカを保持する時間です。
+
+[[http://kafka.apache.org/documentation.html#compaction][ログコンパクション]] されたトピックの削除トゥームストーンマーカを保持する期間です。
+最終段階の有効なスナップショットを確実に得る為にオフセット 0 から読み込みを開始する場合、
+コンシューマはこの期間内に読み込みを完了させる必要があります
+(さもなければ、コンシューマの走査が完了する前に
+削除トゥームストーンマーカが回収されてしまう可能性が有ります。)。
+
+* =flush.messages=
+| デフォルト                 | None                          |
+| サーバデフォルトプロパティ | =log.flush.interval.messages= |
+
+ログに書き込むデータをディスクに強制的に fsync するする間隔を指定出来ます。
+例えば、この値を 1 にすると全メッセージについて都度 fsync するようになります;
+もし 5 にすると、5メッセージ毎に fsync を行うようになります。
+通常はこの設定は指定せず、堅牢性は複製機構によって担保するようにすること推奨します。
+オペレーティングシステムのより効率的なバックグラウンドのフラッシュ性能に委ねましょう。
+{{{otb}}}
+[fn:: ここがそのトピック毎の設定なんだけど…。ブローカ設定と入れ違ったかな？]
+
+* =flush.ms=
+| デフォルト                 | None                    |
+| サーバデフォルトプロパティ | =log.flush.interval.ms= |
+
+ログに書き込むデータをディスクに強制的に fsync するする間隔を指定出来ます。
+例えば、この値を 1000 にすると 1000 ms 経過毎に fsync するようになります。
+通常はこの設定は指定せず、堅牢性は複製機構によって担保するようにすること推奨します。
+オペレーティングシステムのより効率的なバックグラウンドのフラッシュ性能に委ねましょう。
+
+* =index.interval.bytes=
+| デフォルト                 |                       4096 |
+| サーバデフォルトプロパティ | =log.index.interval.bytes= |
+
+この設定はKafkaがオフセットインデックスにインデックスエントリを追加する頻度を制御します。
+デフォルト設定ではおよそ 4096 バイトゴトにメッセージをインデックスするようになっています。
+より多くインデクシングすればする程、
+読み込み時にログ上の正確な位置を知ることが出来るようになりますが、
+その分インデックスサイズは大きくなります。
+おそらくこの値を変更する必要はないでしょう。
+
+* =max.message.bytes=
+| デフォルト                 | 1,000,000           |
+| サーバデフォルトプロパティ | =message.max.bytes= |
+
+そのトピックに追記出来る最大メッセージサイズです。
+この値を増やすならば、コンシューマの最大取得サイズも増やさなければ、
+メッセージを取得出来なくなってしまうため注意が必要です。
+
+* =min.cleanable.dirty.ratio=
+| デフォルト                 |                               0.5 |
+| サーバデフォルトプロパティ | =log.cleaner.min.cleanable.ratio= |
+
+[[http://kafka.apache.org/documentation.html#compaction][ログコンパクション]] が有効なときの、ログコンパクタがログをクリーンする頻度を設定します。
+デフォルトでは50%以上のログがコンパクションされていた場合はクリーニングを行ないません。
+この比率はログの重複により無駄に使用される最大スペースを設定します
+(50%だと、多くて50%のログが重複している可能性がある、ということです)。
+より高い比率に設定すれば、少ない回数で、より効率的なクリーニングが行われることになりますが、
+それは同時にログが無駄に使用するスペースがより多くなるということにもなります。
+[fn:: ブローカ設定の項の説明と一字一句違わない]
+
+* =min.insync.replicas=
+| デフォルト                 |                                                                                                                                                     1 |
+| サーバデフォルトプロパティ | =min.insync.replicas= [fn:: 実際は、このプロパティに対応するサーバデフォルトプロパティは無い。その為、利用する際は必ずトピックレベルで設定すること。] |
+
+プロデューサが =request.required.acks= を -1 に設定していた場合、
+その書き込みが成功したと判断される為には、
+最低限この設定値以上の複製が受領されなければなりません。
+
+これが満たされない場合、プロデューサは例外を発生させます
+( =NotEnoughReplicas= もしくは =NotEnoughReplicasAfterAppend=)。
+
+=min.insync.replicas= と =request.required.acks= を共に設定することで、
+より強力な堅牢性を保証することが出来ます。
+典型的なシナリオでは、レプリケーションファクタ 3 のトピックを作成し、
+=min.insync.replicas= を 2 に設定した上で、
+=request.required.acks= を -1 に設定してプロデュースする、というようになるでしょう。
+こうすることで、書込みを受領出来ない複製が多数を占めた場合に、
+プロデューサが例外を投げることを保証出来ます。
+
+* =retention.bytes=
+| デフォルト                 | None                  |
+| サーバデフォルトプロパティ | =log.retention.bytes= |
+
+ログの保持ポリシーが =delete= の場合に、
+ログ容量がこの設定値を超えると、容量確保の為に古いログセグメントを破棄します。
+デフォルトでは容量制限は無く、時間による制限のみです。
+
+* =retention.ms=
+| デフォルト                 | 7 日                    |
+| サーバデフォルトプロパティ | =log.retention.minutes= |
+
+ログの保持ポリシーが =delete= の場合に、
+ログがこの設定値より古くなると、容量確保の為に古いログセグメントを破棄します。
+これはコンシューマがデータを取得するまでの期間に関する
+SLA(service level agreement, サービス品質保証)を表わしています。
+
+* =segment.bytes=
+| デフォルト                 | 1 GB                |
+| サーバデフォルトプロパティ | =log.segment.bytes= |
+
+ログのセグメントファイルサイズを制御します。
+保持及びクリーニングは常に1ファイルごとに行なわれるため、
+セグメントファイルサイズが大きくなれば扱うファイル数は少なくなりますが、
+ファイル保持制御の粒度は荒くなってしまいます。
+
+* =segment.index.bytes=
+| デフォルト                 | 10 MB                      |
+| サーバデフォルトプロパティ | =log.index.size.max.bytes= |
+
+オフセットとファイルの位置を対応づけるインデックスのサイズを制御します。
+このインデックスファイルは事前に確保され、ログロールの際に縮小されます。
+通常はこの値を変更すべきではありません。
+
+* =segment.ms=
+| デフォルト                 | 7 days           |
+| サーバデフォルトプロパティ | =log.roll.hours= |
+
+セグメントファイルが古いデータの削除、またはコンパクション条件を満たしていない場合でも、
+この期間が過ぎると強制的に新たなセグメントファイルが作成されます。
+
+* =segment.jitter.ms=
+| デフォルト                 |                            0 |
+| サーバデフォルトプロパティ | =log.roll.jitter.{ms,hours}= |
+
+=logRollTimeMillis= から減じられる最大ジッタです。

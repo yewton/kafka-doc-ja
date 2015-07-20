@@ -1,4 +1,5 @@
-We are working on a replacement for our existing producer. The code is available in trunk now and can be considered beta quality. Below is the configuration for the new producer. 
+We are working on a replacement for our existing producer. The code is available in trunk now and can be considered beta quality. Below is the configuration for the new producer.
+[fn:: (訳注) この記述は古いそうです。参考スレッド [[http://mail-archives.apache.org/mod_mbox/kafka-users/201507.mbox/%3CCAOeJiJgh%3D6n2t4h7-bZC83An99WDhjEKFENtu2J9WApz9f8xzw%40mail.gmail.com%3E][Re: New producer in production]]]
 
 * bootstrap.servers
 |Type|list|
