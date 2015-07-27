@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 <title>Apache Kafka</title>
-<!-- 2015-07-27 月 17:03 -->
+<!-- 2015-07-27 月 20:45 -->
 <meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta  name="generator" content="Org-mode" />
 <meta  name="author" content="yewton" />
@@ -150,11 +150,44 @@ for the JavaScript code in this tag.
 <ul>
 <li><a href="#sec-1">1. はじめよう</a>
 <ul>
-<li><a href="#sec-1-1">1.1. 導入</a></li>
-<li><a href="#sec-1-2">1.2. ユースケース</a></li>
-<li><a href="#sec-1-3">1.3. クイックスタート</a></li>
+<li><a href="#sec-1-1">1.1. 導入</a>
+<ul>
+<li><a href="#sec-1-1-1">トピックとログ</a></li>
+<li><a href="#sec-1-1-2">分散</a></li>
+<li><a href="#sec-1-1-3">プロデューサ</a></li>
+<li><a href="#intro_consumers">コンシューマ</a></li>
+<li><a href="#sec-1-1-5">保証</a></li>
+</ul>
+</li>
+<li><a href="#sec-1-2">1.2. ユースケース</a>
+<ul>
+<li><a href="#sec-1-2-1">メッセージング</a></li>
+<li><a href="#sec-1-2-2">Web サイトのアクティビティトラッキング</a></li>
+<li><a href="#sec-1-2-3">メトリクス</a></li>
+<li><a href="#sec-1-2-4">ログ集約</a></li>
+<li><a href="#sec-1-2-5">ストリーム処理</a></li>
+<li><a href="#sec-1-2-6">イベントソーシング</a></li>
+<li><a href="#sec-1-2-7">コミットログ</a></li>
+</ul>
+</li>
+<li><a href="#sec-1-3">1.3. クイックスタート</a>
+<ul>
+<li><a href="#sec-1-3-1">ステップ 1: コードのダウンロード</a></li>
+<li><a href="#sec-1-3-2">ステップ 2: サーバの起動</a></li>
+<li><a href="#sec-1-3-3">ステップ 3: トピックの作成</a></li>
+<li><a href="#sec-1-3-4">ステップ 4: メッセージを送ってみる</a></li>
+<li><a href="#sec-1-3-5">ステップ 5: コンシューマを起動する</a></li>
+<li><a href="#sec-1-3-6">ステップ 6: マルチブローカクラスタを立ち上げる</a></li>
+</ul>
+</li>
 <li><a href="#sec-1-4">1.4. エコシステム</a></li>
-<li><a href="#sec-1-5">1.5. 以前のバージョンからのアップグレード</a></li>
+<li><a href="#sec-1-5">1.5. 以前のバージョンからのアップグレード</a>
+<ul>
+<li><a href="#sec-1-5-1">0.8.1 から 0.8.2.0 へのアップグレード</a></li>
+<li><a href="#sec-1-5-2">0.8.0 から 0.8.1 へのアップグレード</a></li>
+<li><a href="#sec-1-5-3">0.7 からのアップグレード</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#sec-2">2. API</a>
@@ -165,34 +198,302 @@ for the JavaScript code in this tag.
 <li><a href="#sec-2-4">2.4. Kafka Hadoop コンシューマ API</a></li>
 </ul>
 </li>
-<li><a href="#sec-3">3. 設定</a>
+<li><a href="#configuration">3. 設定</a>
 <ul>
-<li><a href="#brokerconfigs">3.1. ブローカ設定</a></li>
-<li><a href="#sec-3-2">3.2. Consumer Configs</a></li>
-<li><a href="#sec-3-3">3.3. Producer Configs</a></li>
-<li><a href="#newproducerconfigs">3.4. New Producer Configs</a></li>
+<li><a href="#brokerconfigs">3.1. ブローカ設定</a>
+<ul>
+<li><a href="#sec-3-1-1"><code>broker.id</code></a></li>
+<li><a href="#sec-3-1-2"><code>log.dirs</code></a></li>
+<li><a href="#sec-3-1-3"><code>port</code></a></li>
+<li><a href="#sec-3-1-4"><code>zookeeper.connect</code></a></li>
+<li><a href="#borker-message-max-bytes"><code>message.max.bytes</code></a></li>
+<li><a href="#sec-3-1-6"><code>num.network.threads</code></a></li>
+<li><a href="#sec-3-1-7"><code>num.io.threads</code></a></li>
+<li><a href="#sec-3-1-8"><code>background.threads</code></a></li>
+<li><a href="#sec-3-1-9"><code>queued.max.requests</code></a></li>
+<li><a href="#sec-3-1-10"><code>host.name</code></a></li>
+<li><a href="#sec-3-1-11"><code>advertised.host.name</code></a></li>
+<li><a href="#sec-3-1-12"><code>advertised.port</code></a></li>
+<li><a href="#sec-3-1-13"><code>socket.send.buffer.bytes</code></a></li>
+<li><a href="#sec-3-1-14"><code>socket.receive.buffer.bytes</code></a></li>
+<li><a href="#sec-3-1-15"><code>socket.request.max.bytes</code></a></li>
+<li><a href="#sec-3-1-16"><code>num.partitions</code></a></li>
+<li><a href="#sec-3-1-17"><code>log.segment.bytes</code></a></li>
+<li><a href="#sec-3-1-18"><code>log.roll.{ms,hours}</code></a></li>
+<li><a href="#sec-3-1-19"><code>log.cleanup.policy</code></a></li>
+<li><a href="#sec-3-1-20"><code>log.retention.{ms,minutes,hours}</code></a></li>
+<li><a href="#sec-3-1-21"><code>log.retention.bytes</code></a></li>
+<li><a href="#sec-3-1-22"><code>log.retention.check.interval.ms</code></a></li>
+<li><a href="#sec-3-1-23"><code>log.cleaner.enable</code></a></li>
+<li><a href="#sec-3-1-24"><code>log.cleaner.threads</code></a></li>
+<li><a href="#sec-3-1-25"><code>log.cleaner.io.max.bytes.per.second</code></a></li>
+<li><a href="#sec-3-1-26"><code>log.cleaner.dedupe.buffer.size</code></a></li>
+<li><a href="#sec-3-1-27"><code>log.cleaner.io.buffer.size</code></a></li>
+<li><a href="#sec-3-1-28"><code>log.cleaner.io.buffer.load.factor</code></a></li>
+<li><a href="#sec-3-1-29"><code>log.cleaner.backoff.ms</code></a></li>
+<li><a href="#sec-3-1-30"><code>log.cleaner.min.cleanable.ratio</code></a></li>
+<li><a href="#sec-3-1-31"><code>log.cleaner.delete.retention.ms</code></a></li>
+<li><a href="#sec-3-1-32"><code>log.index.size.max.bytes</code></a></li>
+<li><a href="#sec-3-1-33"><code>log.index.interval.bytes</code></a></li>
+<li><a href="#sec-3-1-34"><code>log.flush.interval.messages</code></a></li>
+<li><a href="#sec-3-1-35"><code>log.flush.scheduler.interval.ms</code></a></li>
+<li><a href="#sec-3-1-36"><code>log.flush.interval.ms</code></a></li>
+<li><a href="#sec-3-1-37"><code>log.delete.delay.ms</code></a></li>
+<li><a href="#sec-3-1-38"><code>log.flush.offset.checkpoint.interval.ms</code></a></li>
+<li><a href="#sec-3-1-39"><code>log.segment.delete.delay.ms</code></a></li>
+<li><a href="#sec-3-1-40"><code>auto.create.topics.enable</code></a></li>
+<li><a href="#sec-3-1-41"><code>controller.socket.timeout.ms</code></a></li>
+<li><a href="#sec-3-1-42"><code>controller.message.queue.size</code></a></li>
+<li><a href="#sec-3-1-43"><code>default.replication.factor</code></a></li>
+<li><a href="#sec-3-1-44"><code>replica.lag.time.max.ms</code></a></li>
+<li><a href="#sec-3-1-45"><code>replica.lag.max.messages</code></a></li>
+<li><a href="#sec-3-1-46"><code>replica.socket.timeout.ms</code></a></li>
+<li><a href="#sec-3-1-47"><code>replica.socket.receive.buffer.bytes</code></a></li>
+<li><a href="#sec-3-1-48"><code>replica.fetch.max.bytes</code></a></li>
+<li><a href="#sec-3-1-49"><code>replica.fetch.wait.max.ms</code></a></li>
+<li><a href="#sec-3-1-50"><code>replica.fetch.min.bytes</code></a></li>
+<li><a href="#sec-3-1-51"><code>num.replica.fetchers</code></a></li>
+<li><a href="#sec-3-1-52"><code>replica.high.watermark.checkpoint.interval.ms</code></a></li>
+<li><a href="#sec-3-1-53"><code>fetch.purgatory.purge.interval.requests</code></a></li>
+<li><a href="#sec-3-1-54"><code>producer.purgatory.purge.interval.requests</code></a></li>
+<li><a href="#sec-3-1-55"><code>zookeeper.session.timeout.ms</code></a></li>
+<li><a href="#sec-3-1-56"><code>zookeeper.connection.timeout.ms</code></a></li>
+<li><a href="#sec-3-1-57"><code>zookeeper.sync.time.ms</code></a></li>
+<li><a href="#sec-3-1-58"><code>controlled.shutdown.enable</code></a></li>
+<li><a href="#sec-3-1-59"><code>controlled.shutdown.max.retries</code></a></li>
+<li><a href="#sec-3-1-60"><code>controlled.shutdown.retry.backoff.ms</code></a></li>
+<li><a href="#sec-3-1-61"><code>auto.leader.rebalance.enable</code></a></li>
+<li><a href="#sec-3-1-62"><code>leader.imbalance.per.broker.percentage</code></a></li>
+<li><a href="#sec-3-1-63"><code>leader.imbalance.check.interval.seconds</code></a></li>
+<li><a href="#sec-3-1-64"><code>offset.metadata.max.bytes</code></a></li>
+<li><a href="#sec-3-1-65"><code>max.connections.per.ip</code></a></li>
+<li><a href="#sec-3-1-66"><code>max.connections.per.ip.overrides</code></a></li>
+<li><a href="#sec-3-1-67"><code>connections.max.idle.ms</code></a></li>
+<li><a href="#sec-3-1-68"><code>log.roll.jitter.{ms,hours}</code></a></li>
+<li><a href="#sec-3-1-69"><code>num.recovery.threads.per.data.dir</code></a></li>
+<li><a href="#sec-3-1-70"><code>unclean.leader.election.enable</code></a></li>
+<li><a href="#sec-3-1-71"><code>delete.topic.enable</code></a></li>
+<li><a href="#sec-3-1-72"><code>offsets.topic.num.partitions</code></a></li>
+<li><a href="#sec-3-1-73"><code>offsets.topic.retention.minutes</code></a></li>
+<li><a href="#sec-3-1-74"><code>offsets.retention.check.interval.ms</code></a></li>
+<li><a href="#sec-3-1-75"><code>offsets.topic.replication.factor</code></a></li>
+<li><a href="#sec-3-1-76"><code>offsets.topic.segment.bytes</code></a></li>
+<li><a href="#sec-3-1-77"><code>offsets.load.buffer.size</code></a></li>
+<li><a href="#sec-3-1-78"><code>offsets.commit.required.acks</code></a></li>
+<li><a href="#sec-3-1-79"><code>offsets.commit.timeout.ms</code></a></li>
+<li><a href="#topic-config">Topic-level configuration</a></li>
+</ul>
+</li>
+<li><a href="#sec-3-2">3.2. Consumer Configs</a>
+<ul>
+<li><a href="#sec-3-2-1">group.id</a></li>
+<li><a href="#sec-3-2-2">zookeeper.connect</a></li>
+<li><a href="#sec-3-2-3">consumer.id</a></li>
+<li><a href="#sec-3-2-4">socket.timeout.ms</a></li>
+<li><a href="#sec-3-2-5">socket.receive.buffer.bytes</a></li>
+<li><a href="#consumer-fetch-message-max-bytes">fetch.message.max.bytes</a></li>
+<li><a href="#sec-3-2-7">num.consumer.fetchers</a></li>
+<li><a href="#sec-3-2-8">auto.commit.enable</a></li>
+<li><a href="#sec-3-2-9">auto.commit.interval.ms</a></li>
+<li><a href="#sec-3-2-10">queued.max.message.chunks</a></li>
+<li><a href="#sec-3-2-11">rebalance.max.retries</a></li>
+<li><a href="#sec-3-2-12">fetch.min.bytes</a></li>
+<li><a href="#sec-3-2-13">fetch.wait.max.ms</a></li>
+<li><a href="#sec-3-2-14">rebalance.backoff.ms</a></li>
+<li><a href="#sec-3-2-15">refresh.leader.backoff.ms</a></li>
+<li><a href="#sec-3-2-16">auto.offset.reset</a></li>
+<li><a href="#sec-3-2-17">consumer.timeout.ms</a></li>
+<li><a href="#sec-3-2-18">exclude.internal.topics</a></li>
+<li><a href="#sec-3-2-19">partition.assignment.strategy</a></li>
+<li><a href="#sec-3-2-20">client.id</a></li>
+<li><a href="#sec-3-2-21">zookeeper.session.timeout.ms</a></li>
+<li><a href="#sec-3-2-22">zookeeper.connection.timeout.ms</a></li>
+<li><a href="#sec-3-2-23">zookeeper.sync.time.ms</a></li>
+<li><a href="#sec-3-2-24">offsets.storage</a></li>
+<li><a href="#sec-3-2-25">offsets.channel.backoff.ms</a></li>
+<li><a href="#sec-3-2-26">offsets.channel.socket.timeout.ms</a></li>
+<li><a href="#sec-3-2-27">offsets.commit.max.retries</a></li>
+<li><a href="#sec-3-2-28">dual.commit.enabled</a></li>
+<li><a href="#sec-3-2-29">partition.assignment.strategy</a></li>
+</ul>
+</li>
+<li><a href="#sec-3-3">3.3. Producer Configs</a>
+<ul>
+<li><a href="#sec-3-3-1">metadata.broker.list</a></li>
+<li><a href="#sec-3-3-2">request.required.acks</a></li>
+<li><a href="#sec-3-3-3">request.timeout.ms</a></li>
+<li><a href="#sec-3-3-4">producer.type</a></li>
+<li><a href="#sec-3-3-5">serializer.class</a></li>
+<li><a href="#sec-3-3-6">key.serializer.class</a></li>
+<li><a href="#sec-3-3-7">partitioner.class</a></li>
+<li><a href="#sec-3-3-8">compression.codec</a></li>
+<li><a href="#sec-3-3-9">compressed.topics</a></li>
+<li><a href="#sec-3-3-10">message.send.max.retries</a></li>
+<li><a href="#sec-3-3-11">retry.backoff.ms</a></li>
+<li><a href="#sec-3-3-12">topic.metadata.refresh.interval.ms</a></li>
+<li><a href="#sec-3-3-13">queue.buffering.max.ms</a></li>
+<li><a href="#sec-3-3-14">queue.buffering.max.messages</a></li>
+<li><a href="#sec-3-3-15">queue.enqueue.timeout.ms</a></li>
+<li><a href="#sec-3-3-16">batch.num.messages</a></li>
+<li><a href="#sec-3-3-17">send.buffer.bytes</a></li>
+<li><a href="#sec-3-3-18">client.id</a></li>
+</ul>
+</li>
+<li><a href="#newproducerconfigs">3.4. New Producer Configs</a>
+<ul>
+<li><a href="#sec-3-4-1">bootstrap.servers</a></li>
+<li><a href="#sec-3-4-2">acks</a></li>
+<li><a href="#sec-3-4-3">buffer.memory</a></li>
+<li><a href="#sec-3-4-4">compression.type</a></li>
+<li><a href="#sec-3-4-5">retries</a></li>
+<li><a href="#sec-3-4-6">batch.size</a></li>
+<li><a href="#sec-3-4-7">client.id</a></li>
+<li><a href="#sec-3-4-8">linger.ms</a></li>
+<li><a href="#sec-3-4-9">max.request.size</a></li>
+<li><a href="#sec-3-4-10">receive.buffer.bytes</a></li>
+<li><a href="#sec-3-4-11">send.buffer.bytes</a></li>
+<li><a href="#sec-3-4-12">timeout.ms</a></li>
+<li><a href="#sec-3-4-13">block.on.buffer.full</a></li>
+<li><a href="#sec-3-4-14">metadata.fetch.timeout.ms</a></li>
+<li><a href="#sec-3-4-15">metadata.max.age.ms</a></li>
+<li><a href="#sec-3-4-16">metric.reporters</a></li>
+<li><a href="#sec-3-4-17">metrics.num.samples</a></li>
+<li><a href="#sec-3-4-18">metrics.sample.window.ms</a></li>
+<li><a href="#sec-3-4-19">reconnect.backoff.ms</a></li>
+<li><a href="#sec-3-4-20">retry.backoff.ms</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#sec-4">4. 設計</a>
 <ul>
 <li><a href="#sec-4-1">4.1. 動機</a></li>
-<li><a href="#sec-4-2">4.2. 永続化</a></li>
-<li><a href="#sec-4-3">4.3. Efficiency</a></li>
-<li><a href="#sec-4-4">4.4. The Producer</a></li>
-<li><a href="#sec-4-5">4.5. The Consumer</a></li>
+<li><a href="#sec-4-2">4.2. 永続化</a>
+<ul>
+<li><a href="#sec-4-2-1">Don't fear the filesystem!</a></li>
+<li><a href="#sec-4-2-2">Constant Time Suffices</a></li>
+</ul>
+</li>
+<li><a href="#sec-4-3">4.3. Efficiency</a>
+<ul>
+<li><a href="#sec-4-3-1">End-to-end Batch Compression</a></li>
+</ul>
+</li>
+<li><a href="#sec-4-4">4.4. The Producer</a>
+<ul>
+<li><a href="#sec-4-4-1">Load balancing</a></li>
+<li><a href="#sec-4-4-2">Asynchronous send</a></li>
+</ul>
+</li>
+<li><a href="#sec-4-5">4.5. The Consumer</a>
+<ul>
+<li><a href="#sec-4-5-1">Push vs. pull</a></li>
+<li><a href="#sec-4-5-2">Consumer Position</a></li>
+<li><a href="#sec-4-5-3">Offline Data Load</a></li>
+</ul>
+</li>
 <li><a href="#sec-4-6">4.6. Message Delivery Semantics</a></li>
-<li><a href="#sec-4-7">4.7. Replication</a></li>
-<li><a href="#compaction">4.8. Log Compaction</a></li>
+<li><a href="#sec-4-7">4.7. Replication</a>
+<ul>
+<li><a href="#sec-4-7-1">Replicated Logs: Quorums, ISRs, and State Machines (Oh my!)</a></li>
+<li><a href="#sec-4-7-2">Unclean leader election: What if they all die?</a></li>
+<li><a href="#sec-4-7-3">Availability and Durability Guarantees</a></li>
+<li><a href="#sec-4-7-4">Replica Management</a></li>
+</ul>
+</li>
+<li><a href="#compaction">4.8. Log Compaction</a>
+<ul>
+<li><a href="#sec-4-8-1">Log Compaction Basics</a></li>
+<li><a href="#sec-4-8-2">What guarantees does log compaction provide?</a></li>
+<li><a href="#sec-4-8-3">Log Compaction Details</a></li>
+<li><a href="#sec-4-8-4">Configuring The Log Cleaner</a></li>
+<li><a href="#sec-4-8-5">Log Compaction Limitations</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#sec-5">5. 実装</a>
 <ul>
-<li><a href="#sec-5-1">5.1. API Design</a></li>
+<li><a href="#sec-5-1">5.1. API Design</a>
+<ul>
+<li><a href="#sec-5-1-1">Producer APIs</a></li>
+<li><a href="#sec-5-1-2">Consumer APIs</a></li>
+</ul>
+</li>
 <li><a href="#sec-5-2">5.2. Network Layer</a></li>
 <li><a href="#sec-5-3">5.3. Messages</a></li>
 <li><a href="#sec-5-4">5.4. Message Format</a></li>
-<li><a href="#sec-5-5">5.5. Log</a></li>
-<li><a href="#sec-5-6">5.6. Distribution</a></li>
+<li><a href="#sec-5-5">5.5. Log</a>
+<ul>
+<li><a href="#sec-5-5-1">Writes</a></li>
+<li><a href="#sec-5-5-2">Reads</a></li>
+<li><a href="#sec-5-5-3">Deletes</a></li>
+<li><a href="#sec-5-5-4">Guarantees</a></li>
+</ul>
+</li>
+<li><a href="#sec-5-6">5.6. Distribution</a>
+<ul>
+<li><a href="#sec-5-6-1">Consumer Offset Tracking</a></li>
+<li><a href="#sec-5-6-2">ZooKeeper Directories</a></li>
+<li><a href="#sec-5-6-3">Notation</a></li>
+<li><a href="#sec-5-6-4">Broker Node Registry</a></li>
+<li><a href="#sec-5-6-5">Broker Topic Registry</a></li>
+<li><a href="#sec-5-6-6">Consumers and Consumer Groups</a></li>
+<li><a href="#sec-5-6-7">Consumer Id Registry</a></li>
+<li><a href="#sec-5-6-8">Consumer Offsets</a></li>
+<li><a href="#sec-5-6-9">Partition Owner registry</a></li>
+<li><a href="#sec-5-6-10">Broker node registration</a></li>
+<li><a href="#sec-5-6-11">Consumer registration algorithm</a></li>
+<li><a href="#sec-5-6-12">Consumer rebalancing algorithm</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#sec-6">6. 運用</a>
+<ul>
+<li><a href="#sec-6-1">6.1. Basic Kafka Operations</a>
+<ul>
+<li><a href="#sec-6-1-1">Adding and removing topics</a></li>
+<li><a href="#sec-6-1-2">Modifying topics</a></li>
+<li><a href="#sec-6-1-3">Graceful shutdown</a></li>
+<li><a href="#sec-6-1-4">Balancing leadership</a></li>
+<li><a href="#basic_ops_mirror_maker">Mirroring data between clusters</a></li>
+<li><a href="#sec-6-1-6">Checking consumer position</a></li>
+<li><a href="#sec-6-1-7">Expanding your cluster</a></li>
+<li><a href="#sec-6-1-8">Decommissioning brokers</a></li>
+<li><a href="#sec-6-1-9">Increasing replication factor</a></li>
+</ul>
+</li>
+<li><a href="#sec-6-2">6.2. Datacenters</a></li>
+<li><a href="#sec-6-3">6.3. Kafka Configuration</a>
+<ul>
+<li><a href="#sec-6-3-1">Important Client Configurations</a></li>
+<li><a href="#sec-6-3-2">A Production Server Config</a></li>
+<li><a href="#sec-6-3-3">Java Version</a></li>
+</ul>
+</li>
+<li><a href="#sec-6-4">6.4. Hardware and OS</a>
+<ul>
+<li><a href="#sec-6-4-1">OS</a></li>
+<li><a href="#sec-6-4-2">Disks and Filesystem</a></li>
+<li><a href="#sec-6-4-3">Application vs. OS Flush Management</a></li>
+<li><a href="#sec-6-4-4">Understanding Linux OS Flush Behavior</a></li>
+<li><a href="#sec-6-4-5">Ext4 Notes</a></li>
+</ul>
+</li>
+<li><a href="#sec-6-5">6.5. Monitoring</a>
+<ul>
+<li><a href="#sec-6-5-1">Broker monitoring</a></li>
+<li><a href="#sec-6-5-2">New producer monitoring</a></li>
+<li><a href="#sec-6-5-3">Audit</a></li>
+</ul>
+</li>
+<li><a href="#sec-6-6">6.6. ZooKeeper</a>
+<ul>
+<li><a href="#sec-6-6-1">Stable version</a></li>
+<li><a href="#sec-6-6-2">Operationalizing ZooKeeper</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -340,9 +641,10 @@ Kafkaの性能はデータサイズに関しては実質定数のため、大量
 </div>
 </div>
 
-<div id="outline-container-sec-1-1-4" class="outline-4">
-<h4 id="sec-1-1-4">コンシューマ</h4>
-<div class="outline-text-4" id="text-1-1-4">
+<div id="outline-container-intro_consumers" class="outline-4">
+<h4 id="intro_consumers"><a id="sec-1-1-4" name="sec-1-1-4"></a>コンシューマ</h4>
+<div class="outline-text-4" id="text-intro_consumers">
+
 <p>
 伝統的なメッセージングのモデルは <a href="http://en.wikipedia.org/wiki/Message_queue">キューイング</a> と <a href="http://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern">出版・購読型</a> の二つです。
 キューを用いる方法では、コンシューマプールがひとつのサーバからメッセージを取得することができ、
@@ -1111,9 +1413,9 @@ Hadoop コンシューマの使用方法は <a href="https://github.com/linkedin
 </div>
 </div>
 
-<div id="outline-container-sec-3" class="outline-2">
-<h2 id="sec-3"><span class="section-number-2">3</span> 設定</h2>
-<div class="outline-text-2" id="text-3">
+<div id="outline-container-configuration" class="outline-2">
+<h2 id="configuration"><a id="sec-3" name="sec-3"></a><span class="section-number-2">3</span> 設定</h2>
+<div class="outline-text-2" id="text-configuration">
 <p>
 Kafka は  <a href="http://en.wikipedia.org/wiki/.properties">プロパティファイルフォーマット</a> の key-value ペアで設定を行ないます。
 これらの値はファイル、もしくはプログラム中で設定することが出来ます。
@@ -3312,7 +3614,9 @@ IP またはホスト名を指定して、デフォルトの最大接続数を�
 </p>
 </div>
 
-<ul class="org-ul"><li><a id="sec-3-1-80-1" name="sec-3-1-80-1"></a><code>cleanup.policy</code><br  /><div class="outline-text-5" id="text-3-1-80-1">
+<div id="outline-container-sec-3-1-80-1" class="outline-5">
+<h5 id="sec-3-1-80-1"><code>cleanup.policy</code></h5>
+<div class="outline-text-5" id="text-3-1-80-1">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -3341,9 +3645,11 @@ IP またはホスト名を指定して、デフォルトの最大接続数を�
 <code>compact</code> ポリシーではトピックに対して <a href="http://kafka.apache.org/documentation.html#compaction">ログコンパクション</a> が行われます。
 </p>
 </div>
-</li>
+</div>
 
-<li><a id="sec-3-1-80-2" name="sec-3-1-80-2"></a><code>delete.retention.ms</code><br  /><div class="outline-text-5" id="text-3-1-80-2">
+<div id="outline-container-sec-3-1-80-2" class="outline-5">
+<h5 id="sec-3-1-80-2"><code>delete.retention.ms</code></h5>
+<div class="outline-text-5" id="text-3-1-80-2">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -3377,9 +3683,11 @@ IP またはホスト名を指定して、デフォルトの最大接続数を�
 削除トゥームストーンマーカが回収されてしまう可能性が有ります。)。
 </p>
 </div>
-</li>
+</div>
 
-<li><a id="sec-3-1-80-3" name="sec-3-1-80-3"></a><code>flush.messages</code><br  /><div class="outline-text-5" id="text-3-1-80-3">
+<div id="outline-container-sec-3-1-80-3" class="outline-5">
+<h5 id="sec-3-1-80-3"><code>flush.messages</code></h5>
+<div class="outline-text-5" id="text-3-1-80-3">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -3411,9 +3719,11 @@ IP またはホスト名を指定して、デフォルトの最大接続数を�
 <sup><a id="fnr.11" name="fnr.11" class="footref" href="#fn.11">11</a></sup>
 </p>
 </div>
-</li>
+</div>
 
-<li><a id="sec-3-1-80-4" name="sec-3-1-80-4"></a><code>flush.ms</code><br  /><div class="outline-text-5" id="text-3-1-80-4">
+<div id="outline-container-sec-3-1-80-4" class="outline-5">
+<h5 id="sec-3-1-80-4"><code>flush.ms</code></h5>
+<div class="outline-text-5" id="text-3-1-80-4">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -3442,9 +3752,11 @@ IP またはホスト名を指定して、デフォルトの最大接続数を�
 オペレーティングシステムのより効率的なバックグラウンドのフラッシュ性能に委ねましょう。
 </p>
 </div>
-</li>
+</div>
 
-<li><a id="sec-3-1-80-5" name="sec-3-1-80-5"></a><code>index.interval.bytes</code><br  /><div class="outline-text-5" id="text-3-1-80-5">
+<div id="outline-container-sec-3-1-80-5" class="outline-5">
+<h5 id="sec-3-1-80-5"><code>index.interval.bytes</code></h5>
+<div class="outline-text-5" id="text-3-1-80-5">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -3475,9 +3787,11 @@ IP またはホスト名を指定して、デフォルトの最大接続数を�
 おそらくこの値を変更する必要はないでしょう。
 </p>
 </div>
-</li>
+</div>
 
-<li><a id="sec-3-1-80-6" name="sec-3-1-80-6"></a><code>max.message.bytes</code><br  /><div class="outline-text-5" id="text-3-1-80-6">
+<div id="outline-container-sec-3-1-80-6" class="outline-5">
+<h5 id="sec-3-1-80-6"><code>max.message.bytes</code></h5>
+<div class="outline-text-5" id="text-3-1-80-6">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -3505,9 +3819,11 @@ IP またはホスト名を指定して、デフォルトの最大接続数を�
 メッセージを取得出来なくなってしまうため注意が必要です。
 </p>
 </div>
-</li>
+</div>
 
-<li><a id="sec-3-1-80-7" name="sec-3-1-80-7"></a><code>min.cleanable.dirty.ratio</code><br  /><div class="outline-text-5" id="text-3-1-80-7">
+<div id="outline-container-sec-3-1-80-7" class="outline-5">
+<h5 id="sec-3-1-80-7"><code>min.cleanable.dirty.ratio</code></h5>
+<div class="outline-text-5" id="text-3-1-80-7">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -3539,9 +3855,11 @@ IP またはホスト名を指定して、デフォルトの最大接続数を�
 <sup><a id="fnr.12" name="fnr.12" class="footref" href="#fn.12">12</a></sup>
 </p>
 </div>
-</li>
+</div>
 
-<li><a id="sec-3-1-80-8" name="sec-3-1-80-8"></a><code>min.insync.replicas</code><br  /><div class="outline-text-5" id="text-3-1-80-8">
+<div id="outline-container-sec-3-1-80-8" class="outline-5">
+<h5 id="sec-3-1-80-8"><code>min.insync.replicas</code></h5>
+<div class="outline-text-5" id="text-3-1-80-8">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -3584,9 +3902,11 @@ IP またはホスト名を指定して、デフォルトの最大接続数を�
 プロデューサが例外を投げることを保証出来ます。
 </p>
 </div>
-</li>
+</div>
 
-<li><a id="sec-3-1-80-9" name="sec-3-1-80-9"></a><code>retention.bytes</code><br  /><div class="outline-text-5" id="text-3-1-80-9">
+<div id="outline-container-sec-3-1-80-9" class="outline-5">
+<h5 id="sec-3-1-80-9"><code>retention.bytes</code></h5>
+<div class="outline-text-5" id="text-3-1-80-9">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -3614,9 +3934,11 @@ IP またはホスト名を指定して、デフォルトの最大接続数を�
 デフォルトでは容量制限は無く、時間による制限のみです。
 </p>
 </div>
-</li>
+</div>
 
-<li><a id="sec-3-1-80-10" name="sec-3-1-80-10"></a><code>retention.ms</code><br  /><div class="outline-text-5" id="text-3-1-80-10">
+<div id="outline-container-sec-3-1-80-10" class="outline-5">
+<h5 id="sec-3-1-80-10"><code>retention.ms</code></h5>
+<div class="outline-text-5" id="text-3-1-80-10">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -3645,9 +3967,11 @@ IP またはホスト名を指定して、デフォルトの最大接続数を�
 SLA(service level agreement, サービス品質保証)を表わしています。
 </p>
 </div>
-</li>
+</div>
 
-<li><a id="sec-3-1-80-11" name="sec-3-1-80-11"></a><code>segment.bytes</code><br  /><div class="outline-text-5" id="text-3-1-80-11">
+<div id="outline-container-sec-3-1-80-11" class="outline-5">
+<h5 id="sec-3-1-80-11"><code>segment.bytes</code></h5>
+<div class="outline-text-5" id="text-3-1-80-11">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -3676,9 +4000,11 @@ SLA(service level agreement, サービス品質保証)を表わしています�
 ファイル保持制御の粒度は荒くなってしまいます。
 </p>
 </div>
-</li>
+</div>
 
-<li><a id="sec-3-1-80-12" name="sec-3-1-80-12"></a><code>segment.index.bytes</code><br  /><div class="outline-text-5" id="text-3-1-80-12">
+<div id="outline-container-sec-3-1-80-12" class="outline-5">
+<h5 id="sec-3-1-80-12"><code>segment.index.bytes</code></h5>
+<div class="outline-text-5" id="text-3-1-80-12">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -3706,9 +4032,11 @@ SLA(service level agreement, サービス品質保証)を表わしています�
 通常はこの値を変更すべきではありません。
 </p>
 </div>
-</li>
+</div>
 
-<li><a id="sec-3-1-80-13" name="sec-3-1-80-13"></a><code>segment.ms</code><br  /><div class="outline-text-5" id="text-3-1-80-13">
+<div id="outline-container-sec-3-1-80-13" class="outline-5">
+<h5 id="sec-3-1-80-13"><code>segment.ms</code></h5>
+<div class="outline-text-5" id="text-3-1-80-13">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -3735,9 +4063,11 @@ SLA(service level agreement, サービス品質保証)を表わしています�
 この期間が過ぎると強制的に新たなセグメントファイルが作成されます。
 </p>
 </div>
-</li>
+</div>
 
-<li><a id="sec-3-1-80-14" name="sec-3-1-80-14"></a><code>segment.jitter.ms</code><br  /><div class="outline-text-5" id="text-3-1-80-14">
+<div id="outline-container-sec-3-1-80-14" class="outline-5">
+<h5 id="sec-3-1-80-14"><code>segment.jitter.ms</code></h5>
+<div class="outline-text-5" id="text-3-1-80-14">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -3763,7 +4093,7 @@ SLA(service level agreement, サービス品質保証)を表わしています�
 <code>logRollTimeMillis</code> から減じられる最大ジッタです。
 </p>
 </div>
-</li></ul>
+</div>
 </div>
 </div>
 
@@ -6412,7 +6742,9 @@ The high-level API hides the details of brokers from the consumer and allows con
 </p>
 </div>
 
-<ul class="org-ul"><li><a id="sec-5-1-2-1" name="sec-5-1-2-1"></a>Low-level API<br  /><div class="outline-text-5" id="text-5-1-2-1">
+<div id="outline-container-sec-5-1-2-1" class="outline-5">
+<h5 id="sec-5-1-2-1">Low-level API</h5>
+<div class="outline-text-5" id="text-5-1-2-1">
 <div class="org-src-container">
 
 <pre class="src src-scala"><span class="org-keyword">class</span> <span class="org-type">SimpleConsumer</span> <span class="org-rainbow-delimiters-depth-1">{</span>
@@ -6439,9 +6771,11 @@ The high-level API hides the details of brokers from the consumer and allows con
 The low-level API is used to implement the high-level API as well as being used directly for some of our offline consumers (such as the hadoop consumer) which have particular requirements around maintaining state.
 </p>
 </div>
-</li>
+</div>
 
-<li><a id="sec-5-1-2-2" name="sec-5-1-2-2"></a>High-level API<br  /><div class="outline-text-5" id="text-5-1-2-2">
+<div id="outline-container-sec-5-1-2-2" class="outline-5">
+<h5 id="sec-5-1-2-2">High-level API</h5>
+<div class="outline-text-5" id="text-5-1-2-2">
 <div class="org-src-container">
 
 <pre class="src src-scala"><span class="org-comment-delimiter">/* </span><span class="org-comment">create a connection to the cluster */</span>
@@ -6483,7 +6817,7 @@ This API is centered around iterators, implemented by the KafkaStream class. Eac
 The createMessageStreams call registers the consumer for the topic, which results in rebalancing the consumer/broker assignment. The API encourages creating many topic streams in a single call in order to minimize this rebalancing. The createMessageStreamsByFilter call (additionally) registers watchers to discover new topics that match its filter. Note that each stream that createMessageStreamsByFilter returns may iterate over messages from multiple topics (i.e., if multiple topics are allowed by the filter).
 </p>
 </div>
-</li></ul>
+</div>
 </div>
 </div>
 
@@ -6655,7 +6989,9 @@ When the offset manager receives an OffsetCommitRequest, it appends the request 
 </p>
 </div>
 
-<ul class="org-ul"><li><a id="offsetmigration" name="offsetmigration"></a><a id="sec-5-6-1-1" name="sec-5-6-1-1"></a>Migrating offsets from ZooKeeper to Kafka<br  /><div class="outline-text-5" id="text-offsetmigration">
+<div id="outline-container-offsetmigration" class="outline-5">
+<h5 id="offsetmigration"><a id="sec-5-6-1-1" name="sec-5-6-1-1"></a>Migrating offsets from ZooKeeper to Kafka</h5>
+<div class="outline-text-5" id="text-offsetmigration">
 
 <p>
 Kafka consumers in earlier releases store their offsets by default in ZooKeeper. It is possible to migrate these consumers to commit offsets into Kafka by following these steps:
@@ -6676,7 +7012,7 @@ Kafka consumers in earlier releases store their offsets by default in ZooKeeper.
 A roll-back (i.e., migrating from Kafka back to ZooKeeper) can also be performed using the above steps if you set <code>offsets.storage=zookeeper</code>.
 </p>
 </div>
-</li></ul>
+</div>
 </div>
 
 <div id="outline-container-sec-5-6-2" class="outline-4">
@@ -6849,6 +7185,1669 @@ When rebalancing is triggered at one consumer, rebalancing should be triggered i
 </div>
 </div>
 </div>
+<div id="outline-container-sec-6" class="outline-2">
+<h2 id="sec-6"><span class="section-number-2">6</span> 運用</h2>
+<div class="outline-text-2" id="text-6">
+<p>
+Here is some information on actually running Kafka as a production system based on usage and experience at LinkedIn. Please send us any additional tips you know of.
+</p>
+</div>
+
+<div id="outline-container-sec-6-1" class="outline-3">
+<h3 id="sec-6-1"><span class="section-number-3">6.1</span> Basic Kafka Operations</h3>
+<div class="outline-text-3" id="text-6-1">
+<p>
+This section will review the most common operations you will perform on your Kafka cluster. All of the tools reviewed in this section are available under the <code>bin/</code> directory of the Kafka distribution and each tool will print details on all possible commandline options if it is run with no arguments.
+</p>
+</div>
+
+<div id="outline-container-sec-6-1-1" class="outline-4">
+<h4 id="sec-6-1-1">Adding and removing topics</h4>
+<div class="outline-text-4" id="text-6-1-1">
+<p>
+You have the option of either adding topics manually or having them be created automatically when data is first published to a non-existent topic. If topics are auto-created then you may want to tune the default <a href="#topic-config">topic configurations</a> used for auto-created topics.
+</p>
+
+<p>
+Topics are added and modified using the topic tool:
+</p>
+
+<pre class="example">
+&gt; bin/kafka-topics.sh --zookeeper zk_host:port/chroot --create --topic my_topic_name
+      --partitions 20 --replication-factor 3 --config x=y
+</pre>
+
+<p>
+The replication factor controls how many servers will replicate each message that is written. If you have a replication factor of 3 then up to 2 servers can fail before you will lose access to your data. We recommend you use a replication factor of 2 or 3 so that you can transparently bounce machines without interrupting data consumption.
+</p>
+
+<p>
+The partition count controls how many logs the topic will be sharded into. There are several impacts of the partition count. First each partition must fit entirely on a single server. So if you have 20 partitions the full data set (and read and write load) will be handled by no more than 20 servers (no counting replicas). Finally the partition count impacts the maximum parallelism of your consumers. This is discussed in greater detail in the <a href="#intro_consumers">concepts section</a>.
+</p>
+
+<p>
+The configurations added on the command line override the default settings the server has for things like the length of time data should be retained. The complete set of per-topic configurations is documented <a href="#topic-config">here</a>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-6-1-2" class="outline-4">
+<h4 id="sec-6-1-2">Modifying topics</h4>
+<div class="outline-text-4" id="text-6-1-2">
+<p>
+You can change the configuration or partitioning of a topic using the same topic tool.
+</p>
+
+<p>
+To add partitions you can do
+</p>
+
+<pre class="example">
+&gt; bin/kafka-topics.sh --zookeeper zk_host:port/chroot --alter --topic my_topic_name
+      --partitions 40
+</pre>
+
+<p>
+Be aware that one use case for partitions is to semantically partition data, and adding partitions doesn't change the partitioning of existing data so this may disturb consumers if they rely on that partition. That is if data is partitioned by <code>hash(key) % number_of_partitions</code> then this partitioning will potentially be shuffled by adding partitions but Kafka will not attempt to automatically redistribute data in any way.
+</p>
+
+<p>
+To add configs:
+</p>
+
+<pre class="example">
+&gt; bin/kafka-topics.sh --zookeeper zk_host:port/chroot --alter --topic my_topic_name --config x=y
+</pre>
+
+<p>
+To remove a config:
+</p>
+
+<pre class="example">
+&gt; bin/kafka-topics.sh --zookeeper zk_host:port/chroot --alter --topic my_topic_name --deleteConfig x
+</pre>
+
+<p>
+And finally deleting a topic:
+</p>
+
+<pre class="example">
+&gt; bin/kafka-topics.sh --zookeeper zk_host:port/chroot --delete --topic my_topic_name
+</pre>
+
+<p>
+Topic deletion option is disabled by default. To enable it set the server config
+</p>
+
+<pre class="example">
+delete.topic.enable=true
+</pre>
+
+<p>
+Kafka does not currently support reducing the number of partitions for a topic or changing the replication factor.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-6-1-3" class="outline-4">
+<h4 id="sec-6-1-3">Graceful shutdown</h4>
+<div class="outline-text-4" id="text-6-1-3">
+<p>
+The Kafka cluster will automatically detect any broker shutdown or failure and elect new leaders for the partitions on that machine. This will occur whether a server fails or it is brought down intentionally for maintenance or configuration changes. For the later cases Kafka supports a more graceful mechanism for stoping a server then just killing it. When a server is stopped gracefully it has two optimizations it will take advantage of:
+</p>
+
+<ol class="org-ol">
+<li>It will sync all its logs to disk to avoid needing to do any log recovery when it restarts (i.e. validating the checksum for all messages in the tail of the log). Log recovery takes time so this speeds up intentional restarts.
+</li>
+<li>It will migrate any partitions the server is the leader for to other replicas prior to shutting down. This will make the leadership transfer faster and minimize the time each partition is unavailable to a few milliseconds.
+</li>
+</ol>
+
+<p>
+Syncing the logs will happen automatically happen whenever the server is stopped other than by a hard kill, but the controlled leadership migration requires using a special setting:
+</p>
+
+<pre class="example">
+controlled.shutdown.enable=true
+</pre>
+
+<p>
+Note that controlled shutdown will only succeed if <i>all</i> the partitions hosted on the broker have replicas (i.e. the replication factor is greater than 1 <i>and</i> at least one of these replicas is alive). This is generally what you want since shutting down the last replica would make that topic partition unavailable.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-6-1-4" class="outline-4">
+<h4 id="sec-6-1-4">Balancing leadership</h4>
+<div class="outline-text-4" id="text-6-1-4">
+<p>
+Whenever a broker stops or crashes leadership for that broker's partitions transfers to other replicas. This means that by default when the broker is restarted it will only be a follower for all its partitions, meaning it will not be used for client reads and writes.
+</p>
+
+<p>
+To avoid this imbalance, Kafka has a notion of preferred replicas. If the list of replicas for a partition is 1,5,9 then node 1 is preferred as the leader to either node 5 or 9 because it is earlier in the replica list. You can have the Kafka cluster try to restore leadership to the restored replicas by running the command:
+</p>
+
+<pre class="example">
+&gt; bin/kafka-preferred-replica-election.sh --zookeeper zk_host:port/chroot
+</pre>
+
+<p>
+Since running this command can be tedious you can also configure Kafka to do this automatically by setting the following configuration:
+</p>
+
+<pre class="example">
+auto.leader.rebalance.enable=true
+</pre>
+</div>
+</div>
+
+<div id="outline-container-basic_ops_mirror_maker" class="outline-4">
+<h4 id="basic_ops_mirror_maker"><a id="sec-6-1-5" name="sec-6-1-5"></a>Mirroring data between clusters</h4>
+<div class="outline-text-4" id="text-basic_ops_mirror_maker">
+
+<p>
+We refer to the process of replicating data <i>between</i> Kafka clusters "mirroring" to avoid confusion with the replication that happens amongst the nodes in a single cluster. Kafka comes with a tool for mirroring data between Kafka clusters. The tool reads from one or more source clusters and writes to a destination cluster, like this:
+</p>
+
+
+<div class="figure">
+<p><img src="images/mirror-maker.png" alt="mirror-maker.png" />
+</p>
+</div>
+
+<p>
+A common use case for this kind of mirroring is to provide a replica in another datacenter. This scenario will be discussed in more detail in the next section.
+</p>
+
+<p>
+You can run many such mirroring processes to increase throughput and for fault-tolerance (if one process dies, the others will take overs the additional load).
+</p>
+
+<p>
+Data will be read from topics in the source cluster and written to a topic with the same name in the destination cluster. In fact the mirror maker is little more than a Kafka consumer and producer hooked together.
+</p>
+
+<p>
+The source and destination clusters are completely independent entities: they can have different numbers of partitions and the offsets will not be the same. For this reason the mirror cluster is not really intended as a fault-tolerance mechanism (as the consumer position will be different); for that we recommend using normal in-cluster replication. The mirror maker process will, however, retain and use the message key for partitioning so order is preserved on a per-key basis.
+</p>
+
+<p>
+Here is an example showing how to mirror a single topic (named <i>my-topic</i>) from two input clusters:
+</p>
+
+<pre class="example">
+&gt; bin/kafka-run-class.sh kafka.tools.MirrorMaker
+      --consumer.config consumer-1.properties --consumer.config consumer-2.properties
+      --producer.config producer.properties --whitelist my-topic
+</pre>
+
+<p>
+Note that we specify the list of topics with the <code>--whitelist</code> option.
+This option allows any regular expression using <a href="http://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html">Java-style regular expressions</a>.
+So you could mirror two topics named <i>A</i> and <i>B</i> using <code>--whitelist 'A|B'</code>.
+Or you could mirror <i>all</i> topics using <code>--whitelist '*'</code>.
+Make sure to quote any regular expression to ensure the shell doesn't try to expand it as a file path. For convenience we allow the use of <code>,</code> instead of <code>|</code> to specify a list of topics.
+</p>
+
+<p>
+Sometime it is easier to say what it is that you don't want. Instead of using <code>--whitelist</code> to say what you want to mirror you can use <code>--blacklist</code> to say what to exclude. This also takes a regular expression argument.
+</p>
+
+<p>
+Combining mirroring with the configuration <code>auto.create.topics.enable=true</code> makes it possible to have a replica cluster that will automatically create and replicate all data in a source cluster even as new topics are added.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-6-1-6" class="outline-4">
+<h4 id="sec-6-1-6">Checking consumer position</h4>
+<div class="outline-text-4" id="text-6-1-6">
+<p>
+Sometimes it's useful to see the position of your consumers. We have a tool that will show the position of all consumers in a consumer group as well as how far behind the end of the log they are. To run this tool on a consumer group named <i>my-group</i> consuming a topic named <i>my-topic</i> would look like this:
+</p>
+
+<pre class="example">
+ &gt; bin/kafka-run-class.sh kafka.tools.ConsumerOffsetChecker --zkconnect localhost:2181 --group test
+Group           Topic                          Pid Offset          logSize         Lag             Owner
+my-group        my-topic                       0   0               0               0               test_jkreps-mn-1394154511599-60744496-0
+my-group        my-topic                       1   0               0               0               test_jkreps-mn-1394154521217-1a0be913-0
+</pre>
+</div>
+</div>
+
+<div id="outline-container-sec-6-1-7" class="outline-4">
+<h4 id="sec-6-1-7">Expanding your cluster</h4>
+<div class="outline-text-4" id="text-6-1-7">
+<p>
+Adding servers to a Kafka cluster is easy, just assign them a unique broker id and start up Kafka on your new servers. However these new servers will not automatically be assigned any data partitions, so unless partitions are moved to them they won't be doing any work until new topics are created. So usually when you add machines to your cluster you will want to migrate some existing data to these machines.
+</p>
+
+<p>
+The process of migrating data is manually initiated but fully automated. Under the covers what happens is that Kafka will add the new server as a follower of the partition it is migrating and allow it to fully replicate the existing data in that partition. When the new server has fully replicated the contents of this partition and joined the in-sync replica one of the existing replicas will delete their partition's data.
+</p>
+
+<p>
+The partition reassignment tool can be used to move partitions across brokers. An ideal partition distribution would ensure even data load and partition sizes across all brokers. In 0.8.1, the partition reassignment tool does not have the capability to automatically study the data distribution in a Kafka cluster and move partitions around to attain an even load distribution. As such, the admin has to figure out which topics or partitions should be moved around.
+</p>
+
+<p>
+The partition reassignment tool can run in 3 mutually exclusive modes -
+</p>
+
+
+<ul class="org-ul">
+<li>&#x2013;generate: In this mode, given a list of topics and a list of brokers, the tool generates a candidate reassignment to move all partitions of the specified topics to the new brokers. This option merely provides a convenient way to generate a partition reassignment plan given a list of topics and target brokers.
+</li>
+<li>&#x2013;execute: In this mode, the tool kicks off the reassignment of partitions based on the user provided reassignment plan. (using the &#x2013;reassignment-json-file option). This can either be a custom reassignment plan hand crafted by the admin or provided by using the &#x2013;generate option
+</li>
+<li>&#x2013;verify: In this mode, the tool verifies the status of the reassignment for all partitions listed during the last &#x2013;execute. The status can be either of successfully completed, failed or in progress
+</li>
+</ul>
+</div>
+
+<div id="outline-container-sec-6-1-7-1" class="outline-5">
+<h5 id="sec-6-1-7-1">Automatically migrating data to new machines</h5>
+<div class="outline-text-5" id="text-6-1-7-1">
+<p>
+The partition reassignment tool can be used to move some topics off of the current set of brokers to the newly added brokers. This is typically useful while expanding an existing cluster since it is easier to move entire topics to the new set of brokers, than moving one partition at a time. When used to do this, the user should provide a list of topics that should be moved to the new set of brokers and a target list of new brokers. The tool then evenly distributes all partitions for the given list of topics across the new set of brokers. During this move, the replication factor of the topic is kept constant. Effectively the replicas for all partitions for the input list of topics are moved from the old set of brokers to the newly added brokers.
+</p>
+
+<p>
+For instance, the following example will move all partitions for topics foo1,foo2 to the new set of brokers 5,6. At the end of this move, all partitions for topics foo1 and foo2 will only exist on brokers 5,6
+</p>
+
+<p>
+Since, the tool accepts the input list of topics as a json file, you first need to identify the topics you want to move and create the json file as follows-
+</p>
+
+<pre class="example">
+&gt; cat topics-to-move.json
+{"topics": [{"topic": "foo1"},
+            {"topic": "foo2"}],
+ "version":1
+}
+</pre>
+
+<p>
+Once the json file is ready, use the partition reassignment tool to generate a candidate assignment-
+</p>
+
+<pre class="example">
+&gt; bin/kafka-reassign-partitions.sh --zookeeper localhost:2181 --topics-to-move-json-file topics-to-move.json --broker-list "5,6" --generate
+Current partition replica assignment
+
+{"version":1,
+ "partitions":[{"topic":"foo1","partition":2,"replicas":[1,2]},
+               {"topic":"foo1","partition":0,"replicas":[3,4]},
+               {"topic":"foo2","partition":2,"replicas":[1,2]},
+               {"topic":"foo2","partition":0,"replicas":[3,4]},
+               {"topic":"foo1","partition":1,"replicas":[2,3]},
+               {"topic":"foo2","partition":1,"replicas":[2,3]}]
+}
+
+Proposed partition reassignment configuration
+
+{"version":1,
+ "partitions":[{"topic":"foo1","partition":2,"replicas":[5,6]},
+               {"topic":"foo1","partition":0,"replicas":[5,6]},
+               {"topic":"foo2","partition":2,"replicas":[5,6]},
+               {"topic":"foo2","partition":0,"replicas":[5,6]},
+               {"topic":"foo1","partition":1,"replicas":[5,6]},
+               {"topic":"foo2","partition":1,"replicas":[5,6]}]
+}
+</pre>
+
+<p>
+The tool generates a candidate assignment that will move all partitions from topics foo1,foo2 to brokers 5,6. Note, however, that at this point, the partition movement has not started, it merely tells you the current assignment and the proposed new assignment. The current assignment should be saved in case you want to rollback to it. The new assignment should be saved in a json file (e.g. expand-cluster-reassignment.json) to be input to the tool with the &#x2013;execute option as follows-
+</p>
+
+<pre class="example">
+&gt; bin/kafka-reassign-partitions.sh --zookeeper localhost:2181 --reassignment-json-file expand-cluster-reassignment.json --execute
+Current partition replica assignment
+
+{"version":1,
+ "partitions":[{"topic":"foo1","partition":2,"replicas":[1,2]},
+               {"topic":"foo1","partition":0,"replicas":[3,4]},
+               {"topic":"foo2","partition":2,"replicas":[1,2]},
+               {"topic":"foo2","partition":0,"replicas":[3,4]},
+               {"topic":"foo1","partition":1,"replicas":[2,3]},
+               {"topic":"foo2","partition":1,"replicas":[2,3]}]
+}
+
+Save this to use as the --reassignment-json-file option during rollback
+Successfully started reassignment of partitions
+{"version":1,
+ "partitions":[{"topic":"foo1","partition":2,"replicas":[5,6]},
+               {"topic":"foo1","partition":0,"replicas":[5,6]},
+               {"topic":"foo2","partition":2,"replicas":[5,6]},
+               {"topic":"foo2","partition":0,"replicas":[5,6]},
+               {"topic":"foo1","partition":1,"replicas":[5,6]},
+               {"topic":"foo2","partition":1,"replicas":[5,6]}]
+}
+</pre>
+
+<p>
+Finally, the &#x2013;verify option can be used with the tool to check the status of the partition reassignment. Note that the same expand-cluster-reassignment.json (used with the &#x2013;execute option) should be used with the &#x2013;verify option
+</p>
+
+<pre class="example">
+&gt; bin/kafka-reassign-partitions.sh --zookeeper localhost:2181 --reassignment-json-file expand-cluster-reassignment.json --verify
+Status of partition reassignment:
+Reassignment of partition [foo1,0] completed successfully
+Reassignment of partition [foo1,1] is in progress
+Reassignment of partition [foo1,2] is in progress
+Reassignment of partition [foo2,0] completed successfully
+Reassignment of partition [foo2,1] completed successfully
+Reassignment of partition [foo2,2] completed successfully
+</pre>
+</div>
+</div>
+
+<div id="outline-container-sec-6-1-7-2" class="outline-5">
+<h5 id="sec-6-1-7-2">Custom partition assignment and migration</h5>
+<div class="outline-text-5" id="text-6-1-7-2">
+<p>
+The partition reassignment tool can also be used to selectively move replicas of a partition to a specific set of brokers. When used in this manner, it is assumed that the user knows the reassignment plan and does not require the tool to generate a candidate reassignment, effectively skipping the &#x2013;generate step and moving straight to the &#x2013;execute step
+</p>
+
+<p>
+For instance, the following example moves partition 0 of topic foo1 to brokers 5,6 and partition 1 of topic foo2 to brokers 2,3
+</p>
+
+<p>
+The first step is to hand craft the custom reassignment plan in a json file-
+</p>
+
+<pre class="example">
+&gt; cat custom-reassignment.json
+{"version":1,"partitions":[{"topic":"foo1","partition":0,"replicas":[5,6]},{"topic":"foo2","partition":1,"replicas":[2,3]}]}
+</pre>
+
+<p>
+Then, use the json file with the &#x2013;execute option to start the reassignment process-
+</p>
+
+<pre class="example">
+&gt; bin/kafka-reassign-partitions.sh --zookeeper localhost:2181 --reassignment-json-file custom-reassignment.json --execute
+Current partition replica assignment
+
+{"version":1,
+ "partitions":[{"topic":"foo1","partition":0,"replicas":[1,2]},
+               {"topic":"foo2","partition":1,"replicas":[3,4]}]
+}
+
+Save this to use as the --reassignment-json-file option during rollback
+Successfully started reassignment of partitions
+{"version":1,
+ "partitions":[{"topic":"foo1","partition":0,"replicas":[5,6]},
+               {"topic":"foo2","partition":1,"replicas":[2,3]}]
+}
+</pre>
+
+<p>
+The &#x2013;verify option can be used with the tool to check the status of the partition reassignment. Note that the same expand-cluster-reassignment.json (used with the &#x2013;execute option) should be used with the &#x2013;verify option
+</p>
+
+<pre class="example">
+bin/kafka-reassign-partitions.sh --zookeeper localhost:2181 --reassignment-json-file custom-reassignment.json --verify
+Status of partition reassignment:
+Reassignment of partition [foo1,0] completed successfully
+Reassignment of partition [foo2,1] completed successfully
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-6-1-8" class="outline-4">
+<h4 id="sec-6-1-8">Decommissioning brokers</h4>
+<div class="outline-text-4" id="text-6-1-8">
+<p>
+The partition reassignment tool does not have the ability to automatically generate a reassignment plan for decommissioning brokers yet. As such, the admin has to come up with a reassignment plan to move the replica for all partitions hosted on the broker to be decommissioned, to the rest of the brokers. This can be relatively tedious as the reassignment needs to ensure that all the replicas are not moved from the decommissioned broker to only one other broker. To make this process effortless, we plan to add tooling support for decommissioning brokers in 0.8.2.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-6-1-9" class="outline-4">
+<h4 id="sec-6-1-9">Increasing replication factor</h4>
+<div class="outline-text-4" id="text-6-1-9">
+<p>
+Increasing the replication factor of an existing partition is easy. Just specify the extra replicas in the custom reassignment json file and use it with the &#x2013;execute option to increase the replication factor of the specified partitions.
+</p>
+
+<p>
+For instance, the following example increases the replication factor of partition 0 of topic foo from 1 to 3. Before increasing the replication factor, the partition's only replica existed on broker 5. As part of increasing the replication factor, we will add more replicas on brokers 6 and 7.
+</p>
+
+<p>
+The first step is to hand craft the custom reassignment plan in a json file-
+</p>
+
+<pre class="example">
+&gt; cat increase-replication-factor.json
+{"version":1,
+ "partitions":[{"topic":"foo","partition":0,"replicas":[5,6,7]}]}
+</pre>
+
+<p>
+Then, use the json file with the &#x2013;execute option to start the reassignment process-
+</p>
+
+<pre class="example">
+&gt; bin/kafka-reassign-partitions.sh --zookeeper localhost:2181 --reassignment-json-file increase-replication-factor.json --execute
+Current partition replica assignment
+
+{"version":1,
+ "partitions":[{"topic":"foo","partition":0,"replicas":[5]}]}
+
+Save this to use as the --reassignment-json-file option during rollback
+Successfully started reassignment of partitions
+{"version":1,
+ "partitions":[{"topic":"foo","partition":0,"replicas":[5,6,7]}]}
+</pre>
+
+<p>
+The &#x2013;verify option can be used with the tool to check the status of the partition reassignment. Note that the same increase-replication-factor.json (used with the &#x2013;execute option) should be used with the &#x2013;verify option
+</p>
+
+<pre class="example">
+bin/kafka-reassign-partitions.sh --zookeeper localhost:2181 --reassignment-json-file increase-replication-factor.json --verify
+Status of partition reassignment:
+Reassignment of partition [foo,0] completed successfully
+</pre>
+
+<p>
+You can also verify the increase in replication factor with the kafka-topics tool-
+</p>
+
+<pre class="example">
+&gt; bin/kafka-topics.sh --zookeeper localhost:2181 --topic foo --describe
+Topic:foo	PartitionCount:1	ReplicationFactor:3	Configs:
+	Topic: foo	Partition: 0	Leader: 5	Replicas: 5,6,7	Isr: 5,6,7
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-6-2" class="outline-3">
+<h3 id="sec-6-2"><span class="section-number-3">6.2</span> Datacenters</h3>
+<div class="outline-text-3" id="text-6-2">
+<p>
+Some deployments will need to manage a data pipeline that spans multiple datacenters. Our recommended approach to this is to deploy a local Kafka cluster in each datacenter with application instances in each datacenter interacting only with their local cluster and mirroring between clusters (see the documentation on the <a href="#basic_ops_mirror_maker">mirror maker tool</a> for how to do this).
+</p>
+
+<p>
+This deployment pattern allows datacenters to act as independent entities and allows us to manage and tune inter-datacenter replication centrally. This allows each facility to stand alone and operate even if the inter-datacenter links are unavailable: when this occurs the mirroring falls behind until the link is restored at which time it catches up.
+</p>
+
+<p>
+For applications that need a global view of all data you can use mirroring to provide clusters which have aggregate data mirrored from the local clusters in <i>all</i> datacenters. These aggregate clusters are used for reads by applications that require the full data set.
+</p>
+
+<p>
+This is not the only possible deployment pattern. It is possible to read from or write to a remote Kafka cluster over the WAN, though obviously this will add whatever latency is required to get the cluster.
+</p>
+
+<p>
+Kafka naturally batches data in both the producer and consumer so it can achieve high-throughput even over a high-latency connection. To allow this though it may be necessary to increase the TCP socket buffer sizes for the producer, consumer, and broker using the <code>socket.send.buffer.bytes</code> and <code>socket.receive.buffer.bytes</code> configurations. The appropriate way to set this is documented <a href="http://en.wikipedia.org/wiki/Bandwidth-delay_product">here</a>.
+</p>
+
+<p>
+It is generally <i>not</i> advisable to run a <i>single</i> Kafka cluster that spans multiple datacenters over a high-latency link. This will incur very high replication latency both for Kafka writes and ZooKeeper writes, and neither Kafka nor ZooKeeper will remain available in all locations if the network between locations is unavailable.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-6-3" class="outline-3">
+<h3 id="sec-6-3"><span class="section-number-3">6.3</span> Kafka Configuration</h3>
+<div class="outline-text-3" id="text-6-3">
+</div><div id="outline-container-sec-6-3-1" class="outline-4">
+<h4 id="sec-6-3-1">Important Client Configurations</h4>
+<div class="outline-text-4" id="text-6-3-1">
+<p>
+The most important producer configurations control
+</p>
+
+<ul class="org-ul">
+<li>compression
+</li>
+<li>sync vs async production
+</li>
+<li>batch size (for async producers)
+</li>
+</ul>
+
+<p>
+The most important consumer configuration is the fetch size.
+</p>
+
+<p>
+All configurations are documented in the <a href="#configuration">configuration</a> section.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-6-3-2" class="outline-4">
+<h4 id="sec-6-3-2">A Production Server Config</h4>
+<div class="outline-text-4" id="text-6-3-2">
+<p>
+Here is our server production server configuration:
+</p>
+
+<pre class="example">
+# Replication configurations
+num.replica.fetchers=4
+replica.fetch.max.bytes=1048576
+replica.fetch.wait.max.ms=500
+replica.high.watermark.checkpoint.interval.ms=5000
+replica.socket.timeout.ms=30000
+replica.socket.receive.buffer.bytes=65536
+replica.lag.time.max.ms=10000
+replica.lag.max.messages=4000
+
+controller.socket.timeout.ms=30000
+controller.message.queue.size=10
+
+# Log configuration
+num.partitions=8
+message.max.bytes=1000000
+auto.create.topics.enable=true
+log.index.interval.bytes=4096
+log.index.size.max.bytes=10485760
+log.retention.hours=168
+log.flush.interval.ms=10000
+log.flush.interval.messages=20000
+log.flush.scheduler.interval.ms=2000
+log.roll.hours=168
+log.retention.check.interval.ms=300000
+log.segment.bytes=1073741824
+
+# ZK configuration
+zookeeper.connection.timeout.ms=6000
+zookeeper.sync.time.ms=2000
+
+# Socket server configuration
+num.io.threads=8
+num.network.threads=8
+socket.request.max.bytes=104857600
+socket.receive.buffer.bytes=1048576
+socket.send.buffer.bytes=1048576
+queued.max.requests=16
+fetch.purgatory.purge.interval.requests=100
+producer.purgatory.purge.interval.requests=100
+</pre>
+
+<p>
+Our client configuration varies a fair amount between different use cases.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-6-3-3" class="outline-4">
+<h4 id="sec-6-3-3">Java Version</h4>
+<div class="outline-text-4" id="text-6-3-3">
+<p>
+We're currently running JDK 1.7 u51, and we've switched over to the G1 collector. If you do this (and we highly recommend it), make sure you're on u51. We tried out u21 in testing, but we had a number of problems with the GC implementation in that version. Our tuning looks like this:
+</p>
+
+<pre class="example">
+-Xms4g -Xmx4g -XX:PermSize=48m -XX:MaxPermSize=48m -XX:+UseG1GC
+-XX:MaxGCPauseMillis=20 -XX:InitiatingHeapOccupancyPercent=35
+</pre>
+
+<p>
+For reference, here are the stats on one of LinkedIn's busiest clusters (at peak): - 15 brokers - 15.5k partitions (replication factor 2) - 400k messages/sec in - 70 MB/sec inbound, 400 MB/sec+ outbound The tuning looks fairly aggressive, but all of the brokers in that cluster have a 90% GC pause time of about 21ms, and they're doing less than 1 young GC per second.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-6-4" class="outline-3">
+<h3 id="sec-6-4"><span class="section-number-3">6.4</span> Hardware and OS</h3>
+<div class="outline-text-3" id="text-6-4">
+<p>
+We are using dual quad-core Intel Xeon machines with 24GB of memory.
+</p>
+
+<p>
+You need sufficient memory to buffer active readers and writers. You can do a back-of-the-envelope estimate of memory needs by assuming you want to be able to buffer for 30 seconds and compute your memory need as write_throughput*30.
+</p>
+
+<p>
+The disk throughput is important. We have 8x7200 rpm SATA drives. In general disk throughput is the performance bottleneck, and more disks is more better. Depending on how you configure flush behavior you may or may not benefit from more expensive disks (if you force flush often then higher RPM SAS drives may be better).
+</p>
+</div>
+
+<div id="outline-container-sec-6-4-1" class="outline-4">
+<h4 id="sec-6-4-1">OS</h4>
+<div class="outline-text-4" id="text-6-4-1">
+<p>
+Kafka should run well on any unix system and has been tested on Linux and Solaris.
+</p>
+
+<p>
+We have seen a few issues running on Windows and Windows is not currently a well supported platform though we would be happy to change that.
+</p>
+
+<p>
+You likely don't need to do much OS-level tuning though there are a few things that will help performance.
+</p>
+
+<p>
+Two configurations that may be important:
+</p>
+
+<ul class="org-ul">
+<li>We upped the number of file descriptors since we have lots of topics and lots of connections.
+</li>
+<li>We upped the max socket buffer size to enable high-performance data transfer between data centers described <a href="http://www.psc.edu/index.php/networking/641-tcp-tune">described here</a>.
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-6-4-2" class="outline-4">
+<h4 id="sec-6-4-2">Disks and Filesystem</h4>
+<div class="outline-text-4" id="text-6-4-2">
+<p>
+We recommend using multiple drives to get good throughput and not sharing the same drives used for Kafka data with application logs or other OS filesystem activity to ensure good latency. As of 0.8 you can either RAID these drives together into a single volume or format and mount each drive as its own directory. Since Kafka has replication the redundancy provided by RAID can also be provided at the application level. This choice has several tradeoffs.
+</p>
+
+<p>
+If you configure multiple data directories partitions will be assigned round-robin to data directories. Each partition will be entirely in one of the data directories. If data is not well balanced among partitions this can lead to load imbalance between disks.
+</p>
+
+<p>
+RAID can potentially do better at balancing load between disks (although it doesn't always seem to) because it balances load at a lower level. The primary downside of RAID is that it is usually a big performance hit for write throughput and reduces the available disk space.
+</p>
+
+<p>
+Another potential benefit of RAID is the ability to tolerate disk failures. However our experience has been that rebuilding the RAID array is so I/O intensive that it effectively disables the server, so this does not provide much real availability improvement.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-6-4-3" class="outline-4">
+<h4 id="sec-6-4-3">Application vs. OS Flush Management</h4>
+<div class="outline-text-4" id="text-6-4-3">
+<p>
+Kafka always immediately writes all data to the filesystem and supports the ability to configure the flush policy that controls when data is forced out of the OS cache and onto disk using the and flush. This flush policy can be controlled to force data to disk after a period of time or after a certain number of messages has been written. There are several choices in this configuration.
+</p>
+
+<p>
+Kafka must eventually call fsync to know that data was flushed. When recovering from a crash for any log segment not known to be fsync'd Kafka will check the integrity of each message by checking its CRC and also rebuild the accompanying offset index file as part of the recovery process executed on startup.
+</p>
+
+<p>
+Note that durability in Kafka does not require syncing data to disk, as a failed node will always recover from its replicas.
+</p>
+
+<p>
+We recommend using the default flush settings which disable application fsync entirely. This means relying on the background flush done by the OS and Kafka's own background flush. This provides the best of all worlds for most uses: no knobs to tune, great throughput and latency, and full recovery guarantees. We generally feel that the guarantees provided by replication are stronger than sync to local disk, however the paranoid still may prefer having both and application level fsync policies are still supported.
+</p>
+
+<p>
+The drawback of using application level flush settings are that this is less efficient in it's disk usage pattern (it gives the OS less leeway to re-order writes) and it can introduce latency as fsync in most Linux filesystems blocks writes to the file whereas the background flushing does much more granular page-level locking.
+</p>
+
+<p>
+In general you don't need to do any low-level tuning of the filesystem, but in the next few sections we will go over some of this in case it is useful.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-6-4-4" class="outline-4">
+<h4 id="sec-6-4-4">Understanding Linux OS Flush Behavior</h4>
+<div class="outline-text-4" id="text-6-4-4">
+<p>
+In Linux, data written to the filesystem is maintained in <a href="http://en.wikipedia.org/wiki/Page_cache">pagecache</a> until it must be written out to disk (due to an application-level fsync or the OS's own flush policy). The flushing of data is done by a set of background threads called pdflush (or in post 2.6.32 kernels "flusher threads").
+</p>
+
+<p>
+Pdflush has a configurable policy that controls how much dirty data can be maintained in cache and for how long before it must be written back to disk. This policy is described <a href="http://www.westnet.com/~gsmith/content/linux-pdflush.htm">here</a>. When Pdflush cannot keep up with the rate of data being written it will eventually cause the writing process to block incurring latency in the writes to slow down the accumulation of data.
+</p>
+
+<p>
+You can see the current state of OS memory usage by doing
+</p>
+
+<pre class="example">
+&gt; cat /proc/meminfo
+</pre>
+
+<p>
+The meaning of these values are described in the link above.
+</p>
+
+<p>
+Using pagecache has several advantages over an in-process cache for storing data that will be written out to disk:
+</p>
+
+<ul class="org-ul">
+<li>The I/O scheduler will batch together consecutive small writes into bigger physical writes which improves throughput.
+</li>
+<li>The I/O scheduler will attempt to re-sequence writes to minimize movement of the disk head which improves throughput.
+</li>
+<li>It automatically uses all the free memory on the machine
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-6-4-5" class="outline-4">
+<h4 id="sec-6-4-5">Ext4 Notes</h4>
+<div class="outline-text-4" id="text-6-4-5">
+<p>
+Ext4 may or may not be the best filesystem for Kafka. Filesystems like XFS supposedly handle locking during fsync better. We have only tried Ext4, though.
+</p>
+
+<p>
+It is not necessary to tune these settings, however those wanting to optimize performance have a few knobs that will help:
+</p>
+
+
+<ul class="org-ul">
+<li>data=writeback: Ext4 defaults to data=ordered which puts a strong order on some writes. Kafka does not require this ordering as it does very paranoid data recovery on all unflushed log. This setting removes the ordering constraint and seems to significantly reduce latency.
+</li>
+<li>Disabling journaling: Journaling is a tradeoff: it makes reboots faster after server crashes but it introduces a great deal of additional locking which adds variance to write performance. Those who don't care about reboot time and want to reduce a major source of write latency spikes can turn off journaling entirely.
+</li>
+<li>commit=num_secs: This tunes the frequency with which ext4 commits to its metadata journal. Setting this to a lower value reduces the loss of unflushed data during a crash. Setting this to a higher value will improve throughput.
+</li>
+<li>nobh: This setting controls additional ordering guarantees when using data=writeback mode. This should be safe with Kafka as we do not depend on write ordering and improves throughput and latency.
+</li>
+<li>delalloc: Delayed allocation means that the filesystem avoid allocating any blocks until the physical write occurs. This allows ext4 to allocate a large extent instead of smaller pages and helps ensure the data is written sequentially. This feature is great for throughput. It does seem to involve some locking in the filesystem which adds a bit of latency variance.
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-6-5" class="outline-3">
+<h3 id="sec-6-5"><span class="section-number-3">6.5</span> Monitoring</h3>
+<div class="outline-text-3" id="text-6-5">
+<p>
+Kafka uses Yammer Metrics for metrics reporting in both the server and the client. This can be configured to report stats using pluggable stats reporters to hook up to your monitoring system.
+</p>
+
+<p>
+The easiest way to see the available metrics to fire up jconsole and point it at a running kafka client or server; this will all browsing all metrics with JMX.
+</p>
+
+<p>
+We pay particular we do graphing and alerting on the following metrics:
+</p>
+</div>
+
+<div id="outline-container-sec-6-5-1" class="outline-4">
+<h4 id="sec-6-5-1">Broker monitoring</h4>
+<div class="outline-text-4" id="text-6-5-1">
+</div><div id="outline-container-sec-6-5-1-1" class="outline-5">
+<h5 id="sec-6-5-1-1">Message in rate</h5>
+<div class="outline-text-5" id="text-6-5-1-1">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.server:type=BrokerTopicMetrics,name=MessagesInPerSec</code>
+</dd>
+<dt> Normal value </dt><dd></dd>
+</dl>
+</div>
+</div>
+
+<div id="outline-container-sec-6-5-1-2" class="outline-5">
+<h5 id="sec-6-5-1-2">Byte in rate</h5>
+<div class="outline-text-5" id="text-6-5-1-2">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.server:type=BrokerTopicMetrics,name=BytesInPerSec</code>
+</dd>
+<dt> Normal value </dt><dd></dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-1-3" class="outline-5">
+<h5 id="sec-6-5-1-3">Request rate</h5>
+<div class="outline-text-5" id="text-6-5-1-3">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.network:type=RequestMetrics,name=RequestsPerSec,request={Produce|FetchConsumer|FetchFollower}</code>
+</dd>
+<dt> Normal value </dt><dd></dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-1-4" class="outline-5">
+<h5 id="sec-6-5-1-4">Byte out rate</h5>
+<div class="outline-text-5" id="text-6-5-1-4">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.server:type=BrokerTopicMetrics,name=BytesOutPerSec</code>
+</dd>
+<dt> Normal value </dt><dd></dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-1-5" class="outline-5">
+<h5 id="sec-6-5-1-5">Log flush rate and time</h5>
+<div class="outline-text-5" id="text-6-5-1-5">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.log:type=LogFlushStats,name=LogFlushRateAndTimeMs</code>
+</dd>
+<dt> Normal value </dt><dd></dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-1-6" class="outline-5">
+<h5 id="sec-6-5-1-6"># of under replicated partitions (|ISR| &lt; |all replicas|)</h5>
+<div class="outline-text-5" id="text-6-5-1-6">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.server:type=ReplicaManager,name=UnderReplicatedPartitions</code>
+</dd>
+<dt> Normal value </dt><dd>0
+</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-1-7" class="outline-5">
+<h5 id="sec-6-5-1-7">Is controller active on broker</h5>
+<div class="outline-text-5" id="text-6-5-1-7">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.controller:type=KafkaController,name=ActiveControllerCount</code>
+</dd>
+<dt> Normal value </dt><dd>only one broker in the cluster should have 1
+</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-1-8" class="outline-5">
+<h5 id="sec-6-5-1-8">Leader election rate</h5>
+<div class="outline-text-5" id="text-6-5-1-8">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.controller:type=ControllerStats,name=LeaderElectionRateAndTimeMs</code>
+</dd>
+<dt> Normal value </dt><dd>non-zero when there are broker failures
+</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-1-9" class="outline-5">
+<h5 id="sec-6-5-1-9">Unclean leader election rate</h5>
+<div class="outline-text-5" id="text-6-5-1-9">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.controller:type=ControllerStats,name=UncleanLeaderElectionsPerSec</code>
+</dd>
+<dt> Normal value </dt><dd>0
+</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-1-10" class="outline-5">
+<h5 id="sec-6-5-1-10">Partition counts</h5>
+<div class="outline-text-5" id="text-6-5-1-10">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.server:type=ReplicaManager,name=PartitionCount</code>
+</dd>
+<dt> Normal value </dt><dd>mostly even across brokers
+</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-1-11" class="outline-5">
+<h5 id="sec-6-5-1-11">Leader replica counts</h5>
+<div class="outline-text-5" id="text-6-5-1-11">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.server:type=ReplicaManager,name=LeaderCount</code>
+</dd>
+<dt> Normal value </dt><dd>mostly even across brokers
+</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-1-12" class="outline-5">
+<h5 id="sec-6-5-1-12">ISR shrink rate</h5>
+<div class="outline-text-5" id="text-6-5-1-12">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.server:type=ReplicaManager,name=IsrShrinksPerSec</code>
+</dd>
+<dt> Normal value </dt><dd>If a broker goes down, ISR for some of the partitions will shrink.
+When that broker is up again, ISR will be expanded once the replicas are fully caught up.
+Other than that, the expected value for both ISR shrink rate and expansion rate is 0.
+</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-1-13" class="outline-5">
+<h5 id="sec-6-5-1-13">ISR expansion rate</h5>
+<div class="outline-text-5" id="text-6-5-1-13">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.server:type=ReplicaManager,name=IsrExpandsPerSec</code>
+</dd>
+<dt> Normal value </dt><dd>See above
+</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-1-14" class="outline-5">
+<h5 id="sec-6-5-1-14">Max lag in messages btw follower and leader replicas</h5>
+<div class="outline-text-5" id="text-6-5-1-14">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.server:type=ReplicaFetcherManager,name=MaxLag,clientId=Replica</code>
+</dd>
+<dt> Normal value </dt><dd>&lt; replica.lag.max.messages
+</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-1-15" class="outline-5">
+<h5 id="sec-6-5-1-15">Lag in messages per follower replica</h5>
+<div class="outline-text-5" id="text-6-5-1-15">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.server:type=FetcherLagMetrics,name=ConsumerLag,clientId=([-.\w]+),topic=([-.\w]+),partition=([0-9]+)</code>
+</dd>
+<dt> Normal value </dt><dd>&lt; replica.lag.max.messages
+</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-1-16" class="outline-5">
+<h5 id="sec-6-5-1-16">Requests waiting in the producer purgatory</h5>
+<div class="outline-text-5" id="text-6-5-1-16">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.server:type=ProducerRequestPurgatory,name=PurgatorySize</code>
+</dd>
+<dt> Normal value </dt><dd>non-zero if ack=-1 is used
+</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-1-17" class="outline-5">
+<h5 id="sec-6-5-1-17">Requests waiting in the fetch purgatory</h5>
+<div class="outline-text-5" id="text-6-5-1-17">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.server:type=FetchRequestPurgatory,name=PurgatorySize</code>
+</dd>
+<dt> Normal value </dt><dd>size depends on fetch.wait.max.ms in the consumer
+</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-1-18" class="outline-5">
+<h5 id="sec-6-5-1-18">Request total time</h5>
+<div class="outline-text-5" id="text-6-5-1-18">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.network:type=RequestMetrics,name=TotalTimeMs,request={Produce|FetchConsumer|FetchFollower}</code>
+</dd>
+<dt> Normal value </dt><dd>broken into queue, local, remote and response send time
+</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-1-19" class="outline-5">
+<h5 id="sec-6-5-1-19">Time the request waiting in the request queue</h5>
+<div class="outline-text-5" id="text-6-5-1-19">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.network:type=RequestMetrics,name=QueueTimeMs,request={Produce|FetchConsumer|FetchFollower}</code>
+</dd>
+<dt> Normal value </dt><dd></dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-1-20" class="outline-5">
+<h5 id="sec-6-5-1-20">Time the request being processed at the leader</h5>
+<div class="outline-text-5" id="text-6-5-1-20">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.network:type=RequestMetrics,name=LocalTimeMs,request={Produce|FetchConsumer|FetchFollower}</code>
+</dd>
+<dt> Normal value </dt><dd></dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-1-21" class="outline-5">
+<h5 id="sec-6-5-1-21">Time the request waits for the follower</h5>
+<div class="outline-text-5" id="text-6-5-1-21">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.network:type=RequestMetrics,name=RemoteTimeMs,request={Produce|FetchConsumer|FetchFollower}</code>
+</dd>
+<dt> Normal value </dt><dd>non-zero for produce requests when ack=-1
+</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-1-22" class="outline-5">
+<h5 id="sec-6-5-1-22">Time to send the response</h5>
+<div class="outline-text-5" id="text-6-5-1-22">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.network:type=RequestMetrics,name=ResponseSendTimeMs,request={Produce|FetchConsumer|FetchFollower}</code>
+</dd>
+<dt> Normal value </dt><dd></dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-1-23" class="outline-5">
+<h5 id="sec-6-5-1-23">Number of messages the consumer lags behind the producer by</h5>
+<div class="outline-text-5" id="text-6-5-1-23">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.consumer:type=ConsumerFetcherManager,name=MaxLag,clientId=([-.\w]+)</code>
+</dd>
+<dt> Normal value </dt><dd></dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-1-24" class="outline-5">
+<h5 id="sec-6-5-1-24">The average fraction of time the network processors are idle</h5>
+<div class="outline-text-5" id="text-6-5-1-24">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.network:type=SocketServer,name=NetworkProcessorAvgIdlePercent</code>
+</dd>
+<dt> Normal value </dt><dd>between 0 and 1, ideally &gt; 0.3
+</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-1-25" class="outline-5">
+<h5 id="sec-6-5-1-25">The average fraction of time the request handler threads are idle</h5>
+<div class="outline-text-5" id="text-6-5-1-25">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.server:type=KafkaRequestHandlerPool,name=RequestHandlerAvgIdlePercent</code>
+</dd>
+<dt> Normal value </dt><dd>between 0 and 1, ideally &gt; 0.3
+</dd>
+</dl>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-6-5-2" class="outline-4">
+<h4 id="sec-6-5-2">New producer monitoring</h4>
+<div class="outline-text-4" id="text-6-5-2">
+<p>
+The following metrics are available on new producer instances.
+</p>
+</div>
+
+<div id="outline-container-sec-6-5-2-1" class="outline-5">
+<h5 id="sec-6-5-2-1">waiting-threads</h5>
+<div class="outline-text-5" id="text-6-5-2-1">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.producer:type=producer-metrics,client-id=([-.\w]+)</code>
+</dd>
+<dt> Description </dt><dd>The number of user threads blocked waiting for buffer memory to enqueue their records
+</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-2-2" class="outline-5">
+<h5 id="sec-6-5-2-2">buffer-total-bytes</h5>
+<div class="outline-text-5" id="text-6-5-2-2">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.producer:type=producer-metrics,client-id=([-.\w]+)</code>
+</dd>
+<dt> Description </dt><dd>The maximum amount of buffer memory the client can use (whether or not it is currently used).
+</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-2-3" class="outline-5">
+<h5 id="sec-6-5-2-3">buffer-available-bytes</h5>
+<div class="outline-text-5" id="text-6-5-2-3">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.producer:type=producer-metrics,client-id=([-.\w]+)</code>
+</dd>
+<dt> Description </dt><dd>The total amount of buffer memory that is not being used (either unallocated or in the free list).
+</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-2-4" class="outline-5">
+<h5 id="sec-6-5-2-4">bufferpool-wait-time</h5>
+<div class="outline-text-5" id="text-6-5-2-4">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.producer:type=producer-metrics,client-id=([-.\w]+)</code>
+</dd>
+<dt> Description </dt><dd>The fraction of time an appender waits for space allocation.
+</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-2-5" class="outline-5">
+<h5 id="sec-6-5-2-5">batch-size-avg</h5>
+<div class="outline-text-5" id="text-6-5-2-5">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.producer:type=producer-metrics,client-id=([-.\w]+)</code>
+</dd>
+<dt> Description </dt><dd>The average number of bytes sent per partition per-request.
+</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-2-6" class="outline-5">
+<h5 id="sec-6-5-2-6">batch-size-max</h5>
+<div class="outline-text-5" id="text-6-5-2-6">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.producer:type=producer-metrics,client-id=([-.\w]+)</code>
+</dd>
+<dt> Description </dt><dd>The max number of bytes sent per partition per-request.
+</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-2-7" class="outline-5">
+<h5 id="sec-6-5-2-7">compression-rate-avg</h5>
+<div class="outline-text-5" id="text-6-5-2-7">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.producer:type=producer-metrics,client-id=([-.\w]+)</code>
+</dd>
+<dt> Description </dt><dd>The average compression rate of record batches.
+</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-2-8" class="outline-5">
+<h5 id="sec-6-5-2-8">record-queue-time-avg</h5>
+<div class="outline-text-5" id="text-6-5-2-8">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.producer:type=producer-metrics,client-id=([-.\w]+)</code>
+</dd>
+<dt> Description </dt><dd>The average time in ms record batches spent in the record accumulator.
+</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-2-9" class="outline-5">
+<h5 id="sec-6-5-2-9">record-queue-time-max</h5>
+<div class="outline-text-5" id="text-6-5-2-9">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.producer:type=producer-metrics,client-id=([-.\w]+)</code>
+</dd>
+<dt> Description </dt><dd>The maximum time in ms record batches spent in the record accumulator
+</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-2-10" class="outline-5">
+<h5 id="sec-6-5-2-10">request-latency-avg</h5>
+<div class="outline-text-5" id="text-6-5-2-10">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.producer:type=producer-metrics,client-id=([-.\w]+)</code>
+</dd>
+<dt> Description </dt><dd>The average request latency in ms
+</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-2-11" class="outline-5">
+<h5 id="sec-6-5-2-11">request-latency-max</h5>
+<div class="outline-text-5" id="text-6-5-2-11">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.producer:type=producer-metrics,client-id=([-.\w]+)</code>
+</dd>
+<dt> Description </dt><dd>The maximum request latency in ms
+</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-2-12" class="outline-5">
+<h5 id="sec-6-5-2-12">record-send-rate</h5>
+<div class="outline-text-5" id="text-6-5-2-12">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.producer:type=producer-metrics,client-id=([-.\w]+)</code>
+</dd>
+<dt> Description </dt><dd>The average number of records sent per second.
+</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-2-13" class="outline-5">
+<h5 id="sec-6-5-2-13">records-per-request-avg</h5>
+<div class="outline-text-5" id="text-6-5-2-13">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.producer:type=producer-metrics,client-id=([-.\w]+)</code>
+</dd>
+<dt> Description </dt><dd>The average number of records per request.
+</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-2-14" class="outline-5">
+<h5 id="sec-6-5-2-14">record-retry-rate</h5>
+<div class="outline-text-5" id="text-6-5-2-14">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.producer:type=producer-metrics,client-id=([-.\w]+)</code>
+</dd>
+<dt> Description </dt><dd>The average per-second number of retried record sends
+</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-2-15" class="outline-5">
+<h5 id="sec-6-5-2-15">record-error-rate</h5>
+<div class="outline-text-5" id="text-6-5-2-15">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.producer:type=producer-metrics,client-id=([-.\w]+)</code>
+</dd>
+<dt> Description </dt><dd>The average per-second number of record sends that resulted in errors
+</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-2-16" class="outline-5">
+<h5 id="sec-6-5-2-16">record-size-max</h5>
+<div class="outline-text-5" id="text-6-5-2-16">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.producer:type=producer-metrics,client-id=([-.\w]+)</code>
+</dd>
+<dt> Description </dt><dd>The maximum record size
+</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-2-17" class="outline-5">
+<h5 id="sec-6-5-2-17">record-size-avg</h5>
+<div class="outline-text-5" id="text-6-5-2-17">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.producer:type=producer-metrics,client-id=([-.\w]+)</code>
+</dd>
+<dt> Description </dt><dd>The average record size
+</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-2-18" class="outline-5">
+<h5 id="sec-6-5-2-18">requests-in-flight</h5>
+<div class="outline-text-5" id="text-6-5-2-18">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.producer:type=producer-metrics,client-id=([-.\w]+)</code>
+</dd>
+<dt> Description </dt><dd>The current number of in-flight requests awaiting a response.
+</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-2-19" class="outline-5">
+<h5 id="sec-6-5-2-19">metadata-age</h5>
+<div class="outline-text-5" id="text-6-5-2-19">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.producer:type=producer-metrics,client-id=([-.\w]+)</code>
+</dd>
+<dt> Description </dt><dd>The age in seconds of the current producer metadata being used.
+</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-2-20" class="outline-5">
+<h5 id="sec-6-5-2-20">connection-close-rate</h5>
+<div class="outline-text-5" id="text-6-5-2-20">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.producer:type=producer-metrics,client-id=([-.\w]+)</code>
+</dd>
+<dt> Description </dt><dd>Connections closed per second in the window.
+</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-2-21" class="outline-5">
+<h5 id="sec-6-5-2-21">connection-creation-rate</h5>
+<div class="outline-text-5" id="text-6-5-2-21">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.producer:type=producer-metrics,client-id=([-.\w]+)</code>
+</dd>
+<dt> Description </dt><dd>New connections established per second in the window.
+</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-2-22" class="outline-5">
+<h5 id="sec-6-5-2-22">network-io-rate</h5>
+<div class="outline-text-5" id="text-6-5-2-22">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.producer:type=producer-metrics,client-id=([-.\w]+)</code>
+</dd>
+<dt> Description </dt><dd>The average number of network operations (reads or writes) on all connections per second.
+</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-2-23" class="outline-5">
+<h5 id="sec-6-5-2-23">outgoing-byte-rate</h5>
+<div class="outline-text-5" id="text-6-5-2-23">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.producer:type=producer-metrics,client-id=([-.\w]+)</code>
+</dd>
+<dt> Description </dt><dd>The average number of outgoing bytes sent per second to all servers.
+</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-2-24" class="outline-5">
+<h5 id="sec-6-5-2-24">request-rate</h5>
+<div class="outline-text-5" id="text-6-5-2-24">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.producer:type=producer-metrics,client-id=([-.\w]+)</code>
+</dd>
+<dt> Description </dt><dd>The average number of requests sent per second.
+</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-2-25" class="outline-5">
+<h5 id="sec-6-5-2-25">request-size-avg</h5>
+<div class="outline-text-5" id="text-6-5-2-25">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.producer:type=producer-metrics,client-id=([-.\w]+)</code>
+</dd>
+<dt> Description </dt><dd>The average size of all requests in the window.
+</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-2-26" class="outline-5">
+<h5 id="sec-6-5-2-26">request-size-max</h5>
+<div class="outline-text-5" id="text-6-5-2-26">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.producer:type=producer-metrics,client-id=([-.\w]+)</code>
+</dd>
+<dt> Description </dt><dd>The maximum size of any request sent in the window.
+</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-2-27" class="outline-5">
+<h5 id="sec-6-5-2-27">incoming-byte-rate</h5>
+<div class="outline-text-5" id="text-6-5-2-27">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.producer:type=producer-metrics,client-id=([-.\w]+)</code>
+</dd>
+<dt> Description </dt><dd>Bytes/second read off all sockets
+</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-2-28" class="outline-5">
+<h5 id="sec-6-5-2-28">response-rate</h5>
+<div class="outline-text-5" id="text-6-5-2-28">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.producer:type=producer-metrics,client-id=([-.\w]+)</code>
+</dd>
+<dt> Description </dt><dd>Responses received sent per second.
+</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-2-29" class="outline-5">
+<h5 id="sec-6-5-2-29">select-rate</h5>
+<div class="outline-text-5" id="text-6-5-2-29">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.producer:type=producer-metrics,client-id=([-.\w]+)</code>
+</dd>
+<dt> Description </dt><dd>Number of times the I/O layer checked for new I/O to perform per second
+</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-2-30" class="outline-5">
+<h5 id="sec-6-5-2-30">io-wait-time-ns-avg</h5>
+<div class="outline-text-5" id="text-6-5-2-30">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.producer:type=producer-metrics,client-id=([-.\w]+)</code>
+</dd>
+<dt> Description </dt><dd>The average length of time the I/O thread spent waiting for a socket ready for reads or writes in nanoseconds.
+</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-2-31" class="outline-5">
+<h5 id="sec-6-5-2-31">io-wait-ratio</h5>
+<div class="outline-text-5" id="text-6-5-2-31">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.producer:type=producer-metrics,client-id=([-.\w]+)</code>
+</dd>
+<dt> Description </dt><dd>The fraction of time the I/O thread spent waiting.
+</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-2-32" class="outline-5">
+<h5 id="sec-6-5-2-32">io-time-ns-avg</h5>
+<div class="outline-text-5" id="text-6-5-2-32">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.producer:type=producer-metrics,client-id=([-.\w]+)</code>
+</dd>
+<dt> Description </dt><dd>The average length of time for I/O per select call in nanoseconds.
+</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-2-33" class="outline-5">
+<h5 id="sec-6-5-2-33">io-ratio</h5>
+<div class="outline-text-5" id="text-6-5-2-33">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.producer:type=producer-metrics,client-id=([-.\w]+)</code>
+</dd>
+<dt> Description </dt><dd>The fraction of time the I/O thread spent doing I/O
+</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-2-34" class="outline-5">
+<h5 id="sec-6-5-2-34">connection-count</h5>
+<div class="outline-text-5" id="text-6-5-2-34">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.producer:type=producer-metrics,client-id=([-.\w]+)</code>
+</dd>
+<dt> Description </dt><dd>The current number of active connections.
+</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-2-35" class="outline-5">
+<h5 id="sec-6-5-2-35">outgoing-byte-rate</h5>
+<div class="outline-text-5" id="text-6-5-2-35">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.producer:type=producer-node-metrics,client-id=([-.\w]+),node-id=([0-9]+)</code>
+</dd>
+<dt> Description </dt><dd>The average number of outgoing bytes sent per second for a node.
+</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-2-36" class="outline-5">
+<h5 id="sec-6-5-2-36">request-rate</h5>
+<div class="outline-text-5" id="text-6-5-2-36">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.producer:type=producer-node-metrics,client-id=([-.\w]+),node-id=([0-9]+)</code>
+</dd>
+<dt> Description </dt><dd>The average number of requests sent per second for a node.
+</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-2-37" class="outline-5">
+<h5 id="sec-6-5-2-37">request-size-avg</h5>
+<div class="outline-text-5" id="text-6-5-2-37">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.producer:type=producer-node-metrics,client-id=([-.\w]+),node-id=([0-9]+)</code>
+</dd>
+<dt> Description </dt><dd>The average size of all requests in the window for a node.
+</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-2-38" class="outline-5">
+<h5 id="sec-6-5-2-38">request-size-max</h5>
+<div class="outline-text-5" id="text-6-5-2-38">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.producer:type=producer-node-metrics,client-id=([-.\w]+),node-id=([0-9]+)</code>
+</dd>
+<dt> Description </dt><dd>The maximum size of any request sent in the window for a node.
+</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-2-39" class="outline-5">
+<h5 id="sec-6-5-2-39">incoming-byte-rate</h5>
+<div class="outline-text-5" id="text-6-5-2-39">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.producer:type=producer-node-metrics,client-id=([-.\w]+),node-id=([0-9]+)</code>
+</dd>
+<dt> Description </dt><dd>The average number of responses received per second for a node.
+</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-2-40" class="outline-5">
+<h5 id="sec-6-5-2-40">request-latency-avg</h5>
+<div class="outline-text-5" id="text-6-5-2-40">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.producer:type=producer-node-metrics,client-id=([-.\w]+),node-id=([0-9]+)</code>
+</dd>
+<dt> Description </dt><dd>The average request latency in ms for a node.
+</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-2-41" class="outline-5">
+<h5 id="sec-6-5-2-41">request-latency-max</h5>
+<div class="outline-text-5" id="text-6-5-2-41">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.producer:type=producer-node-metrics,client-id=([-.\w]+),node-id=([0-9]+)</code>
+</dd>
+<dt> Description </dt><dd>The maximum request latency in ms for a node.
+</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-2-42" class="outline-5">
+<h5 id="sec-6-5-2-42">response-rate</h5>
+<div class="outline-text-5" id="text-6-5-2-42">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.producer:type=producer-node-metrics,client-id=([-.\w]+),node-id=([0-9]+)</code>
+</dd>
+<dt> Description </dt><dd>Responses received sent per second for a node.
+</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-2-43" class="outline-5">
+<h5 id="sec-6-5-2-43">record-send-rate</h5>
+<div class="outline-text-5" id="text-6-5-2-43">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.producer:type=producer-topic-metrics,client-id=([-.\w]+),topic=([-.\w]+)</code>
+</dd>
+<dt> Description </dt><dd>The average number of records sent per second for a topic.
+</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-2-44" class="outline-5">
+<h5 id="sec-6-5-2-44">byte-rate</h5>
+<div class="outline-text-5" id="text-6-5-2-44">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.producer:type=producer-topic-metrics,client-id=([-.\w]+),topic=([-.\w]+)</code>
+</dd>
+<dt> Description </dt><dd>The average number of bytes sent per second for a topic.
+</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-2-45" class="outline-5">
+<h5 id="sec-6-5-2-45">compression-rate</h5>
+<div class="outline-text-5" id="text-6-5-2-45">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.producer:type=producer-topic-metrics,client-id=([-.\w]+),topic=([-.\w]+)</code>
+</dd>
+<dt> Description </dt><dd>The average compression rate of record batches for a topic.
+</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-2-46" class="outline-5">
+<h5 id="sec-6-5-2-46">record-retry-rate</h5>
+<div class="outline-text-5" id="text-6-5-2-46">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.producer:type=producer-topic-metrics,client-id=([-.\w]+),topic=([-.\w]+)</code>
+</dd>
+<dt> Description </dt><dd>The average per-second number of retried record sends for a topic
+</dd>
+</dl>
+</div>
+</div>
+<div id="outline-container-sec-6-5-2-47" class="outline-5">
+<h5 id="sec-6-5-2-47">record-error-rate</h5>
+<div class="outline-text-5" id="text-6-5-2-47">
+<dl class="org-dl">
+<dt> Mbean name </dt><dd><code>kafka.producer:type=producer-topic-metrics,client-id=([-.\w]+),topic=([-.\w]+)</code>
+</dd>
+<dt> Description </dt><dd>The average per-second number of record sends that resulted in errors for a topic.
+</dd>
+</dl>
+
+<p>
+We recommend monitor GC time and other stats and various server stats such as CPU utilization, I/O service time, etc.
+On the client side, we recommend monitor the message/byte rate (global and per topic), request rate/size/time, and on the consumer side,
+max lag in messages among all partitions and min fetch request rate.
+For a consumer to keep up, max lag needs to be less than a threshold and min fetch rate needs to be larger than 0.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-6-5-3" class="outline-4">
+<h4 id="sec-6-5-3">Audit</h4>
+<div class="outline-text-4" id="text-6-5-3">
+<p>
+The final alerting we do is on the correctness of the data delivery. We audit that every message that is sent is consumed by all consumers and measure the lag for this to occur. For important topics we alert if a certain completeness is not achieved in a certain time period. The details of this are discussed in <a href="https://issues.apache.org/jira/browse/KAFKA-260">KAFKA-260</a>.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-6-6" class="outline-3">
+<h3 id="sec-6-6"><span class="section-number-3">6.6</span> ZooKeeper</h3>
+<div class="outline-text-3" id="text-6-6">
+</div><div id="outline-container-sec-6-6-1" class="outline-4">
+<h4 id="sec-6-6-1">Stable version</h4>
+<div class="outline-text-4" id="text-6-6-1">
+<p>
+At LinkedIn, we are running ZooKeeper 3.3.*. Version 3.3.3 has known serious issues regarding ephemeral node deletion and session expirations. After running into those issues in production, we upgraded to 3.3.4 and have been running that smoothly for over a year now. 
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-6-6-2" class="outline-4">
+<h4 id="sec-6-6-2">Operationalizing ZooKeeper</h4>
+<div class="outline-text-4" id="text-6-6-2">
+<p>
+Operationally, we do the following for a healthy ZooKeeper installation:
+</p>
+
+
+<ul class="org-ul">
+<li>Redundancy in the physical/hardware/network layout: try not to put them all in the same rack, decent (but don't go nuts) hardware, try to keep redundant power and network paths, etc.
+</li>
+<li>I/O segregation: if you do a lot of write type traffic you'll almost definitely want the transaction logs on a different disk group than application logs and snapshots (the write to the ZooKeeper service has a synchronous write to disk, which can be slow).
+</li>
+<li>Application segregation: Unless you really understand the application patterns of other apps that you want to install on the same box, it can be a good idea to run ZooKeeper in isolation (though this can be a balancing act with the capabilities of the hardware).
+</li>
+<li>Use care with virtualization: It can work, depending on your cluster layout and read/write patterns and SLAs, but the tiny overheads introduced by the virtualization layer can add up and throw off ZooKeeper, as it can be very time sensitive
+</li>
+<li>ZooKeeper configuration and monitoring: It's java, make sure you give it 'enough' heap space (We usually run them with 3-5G, but that's mostly due to the data set size we have here). Unfortunately we don't have a good formula for it. As far as monitoring, both JMZ and the 4 letter commands are very useful, they do overlap in some cases (and in those cases we prefer the 4 letter commands, they seem more predictable, or at the very least, they work better with the LI monitoring infrastructure)
+</li>
+<li>Don't overbuild the cluster: large clusters, especially in a write heavy usage pattern, means a lot of intracluster communication (quorums on the writes and subsequent cluster member updates), but don't underbuild it (and risk swamping the cluster).
+</li>
+<li>Try to run on a 3-5 node cluster: ZooKeeper writes use quorums and inherently that means having an odd number of machines in a cluster. Remember that a 5 node cluster will cause writes to slow down compared to a 3 node cluster, but will allow more fault tolerance.
+</li>
+</ul>
+
+<p>
+Overall, we try to keep the ZooKeeper system as small as will handle the load (plus standard growth capacity planning) and as simple as possible. We try not to do anything fancy with the configuration or application layout as compared to the official release as well as keep it as self contained as possible. For these reasons, we tend to skip the OS packaged versions, since it has a tendency to try to put things in the OS standard hierarchy, which can be 'messy', for want of a better way to word it.
+</p>
+
+<div class="figure">
+  <p>
+    <a href="http://www.apache.org">
+      <img class="feather" src="images/feather-small.png" alt="Apache Feather">
+    </a>
+  </p>
+</div>
+</div>
+</div>
+</div>
+</div>
 <div id="footnotes">
 <h2 class="footnotes">Footnotes: </h2>
 <div id="text-footnotes">
@@ -6886,7 +8885,7 @@ When rebalancing is triggered at one consumer, rebalancing should be triggered i
 </div></div>
 <div id="postamble" class="status">
 <p class="author">Author: yewton</p>
-<p class="date">Created: 2015-07-27 月 17:03</p>
+<p class="date">Created: 2015-07-27 月 20:45</p>
 <p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.4.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>

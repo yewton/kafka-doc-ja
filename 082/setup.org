@@ -8,7 +8,7 @@
 
 #+OPTIONS: html-link-use-abs-url:nil html-postamble:auto html-preamble:t html-scripts:t
 #+OPTIONS: html-style:t html5-fancy:nil tex:t
-#+OPTIONS: num:2 toc:2 ^:nil
+#+OPTIONS: num:2 toc:3 ^:nil H:6
 
 #+HTML_CONTAINER: div
 #+HTML_DOCTYPE: xhtml-strict

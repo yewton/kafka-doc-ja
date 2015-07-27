@@ -82,6 +82,9 @@ Kafkaの性能はデータサイズに関しては実質定数のため、大量
 パーティションの利用に関する詳細は後述します。
 
 ** コンシューマ
+:PROPERTIES:
+:CUSTOM_ID: intro_consumers
+:END:
 
 伝統的なメッセージングのモデルは [[http://en.wikipedia.org/wiki/Message_queue][キューイング]] と [[http://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern][出版・購読型]] の二つです。
 キューを用いる方法では、コンシューマプールがひとつのサーバからメッセージを取得することができ、

@@ -10,8 +10,13 @@
 #+INCLUDE: "2_API.org"
 
 * 設定
+:PROPERTIES:
+:CUSTOM_ID: configuration
+:END:
 #+INCLUDE: "3_Configuration.org"
 * 設計
 #+INCLUDE: "4_Design.org"
 * 実装
 #+INCLUDE: "5_Implementation.org"
+* 運用
+#+INCLUDE: "6_Operations.org"
