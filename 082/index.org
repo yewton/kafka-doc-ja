@@ -1,7 +1,6 @@
 #+TITLE: Apache Kafka
 #+AUTHOR: yewton
-#+OPTIONS: num:2 toc:2
-#+CREATOR: <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.4.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)
+
 #+SETUPFILE: setup.org
 
 * はじめよう
@@ -14,3 +13,5 @@
 #+INCLUDE: "3_Configuration.org"
 * 設計
 #+INCLUDE: "4_Design.org"
+* 実装
+#+INCLUDE: "5_Implementation.org"
