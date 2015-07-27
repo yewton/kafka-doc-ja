@@ -1,11 +1,13 @@
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="../org-html-themes/styles/readtheorg/css/htmlize.css"/>
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="../org-html-themes/styles/readtheorg/css/readtheorg.css"/>
-#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="css/src-block-theme.css" rel="stylesheet">
+
 #+HTML_HEAD: <script src="js/jquery.min.js"></script>
 #+HTML_HEAD: <script src="js/bootstrap.min.js"></script>
+#+HTML_HEAD: <script type="text/javascript" src="js/jquery.stickytableheaders.min.js"></script>
+#+HTML_HEAD: <script type="text/javascript" src="js/readtheorg.js"></script>
+
 #+OPTIONS: html-link-use-abs-url:nil html-postamble:auto html-preamble:t html-scripts:t
 #+OPTIONS: html-style:t html5-fancy:nil tex:t
-#+CREATOR: <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.4.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)
 #+HTML_CONTAINER: div
 #+HTML_DOCTYPE: xhtml-strict
 #+HTML_HEAD:
