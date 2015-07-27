@@ -2,6 +2,9 @@ Kafka は  [[http://en.wikipedia.org/wiki/.properties][プロパティファイ�
 これらの値はファイル、もしくはプログラム中で設定することが出来ます。
 
 * ブローカ設定
+:PROPERTIES:
+:CUSTOM_ID: brokerconfigs
+:END:
 最低限の設定値は以下の3つです:
 
 - =broker.id=
@@ -26,5 +29,8 @@ Kafka は  [[http://en.wikipedia.org/wiki/.properties][プロパティファイ�
 #+INCLUDE: "3_Configuration_Producer_Configs.org"
 
 * New Producer Configs
+:PROPERTIES:
+:CUSTOM_ID: newproducerconfigs
+:END:
 #+INCLUDE: "3_Configuration_New_Producer_Configs.org"
 

@@ -12,3 +12,5 @@
 
 * 設定
 #+INCLUDE: "3_Configuration.org"
+* 設計
+#+INCLUDE: "4_Design.org"
