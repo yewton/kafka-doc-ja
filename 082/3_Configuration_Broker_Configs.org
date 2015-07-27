@@ -37,6 +37,7 @@ ZooKeeper では "chroot" パスを追加することも出来、
 
 #+begin_note
 chroot を指定する場合、ブローカを起動する前にパスを作っておく必要があります。
+[fn:: (訳注)これは古い記述で、実際には事前に作る必要は有りません。関連issue [[https://issues.apache.org/jira/browse/KAFKA-2357][KAFKA-2357]]]
 また、全コンシューマが同じ接続情報文字列を利用するようにしなければなりません。
 #+end_note
 
