@@ -732,12 +732,4 @@ Operationally, we do the following for a healthy ZooKeeper installation:
 
 Overall, we try to keep the ZooKeeper system as small as will handle the load (plus standard growth capacity planning) and as simple as possible. We try not to do anything fancy with the configuration or application layout as compared to the official release as well as keep it as self contained as possible. For these reasons, we tend to skip the OS packaged versions, since it has a tendency to try to put things in the OS standard hierarchy, which can be 'messy', for want of a better way to word it.
 
-#+BEGIN_HTML
-<div class="figure">
-  <p>
-    <a href="http://www.apache.org">
-      <img class="feather" src="images/feather-small.png" alt="Apache Feather">
-    </a>
-  </p>
-</div>
-#+END_HTML
+[[http://www.apache.org][file:images/feather-small.png]]
