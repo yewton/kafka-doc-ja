@@ -157,26 +157,28 @@ Now let's describe the semantics from the point-of-view of the consumer. All rep
 
 So effectively Kafka guarantees at-least-once delivery by default and allows the user to implement at most once delivery by disabling retries on the producer and committing its offset prior to processing a batch of messages. Exactly-once delivery requires co-operation with the destination storage system but Kafka provides the offset which makes implementing this straight-forward.
 
-* レプリケーション Replication
+* レプリケーション
 
-#+BEGIN_QUOTE
+{{{begin_orig}}}
+Replication
+
 Kafka replicates the log for each topic's partitions across a configurable number of servers
 (you can set this replication factor on a topic-by-topic basis).
 This allows automatic failover to these replicas when a server in the cluster fails so messages remain available in the presence of failures.
-#+END_QUOTE
+{{{end_orig}}}
 
 Kafkaは各トピックのパーティションログを、設定に応じた数のサーバに複製します
 (レプリケーションファクタはトピック毎に設定することが出来ます)。
 これによりクラスタ内のサーバに障害が発生しても、この複製を利用して自動フェイルオーバすることが可能になり、
 障害発生中でもメッセージが利用可能になります。
 
-#+BEGIN_QUOTE
+{{{begin_orig}}}
 Other messaging systems provide some replication-related features, but, in our (totally biased) opinion,
 this appears to be a tacked-on thing, not heavily used, and with large downsides:
 slaves are inactive, throughput is heavily impacted, it requires fiddly manual configuration, etc.
 Kafka is meant to be used with replication by default—
 in fact we implement un-replicated topics as replicated topics where the replication factor is one.
-#+END_QUOTE
+{{{end_orig}}}
 
 他のメッセージングシステムでもレプリケーションのような機能を提供する場合もありますが、
 追加機能の一種であり、多用されているとは言えず、
@@ -185,7 +187,7 @@ in fact we implement un-replicated topics as replicated topics where the replica
 Kafkaはデフォルトでレプリケーションと共に使用されます——
 複製を持たないトピックは実はレプリケーションファクタが1の複製を持つトピックとして実装されているのです。
 
-#+BEGIN_QUOTE
+{{{begin_orig}}}
 The unit of replication is the topic partition.
 Under non-failure conditions, each partition in Kafka has a single leader and zero or more followers.
 The total number of replicas including the leader constitute the replication factor.
@@ -193,7 +195,7 @@ All reads and writes go to the leader of the partition.
 Typically, there are many more partitions than brokers and the leaders are evenly distributed among brokers.
 The logs on the followers are identical to the leader's log—all have the same offsets and messages in the same order
 (though, of course, at any given time the leader may have a few as-yet unreplicated messages at the end of its log).
-#+END_QUOTE
+{{{end_orig}}}
 
 レプリケーションの単位はトピックのパーティションです。
 正常時はKafkaの各パーティションには単一のリーダ、及び0以上のフォロワが存在します。
@@ -205,39 +207,39 @@ The logs on the followers are identical to the leader's log—all have the same 
 全て同じオフセットとメッセージを、同じ順番で記録しています
 (但し、もちろん、未複製のメッセージがリーダのログ末尾に多少存在するタイミングは存在します)。
 
-#+BEGIN_QUOTE
+{{{begin_orig}}}
 Followers consume messages from the leader just as a normal Kafka consumer would and apply them to their own log.
 Having the followers pull from the leader has the nice property of allowing the follower to naturally batch together log entries they are applying to their log.
-#+END_QUOTE
+{{{end_orig}}}
 
 フォロワは通常のKafkaコンシューマと同様にリーダからメッセージをコンシュームし、自身のログに反映します。
 このようにリーダからフォロワがpullするという仕組みは、
 フォロワが自身のログに反映するログエントリをひとまとめにするということが自然に行えるようにするのに都合が良いのです。
 
-#+BEGIN_QUOTE
+{{{begin_orig}}}
 As with most distributed systems automatically handling failures requires having a precise definition of what it means for a node to be "alive".
 For Kafka node liveness has two conditions
-#+END_QUOTE
+{{{end_orig}}}
 
 自動で障害をハンドリングする分散システムでは、大抵、
 ノードが「生きている」というのが何を意味するのかを正確に定義することが必要になります。
 Kafkaでは生存判定を以下の2つの条件で行ないます。
 
-#+BEGIN_QUOTE
+{{{begin_orig}}}
 1. A node must be able to maintain its session with ZooKeeper (via ZooKeeper's heartbeat mechanism)
 2. If it is a slave it must replicate the writes happening on the leader and not fall "too far" behind
-#+END_QUOTE
+{{{end_orig}}}
 
 1. そのノードが(ZooKeeperのハートビート機構を通じて)ZooKeeperとのセッションを保持すること
 2. そのノードがスレーブの場合、リーダに対して行われた書き込みが複製され、かつ、「かけ離れ」てしまわないこと
 
-#+BEGIN_QUOTE
+{{{begin_orig}}}
 We refer to nodes satisfying these two conditions as being "in sync" to avoid the vagueness of "alive" or "failed".
 The leader keeps track of the set of "in sync" nodes.
 If a follower dies, gets stuck, or falls behind, the leader will remove it from the list of in sync replicas.
 The definition of, how far behind is too far, is controlled by the replica.lag.max.messages configuration
 and the definition of a stuck replica is controlled by the replica.lag.time.max.ms configuration.
-#+END_QUOTE
+{{{end_orig}}}
 
 「alive」や「failed」といった漠然とした表現を避ける為、
 この二つの条件を満たすノードを「in sync」と呼ぶことにします。
@@ -246,25 +248,25 @@ and the definition of a stuck replica is controlled by the replica.lag.time.max.
 「かけ離れる」というのがどのくらいなのか、の定義は =replica.lag.max.messages= で制御することが出来ます。
 また、複製が「詰まった」の定義は =replica.lag.time.max.ms= で制御出来ます。
 
-#+BEGIN_QUOTE
+{{{begin_orig}}}
 In distributed systems terminology we only attempt to handle a "fail/recover" model of failures where nodes suddenly cease working
 and then later recover (perhaps without knowing that they have died).
 Kafka does not handle so-called "Byzantine" failures in which nodes produce arbitrary or malicious responses (perhaps due to bugs or foul play).
-#+END_QUOTE
+{{{end_orig}}}
 
 分散システムの用語で言うと、Kafkaが対応を想定しているのは障害の「fail/recover」モデル、
 つまり、ノードが突然稼動停止してしまい、しばらくすると(おそらく自分が死んだことにも気付かずに)復旧する、というモデルです。
 「Byzantine」と呼ばれる障害、つまりノードが(バグや不正な行為によって)任意の、あるいは悪意のあるレスポンスを送出するようなものは、
 Kafkaでは取り扱いません。
 
-#+BEGIN_QUOTE
+{{{begin_orig}}}
 A message is considered "committed" when all in sync replicas for that partition have applied it to their log.
 Only committed messages are ever given out to the consumer.
 This means that the consumer need not worry about potentially seeing a message that could be lost if the leader fails.
 Producers, on the other hand, have the option of either waiting for the message to be committed or not,
 depending on their preference for tradeoff between latency and durability.
 This preference is controlled by the request.required.acks setting that the producer uses.
-#+END_QUOTE
+{{{end_orig}}}
 
 あるメッセージが「コミット済み」とは、
 そのパーティションの全てのin syncな複製が自身のログにメッセージを反映した状態を言います。
@@ -274,16 +276,16 @@ This preference is controlled by the request.required.acks setting that the prod
 メッセージのコミットを待つかどうか、という選択をすることが可能です。
 これはプロデューサの =request.required.acks= [fn:: (訳注) New Producerの場合は =acks=] を設定することで制御出来ます。
 
-#+BEGIN_QUOTE
+{{{begin_orig}}}
 The guarantee that Kafka offers is that a committed message will not be lost, as long as there is at least one in sync replica alive, at all times.
-#+END_QUOTE
+{{{end_orig}}}
 
 最低1つのin syncな複製が生存している限りは常に、
 コミット済みメッセージは失われないことをKafkaは保証します。
 
-#+BEGIN_QUOTE
+{{{begin_orig}}}
 Kafka will remain available in the presence of node failures after a short fail-over period, but may not remain available in the presence of network partitions.
-#+END_QUOTE
+{{{end_orig}}}
 
 Kafkaはノードの障害発生時には短いフェイルオーバ期間の後にサービス継続可能ですが、
 ネットワーク分断が発生した際には不可能です。
