@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 <title>Apache Kafka</title>
-<!-- 2015-07-30 木 14:11 -->
+<!-- 2015-08-06 木 17:49 -->
 <meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta  name="generator" content="Org-mode" />
 <meta  name="author" content="yewton" />
@@ -1565,9 +1565,7 @@ ZooKeeper では "chroot" パスを追加することも出来、
 
 <div class="note">
 <p>
-chroot を指定する場合、ブローカを起動する前にパスを作っておく必要があります。
-<sup><a id="fnr.5" name="fnr.5" class="footref" href="#fn.5">5</a></sup>
-また、全コンシューマが同じ接続情報文字列を利用するようにしなければなりません。
+chroot を指定する場合、全コンシューマが同じ接続情報文字列を利用するようにしなければなりません。
 </p>
 
 </div>
@@ -1760,7 +1758,7 @@ I/O スレッドが処理する為にキューに詰まれる最大リクエス�
 </p>
 
 <p>
-<sup><a id="fnr.6" name="fnr.6" class="footref" href="#fn.6">6</a></sup>
+<sup><a id="fnr.5" name="fnr.5" class="footref" href="#fn.5">5</a></sup>
 </p>
 </div>
 </div>
@@ -1915,7 +1913,7 @@ I/O スレッドが処理する為にキューに詰まれる最大リクエス�
 <p>
 トピックパーティションのログは、セグメントファイルのディレクトリとして保存されています。
 1セグメントのファイルサイズがこの値に達すると、新しいセグメントファイルが作成されます。
-<sup><a id="fnr.7" name="fnr.7" class="footref" href="#fn.7">7</a></sup>
+<sup><a id="fnr.6" name="fnr.6" class="footref" href="#fn.6">6</a></sup>
 この設定値はトピック毎に上書き可能です( <a href="#topic-config">トピックレベルの設定</a> を参照)。
 </p>
 </div>
@@ -2371,7 +2369,7 @@ I/O スレッドが処理する為にキューに詰まれる最大リクエス�
 正しいログ内の位置を見つけるため、ここで設定したバイト数まで線形走査する必要があります。
 そのためこの値を大きくすればする程インデックスファイルは大きくなり
 (そしてもう少しだけメモリを使用するようになり)ますが、走査回数は少なくなります。
-<sup><a id="fnr.8" name="fnr.8" class="footref" href="#fn.8">8</a></sup>
+<sup><a id="fnr.7" name="fnr.7" class="footref" href="#fn.7">7</a></sup>
 ただ、サーバはログ追加毎に2つ以上インデックスエントリを追加することは決してありません
 (たとえ <code>log.index.interval</code> を上回るメッセージが追加されたとしても)。
 普通はこの値をいじる必要は無いでしょう。
@@ -2483,7 +2481,7 @@ I/O スレッドが処理する為にキューに詰まれる最大リクエス�
 <p>
 メモリ上のセグメントインデックスから除去された後にログファイルを保持しておく期間です。
 この期間はロックせずとも進行中の読み込みを中断することなく完了することが出来ます。
-<sup><a id="fnr.9" name="fnr.9" class="footref" href="#fn.9">9</a></sup>
+<sup><a id="fnr.8" name="fnr.8" class="footref" href="#fn.8">8</a></sup>
 通常はこの値を変更する必要は無いでしょう。
 </p>
 </div>
@@ -2891,7 +2889,7 @@ I/O スレッドが処理する為にキューに詰まれる最大リクエス�
 </table>
 
 <p>
-取得リクエストパーガトリの <sup><a id="fnr.10" name="fnr.10" class="footref" href="#fn.10">10</a></sup>
+取得リクエストパーガトリの <sup><a id="fnr.9" name="fnr.9" class="footref" href="#fn.9">9</a></sup>
 解放間隔(リクエスト数)です。
 </p>
 </div>
@@ -2917,7 +2915,7 @@ I/O スレッドが処理する為にキューに詰まれる最大リクエス�
 </table>
 
 <p>
-プロデューサリクエストパーガトリ <sup><a id="fnr.10.100" name="fnr.10.100" class="footref" href="#fn.10">10</a></sup> の解放間隔(リクエスト数)です。
+プロデューサリクエストパーガトリ <sup><a id="fnr.9.100" name="fnr.9.100" class="footref" href="#fn.9">9</a></sup> の解放間隔(リクエスト数)です。
 </p>
 </div>
 </div>
@@ -3719,7 +3717,7 @@ IP またはホスト名を指定して、デフォルトの最大接続数を�
 通常はこの設定は指定せず、堅牢性は複製機構によって担保するようにすること推奨します。
 オペレーティングシステムのより効率的なバックグラウンドのフラッシュ性能に委ねましょう。
 この設定値はトピック毎に上書き可能です( <a href="#topic-config">トピックレベルの設定</a> を参照)。
-<sup><a id="fnr.11" name="fnr.11" class="footref" href="#fn.11">11</a></sup>
+<sup><a id="fnr.10" name="fnr.10" class="footref" href="#fn.10">10</a></sup>
 </p>
 </div>
 </div>
@@ -3855,7 +3853,7 @@ IP またはホスト名を指定して、デフォルトの最大接続数を�
 (50%だと、多くて50%のログが重複している可能性がある、ということです)。
 より高い比率に設定すれば、少ない回数で、より効率的なクリーニングが行われることになりますが、
 それは同時にログが無駄に使用するスペースがより多くなるということにもなります。
-<sup><a id="fnr.12" name="fnr.12" class="footref" href="#fn.12">12</a></sup>
+<sup><a id="fnr.11" name="fnr.11" class="footref" href="#fn.11">11</a></sup>
 </p>
 </div>
 </div>
@@ -3879,7 +3877,7 @@ IP またはホスト名を指定して、デフォルトの最大接続数を�
 
 <tr>
 <td class="left">サーバデフォルトプロパティ</td>
-<td class="right"><code>min.insync.replicas</code> <sup><a id="fnr.13" name="fnr.13" class="footref" href="#fn.13">13</a></sup></td>
+<td class="right"><code>min.insync.replicas</code> <sup><a id="fnr.12" name="fnr.12" class="footref" href="#fn.12">12</a></sup></td>
 </tr>
 </tbody>
 </table>
@@ -5273,7 +5271,7 @@ The client id is a user-specified string sent in each request to help trace call
 <div class="outline-text-3" id="text-newproducerconfigs">
 <p>
 We are working on a replacement for our existing producer. The code is available in trunk now and can be considered beta quality. Below is the configuration for the new producer.
-<sup><a id="fnr.14" name="fnr.14" class="footref" href="#fn.14">14</a></sup>
+<sup><a id="fnr.13" name="fnr.13" class="footref" href="#fn.13">13</a></sup>
 </p>
 </div>
 
@@ -6464,7 +6462,7 @@ This preference is controlled by the request.required.acks setting that the prod
 つまり、コンシューマはリーダに障害が発生したときにメッセージがロストするということを考慮する必要は無いということです。
 他方、プロデューサは、レイテンシと堅牢性のトレードオフの下、
 メッセージのコミットを待つかどうか、という選択をすることが可能です。
-これはプロデューサの <code>request.required.acks</code> <sup><a id="fnr.15" name="fnr.15" class="footref" href="#fn.15">15</a></sup> を設定することで制御出来ます。
+これはプロデューサの <code>request.required.acks</code> <sup><a id="fnr.14" name="fnr.14" class="footref" href="#fn.14">14</a></sup> を設定することで制御出来ます。
 </p>
 
 <div class="orig-text"><h6>▶ show original text</h6><div>
@@ -8995,34 +8993,32 @@ Overall, we try to keep the ZooKeeper system as small as will handle the load (p
 
 <div class="footdef"><sup><a id="fn.4" name="fn.4" class="footnum" href="#fnr.4">4</a></sup> <p>(訳注) 関連ソース <a href="https://github.com/apache/kafka/blob/0.8.2/core/src/main/scala/kafka/consumer/SimpleConsumer.scala">SimpleConsumer</a> 、 <a href="https://github.com/apache/kafka/blob/0.8.2/core/src/main/scala/kafka/api/FetchRequest.scala">FetchRequest</a> 、 <a href="https://github.com/apache/kafka/blob/0.8.2/core/src/main/scala/kafka/api/FetchResponse.scala">FetchResponse</a> 、 <a href="https://github.com/apache/kafka/blob/0.8.2/core/src/main/scala/kafka/api/TopicMetadataRequest.scala">TopicMetadataRequest</a> 、 <a href="https://github.com/apache/kafka/blob/0.8.2/core/src/main/scala/kafka/api/TopicMetadataResponse.scala">TopicMetadataResponse</a> 、<a href="https://github.com/apache/kafka/blob/0.8.2/core/src/main/scala/kafka/api/OffsetRequest.scala">OffsetRequest</a> 、<a href="https://github.com/apache/kafka/blob/0.8.2/core/src/main/scala/kafka/api/OffsetResponse.scala">OffsetResponse</a></p></div>
 
-<div class="footdef"><sup><a id="fn.5" name="fn.5" class="footnum" href="#fnr.5">5</a></sup> <p>(訳注)これは古い記述で、実際には事前に作る必要は有りません。関連issue <a href="https://issues.apache.org/jira/browse/KAFKA-2357">KAFKA-2357</a></p></div>
+<div class="footdef"><sup><a id="fn.5" name="fn.5" class="footnum" href="#fnr.5">5</a></sup> <p>(訳注) 関連 issue <a href="https://issues.apache.org/jira/browse/KAFKA-1092">KAFKA-1092</a></p></div>
 
-<div class="footdef"><sup><a id="fn.6" name="fn.6" class="footnum" href="#fnr.6">6</a></sup> <p>(訳注) 関連 issue <a href="https://issues.apache.org/jira/browse/KAFKA-1092">KAFKA-1092</a></p></div>
+<div class="footdef"><sup><a id="fn.6" name="fn.6" class="footnum" href="#fnr.6">6</a></sup> <p>(訳注) <code>log_dirs</code> に、 <code>&lt;トピック名&gt;-&lt;パーティション番号&gt;/000...000.log</code> の様に保存されています。</p></div>
 
-<div class="footdef"><sup><a id="fn.7" name="fn.7" class="footnum" href="#fnr.7">7</a></sup> <p>(訳注) <code>log_dirs</code> に、 <code>&lt;トピック名&gt;-&lt;パーティション番号&gt;/000...000.log</code> の様に保存されています。</p></div>
+<div class="footdef"><sup><a id="fn.7" name="fn.7" class="footnum" href="#fnr.7">7</a></sup> <p>(訳注) 何言ってんのかよく分かんない</p></div>
 
 <div class="footdef"><sup><a id="fn.8" name="fn.8" class="footnum" href="#fnr.8">8</a></sup> <p>(訳注) 何言ってんのかよく分かんない</p></div>
 
-<div class="footdef"><sup><a id="fn.9" name="fn.9" class="footnum" href="#fnr.9">9</a></sup> <p>(訳注) 何言ってんのかよく分かんない</p></div>
+<div class="footdef"><sup><a id="fn.9" name="fn.9" class="footnum" href="#fnr.9">9</a></sup> <p>(訳注) <a href="https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=34839465">Request Purgatory (0.8) - Apache Kafka - Apache Software Foundation</a></p></div>
 
-<div class="footdef"><sup><a id="fn.10" name="fn.10" class="footnum" href="#fnr.10">10</a></sup> <p>(訳注) <a href="https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=34839465">Request Purgatory (0.8) - Apache Kafka - Apache Software Foundation</a></p></div>
+<div class="footdef"><sup><a id="fn.10" name="fn.10" class="footnum" href="#fnr.10">10</a></sup> <p>ここがそのトピック毎の設定なんだけど…。ブローカ設定と入れ違ったかな？</p></div>
 
-<div class="footdef"><sup><a id="fn.11" name="fn.11" class="footnum" href="#fnr.11">11</a></sup> <p>ここがそのトピック毎の設定なんだけど…。ブローカ設定と入れ違ったかな？</p></div>
+<div class="footdef"><sup><a id="fn.11" name="fn.11" class="footnum" href="#fnr.11">11</a></sup> <p>ブローカ設定の項の説明と一字一句違わない</p></div>
 
-<div class="footdef"><sup><a id="fn.12" name="fn.12" class="footnum" href="#fnr.12">12</a></sup> <p>ブローカ設定の項の説明と一字一句違わない</p></div>
+<div class="footdef"><sup><a id="fn.12" name="fn.12" class="footnum" href="#fnr.12">12</a></sup> <p>実際は、このプロパティに対応するサーバデフォルトプロパティは無い。その為、利用する際は必ずトピックレベルで設定すること。</p></div>
 
-<div class="footdef"><sup><a id="fn.13" name="fn.13" class="footnum" href="#fnr.13">13</a></sup> <p>実際は、このプロパティに対応するサーバデフォルトプロパティは無い。その為、利用する際は必ずトピックレベルで設定すること。</p></div>
+<div class="footdef"><sup><a id="fn.13" name="fn.13" class="footnum" href="#fnr.13">13</a></sup> <p>(訳注) この記述は古いそうです。参考スレッド <a href="http://mail-archives.apache.org/mod_mbox/kafka-users/201507.mbox/<CAOeJiJgh=6n2t4h7-bZC83An99WDhjEKFENtu2J9WApz9f8xzw@mail.gmail.com>">Re: New producer in production</a></p></div>
 
-<div class="footdef"><sup><a id="fn.14" name="fn.14" class="footnum" href="#fnr.14">14</a></sup> <p>(訳注) この記述は古いそうです。参考スレッド <a href="http://mail-archives.apache.org/mod_mbox/kafka-users/201507.mbox/<CAOeJiJgh=6n2t4h7-bZC83An99WDhjEKFENtu2J9WApz9f8xzw@mail.gmail.com>">Re: New producer in production</a></p></div>
-
-<div class="footdef"><sup><a id="fn.15" name="fn.15" class="footnum" href="#fnr.15">15</a></sup> <p>(訳注) New Producerの場合は <code>acks</code></p></div>
+<div class="footdef"><sup><a id="fn.14" name="fn.14" class="footnum" href="#fnr.14">14</a></sup> <p>(訳注) New Producerの場合は <code>acks</code></p></div>
 
 
 </div>
 </div></div>
 <div id="postamble" class="status">
 <p class="author">Author: yewton</p>
-<p class="date">Created: 2015-07-30 木 14:11</p>
+<p class="date">Created: 2015-08-06 木 17:49</p>
 <p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.4.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
