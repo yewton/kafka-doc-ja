@@ -5,12 +5,16 @@
     padding: 0px;
 }
 
-.orig-text p {
+div.orig-text {
     font-size: 90%;
     background-color: #F0F0F0;
     border-left: 5px solid #CCCCCC;
     margin: 0px;
     padding: 6px 10px;
+}
+
+.orig-text p {
+    margin: 6px 0px;
 }
 
 pre {

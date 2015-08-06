@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 <title>Apache Kafka</title>
-<!-- 2015-08-06 木 17:49 -->
+<!-- 2015-08-06 木 20:03 -->
 <meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta  name="generator" content="Org-mode" />
 <meta  name="author" content="yewton" />
@@ -511,14 +511,55 @@ for the JavaScript code in this tag.
 <div id="outline-container-sec-1-1" class="outline-3">
 <h3 id="sec-1-1"><span class="section-number-3">1.1</span> 導入</h3>
 <div class="outline-text-3" id="text-1-1">
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+Getting Started
+</p>
+
+<p>
+Introduction
+</p>
+
+<p>
+Kafka is a distributed, partitioned, replicated commit log service. It provides the functionality of a messaging system, but with a unique design.
+</p>
+</div></div>
+
 <p>
 Kafka は分散し、分割され、複製されるコミットログサービスです。
 メッセージングシステムの機能を提供しますが、その設計は独特なものです。
 </p>
 
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+What does all that mean?
+</p>
+</div></div>
+
 <p>
 つまり、どういうことでしょう？
 </p>
+
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+First let's review some basic messaging terminology:
+</p>
+
+<ul class="org-ul">
+<li>Kafka maintains feeds of messages in categories called topics.
+</li>
+<li>We'll call processes that publish messages to a Kafka topic producers.
+</li>
+<li>We'll call processes that subscribe to topics and process the feed of published messages consumers..
+</li>
+<li>Kafka is run as a cluster comprised of one or more servers each of which is called a broker.
+</li>
+</ul>
+
+<p>
+So, at a high level, producers send messages over the network to the Kafka cluster which in turn serves them up to consumers like this:
+</p>
+</div></div>
 
 <p>
 はじめに、基本的なメッセージングの用語を確認しておきましょう:
@@ -546,6 +587,12 @@ Kafka は分散し、分割され、複製されるコミットログサービ�
 </p>
 </div>
 
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+Communication between the clients and the servers is done with a simple, high-performance, language agnostic <a href="https://cwiki.apache.org/confluence/display/KAFKA/A+Guide+To+The+Kafka+Protocol">TCP protocol</a>. We provide a Java client for Kafka, but clients are available in <a href="https://cwiki.apache.org/confluence/display/KAFKA/Clients">many languages</a>.
+</p>
+</div></div>
+
 <p>
 クライアントとサーバ間の通信はシンプルかつ高性能で、言語に依存しない <a href="https://cwiki.apache.org/confluence/display/KAFKA/A+Guide+To+The+Kafka+Protocol">TCP protocol</a> で行なわれます。
 提供されるのは Java の Kafka クライアントですが、 <a href="https://cwiki.apache.org/confluence/display/KAFKA/Clients">多くの言語で</a> 利用することが出来ます。
@@ -555,9 +602,25 @@ Kafka は分散し、分割され、複製されるコミットログサービ�
 <div id="outline-container-sec-1-1-1" class="outline-4">
 <h4 id="sec-1-1-1">トピックとログ</h4>
 <div class="outline-text-4" id="text-1-1-1">
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+Topics and Logs
+</p>
+
+<p>
+Let's first dive into the high-level abstraction Kafka provides—the topic.
+</p>
+</div></div>
+
 <p>
 まず最初に、 Kafka が提供する高レベルな抽象概念である「トピック」について見ていきましょう。
 </p>
+
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+A topic is a category or feed name to which messages are published. For each topic, the Kafka cluster maintains a partitioned log that looks like this:
+</p>
+</div></div>
 
 <p>
 トピックはカテゴリ、あるいはフィードの名前であり、メッセージはトピックに対して発行されます。
@@ -570,12 +633,24 @@ Kafka は分散し、分割され、複製されるコミットログサービ�
 </p>
 </div>
 
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+Each partition is an ordered, immutable sequence of messages that is continually appended to—a commit log. The messages in the partitions are each assigned a sequential id number called the offset that uniquely identifies each message within the partition. 
+</p>
+</div></div>
+
 <p>
 各パーティションは不変で順序があるメッセージ列で、メッセージは断続的に追記されます。
 このメッセージ列を「コミットログ」と呼びます。
 メッセージには、格納されたパーティションごとに「オフセット」と呼ばれるユニークな通し番号が付与されます。
 このオフセットにより、パーティション内のメッセージを一意に特定することができます。
 </p>
+
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+The Kafka cluster retains all published messages—whether or not they have been consumed—for a configurable period of time. For example if the log retention is set to two days, then for the two days after a message is published it is available for consumption, after which it will be discarded to free up space. Kafka's performance is effectively constant with respect to data size so retaining lots of data is not a problem.
+</p>
+</div></div>
 
 <p>
 Kafka クラスタは、コンシュームされたかどうかに拘わらず、発行されたすべてのメッセージを保存しています。
@@ -585,6 +660,12 @@ Kafka クラスタは、コンシュームされたかどうかに拘わらず�
 Kafkaの性能はデータサイズに関しては実質定数のため、大量のデータを保存することは問題ありません。
 </p>
 
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+In fact the only metadata retained on a per-consumer basis is the position of the consumer in the log, called the "offset". This offset is controlled by the consumer: normally a consumer will advance its offset linearly as it reads messages, but in fact the position is controlled by the consumer and it can consume messages in any order it likes. For example a consumer can reset to an older offset to reprocess.
+</p>
+</div></div>
+
 <p>
 実は、コンシューマ毎に保存されているメタデータというのは、ログ内のコンシューマの位置情報だけです。
 これは「オフセット」と呼ばれます。
@@ -593,12 +674,24 @@ Kafkaの性能はデータサイズに関しては実質定数のため、大量
 例えば、コンシューマは昔のオフセットにリセットして再処理を行なうことが出来ます。
 </p>
 
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+This combination of features means that Kafka consumers are very cheap—they can come and go without much impact on the cluster or on other consumers. For example, you can use our command line tools to "tail" the contents of any topic without changing what is consumed by any existing consumers.
+</p>
+</div></div>
+
 <p>
 以上の機能の組合せにより、Kafkaのコンシューマはとても安価であると言えます————コンシューマはクラスタへの参加・離脱を、
 そのクラスタや、クラスタに所属する他のコンシューマに大きな影響を与えることなく行なうことができる、ということです。
 例えば、任意のトピックについて、付属のコマンドラインツールで「tail」操作を行なうことが出来ますが、
 これは既存のコンシューマのコンシューム状況を変えることなく行なうことが可能です。
 </p>
+
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+The partitions in the log serve several purposes. First, they allow the log to scale beyond a size that will fit on a single server. Each individual partition must fit on the servers that host it, but a topic may have many partitions so it can handle an arbitrary amount of data. Second they act as the unit of parallelism—more on that in a bit.
+</p>
+</div></div>
 
 <p>
 パーティションは様々な目的で提供されています。
@@ -613,12 +706,25 @@ Kafkaの性能はデータサイズに関しては実質定数のため、大量
 <div id="outline-container-sec-1-1-2" class="outline-4">
 <h4 id="sec-1-1-2">分散</h4>
 <div class="outline-text-4" id="text-1-1-2">
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+Distribution
+The partitions of the log are distributed over the servers in the Kafka cluster with each server handling data and requests for a share of the partitions. Each partition is replicated across a configurable number of servers for fault tolerance.
+</p>
+</div></div>
+
 <p>
 ログのパーティションは Kafka クラスタ内のサーバ上で分散して保持されており、
 各サーバはパーティションを共有するためのデータとリクエストを処理します。
 耐障害性のために、各パーティションを複数のサーバに複製することも出来ます。
 複製するサーバ数は設定で変更可能です。
 </p>
+
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+Each partition has one server which acts as the "leader" and zero or more servers which act as "followers". The leader handles all read and write requests for the partition while the followers passively replicate the leader. If the leader fails, one of the followers will automatically become the new leader. Each server acts as a leader for some of its partitions and a follower for others so load is well balanced within the cluster.
+</p>
+</div></div>
 
 <p>
 各パーティションは「リーダ」となる一つのサーバと、0以上の「フォロワ」サーバを持ちます。
@@ -634,6 +740,16 @@ Kafkaの性能はデータサイズに関しては実質定数のため、大量
 <div id="outline-container-sec-1-1-3" class="outline-4">
 <h4 id="sec-1-1-3">プロデューサ</h4>
 <div class="outline-text-4" id="text-1-1-3">
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+Producers
+</p>
+
+<p>
+Producers publish data to the topics of their choice. The producer is responsible for choosing which message to assign to which partition within the topic. This can be done in a round-robin fashion simply to balance load or it can be done according to some semantic partition function (say based on some key in the message). More on the use of partitioning in a second.
+</p>
+</div></div>
+
 <p>
 プロデューサは自身の選択したトピックに対してデータを発行します。
 プロデューサはどのメッセージをトピック内のどのパーティションに割り当てるかを選択する責務があります。
@@ -648,6 +764,12 @@ Kafkaの性能はデータサイズに関しては実質定数のため、大量
 <h4 id="intro_consumers"><a id="sec-1-1-4" name="sec-1-1-4"></a>コンシューマ</h4>
 <div class="outline-text-4" id="text-intro_consumers">
 
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+Messaging traditionally has two models: <a href="http://en.wikipedia.org/wiki/Message_queue">queuing</a> and <a href="https://en.wikipedia.org/wiki/Publish%25E2%2580%2593subscribe_pattern">publish-subscribe</a>. In a queue, a pool of consumers may read from a server and each message goes to one of them; in publish-subscribe the message is broadcast to all consumers. Kafka offers a single consumer abstraction that generalizes both of these—the <i>consumer group</i>.
+</p>
+</div></div>
+
 <p>
 伝統的なメッセージングのモデルは <a href="http://en.wikipedia.org/wiki/Message_queue">キューイング</a> と <a href="http://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern">出版・購読型</a> の二つです。
 キューを用いる方法では、コンシューマプールがひとつのサーバからメッセージを取得することができ、
@@ -657,6 +779,12 @@ Kafka はその両方を一般化するコンシューマの抽象概念を提�
 それが「コンシューマグループ」です。
 </p>
 
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+Consumers label themselves with a consumer group name, and each message published to a topic is delivered to one consumer instance within each subscribing consumer group. Consumer instances can be in separate processes or on separate machines.
+</p>
+</div></div>
+
 <p>
 コンシューマは自分自身にコンシューマグループ名をラベル付けしており、
 トピックに発行される各メッセージは、そのトピックを購読している各コンシューマグループそれぞれの、
@@ -664,15 +792,33 @@ Kafka はその両方を一般化するコンシューマの抽象概念を提�
 コンシューマインスタンスは異なるプロセス、あるいは異なるサーバ上で稼動させることが出来ます。
 </p>
 
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+If all the consumer instances have the same consumer group, then this works just like a traditional queue balancing load over the consumers.
+</p>
+</div></div>
+
 <p>
 全てのコンシューマインスタンスが同一のコンシューマグループに属しているならば、
 コンシューマ上で負荷分散される伝統的なキューイングモデルのように動きます。
 </p>
 
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+If all the consumer instances have different consumer groups, then this works like publish-subscribe and all messages are broadcast to all consumers.
+</p>
+</div></div>
+
 <p>
 全てのコンシューマインスタンスがそれぞれ異なるコンシューマグループに属しているならば、
 出版・購読型モデルのように動き、メッセージは全てのコンシューマにブロードキャストされることになります。
 </p>
+
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+More commonly, however, we have found that topics have a small number of consumer groups, one for each "logical subscriber". Each group is composed of many consumer instances for scalability and fault tolerance. This is nothing more than publish-subscribe semantics where the subscriber is cluster of consumers instead of a single process.
+</p>
+</div></div>
 
 <p>
 しかしより一般には、トピックは「論理的な購読者」を表す少数のコンシューマグループを持つことになるでしょう。
@@ -687,9 +833,25 @@ Kafka はその両方を一般化するコンシューマの抽象概念を提�
 <p><span class="figure-number">Figure 3:</span> 4つのパーティション(P0-P3)をホスティングする2つのサーバで構成されるKafka クラスタ、及び2つのコンシューマグループ。グループAは2つ、Bは4つのインスタンスを持っている。</p>
 </div>
 
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+Caption: A two server Kafka cluster hosting four partitions (P0-P3) with two consumer groups. Consumer group A has two consumer instances and group B has four.
+</p>
+
+<p>
+Kafka has stronger ordering guarantees than a traditional messaging system, too.
+</p>
+</div></div>
+
 <p>
 また、Kafkaは伝統的なメッセージングシステムと比べてより強力な順序保証を提供しています。
 </p>
+
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+A traditional queue retains messages in-order on the server, and if multiple consumers consume from the queue then the server hands out messages in the order they are stored. However, although the server hands out messages in order, the messages are delivered asynchronously to consumers, so they may arrive out of order on different consumers. This effectively means the ordering of the messages is lost in the presence of parallel consumption. Messaging systems often work around this by having a notion of "exclusive consumer" that allows only one process to consume from a queue, but of course this means that there is no parallelism in processing.
+</p>
+</div></div>
 
 <p>
 伝統的なキューはメッセージを順番にサーバ上に保存しています。
@@ -704,6 +866,12 @@ Kafka はその両方を一般化するコンシューマの抽象概念を提�
 しかしこれは当然、並列処理は出来ません。
 </p>
 
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+Kafka does it better. By having a notion of parallelism—the partition—within the topics, Kafka is able to provide both ordering guarantees and load balancing over a pool of consumer processes. This is achieved by assigning the partitions in the topic to the consumers in the consumer group so that each partition is consumed by exactly one consumer in the group. By doing this we ensure that the consumer is the only reader of that partition and consumes the data in order. Since there are many partitions this still balances the load over many consumer instances. Note however that there cannot be more consumer instances than partitions.
+</p>
+</div></div>
+
 <p>
 Kafka はもっと上手いことやっています。
 トピック内の並列性(これはつまり、パーティションのことです)という概念を利用することで、
@@ -714,6 +882,12 @@ Kafkaはコンシューマプロセスプール上の順序保証と負荷分散
 多くのパーティションがある為、これでもコンシューマインスタンス間の負荷は分散します。
 ただし、パーティション数以上のコンシューマインスタンスは存在し得ないことに注意してください。
 </p>
+
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+Kafka only provides a total order over messages <i>within</i> a partition, not between different partitions in a topic. Per-partition ordering combined with the ability to partition data by key is sufficient for most applications. However, if you require a total order over messages this can be achieved with a topic that has only one partition, though this will mean only one consumer process.
+</p>
+</div></div>
 
 <p>
 Kafka はトピック内のパーティションの <i>中の</i> メッセージ順序しか保証しません。
@@ -728,6 +902,29 @@ Kafka はトピック内のパーティションの <i>中の</i> メッセー�
 <div id="outline-container-sec-1-1-5" class="outline-4">
 <h4 id="sec-1-1-5">保証</h4>
 <div class="outline-text-4" id="text-1-1-5">
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+Guarantees
+</p>
+
+<p>
+At a high-level Kafka gives the following guarantees:
+</p>
+
+<ul class="org-ul">
+<li>Messages sent by a producer to a particular topic partition will be appended in the order they are sent. That is, if a message M1 is sent by the same producer as a message M2, and M1 is sent first, then M1 will have a lower offset than M2 and appear earlier in the log.
+</li>
+<li>A consumer instance sees messages in the order they are stored in the log.
+</li>
+<li>For a topic with replication factor N, we will tolerate up to N-1 server failures without losing any messages committed to the log.
+</li>
+</ul>
+
+<p>
+More details on these guarantees are given in the design section of the documentation.
+</p>
+</div></div>
+
 <p>
 高レベルな視点では Kafka は以下の保証を提供します:
 </p>
@@ -754,6 +951,16 @@ Kafka はトピック内のパーティションの <i>中の</i> メッセー�
 <div id="outline-container-sec-1-2" class="outline-3">
 <h3 id="sec-1-2"><span class="section-number-3">1.2</span> ユースケース</h3>
 <div class="outline-text-3" id="text-1-2">
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+Use Cases
+</p>
+
+<p>
+Here is a description of a few of the popular use cases for Apache Kafka. For an overview of a number of these areas in action, see <a href="http://engineering.linkedin.com/distributed-systems/log-what-every-software-engineer-should-know-about-real-time-datas-unifying">this blog post</a>.
+</p>
+</div></div>
+
 <p>
 Apache Kafka のユースケースをいくつか紹介します。
 これらの分野についての数多くの取り組みの概要が <a href="http://engineering.linkedin.com/distributed-systems/log-what-every-software-engineer-should-know-about-real-time-datas-unifying">このブログ記事</a> にまとめられています。
@@ -763,6 +970,16 @@ Apache Kafka のユースケースをいくつか紹介します。
 <div id="outline-container-sec-1-2-1" class="outline-4">
 <h4 id="sec-1-2-1">メッセージング</h4>
 <div class="outline-text-4" id="text-1-2-1">
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+Messaging
+</p>
+
+<p>
+Kafka works well as a replacement for a more traditional message broker. Message brokers are used for a variety of reasons (to decouple processing from data producers, to buffer unprocessed messages, etc). In comparison to most messaging systems Kafka has better throughput, built-in partitioning, replication, and fault-tolerance which makes it a good solution for large scale message processing applications.
+</p>
+</div></div>
+
 <p>
 Kafka は伝統的なメッセージブローカの代替として使うことが出来ます。
 メッセージブローカを利用する理由は様々です——
@@ -772,10 +989,22 @@ Kafka はより良いスループット、組込みのパーティショニン�
 大規模メッセージ処理アプリケーションの良いソリューションとなります。
 </p>
 
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+In our experience messaging uses are often comparatively low-throughput, but may require low end-to-end latency and often depend on the strong durability guarantees Kafka provides.
+</p>
+</div></div>
+
 <p>
 経験上、メッセージングは比較的低いスループットで、しかしエンドツーエンドの低いレイテンシを要求し、
 また、Kafka が提供する強い堅牢性に関する保証に依存するという場合が多いです。
 </p>
+
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+In this domain Kafka is comparable to traditional messaging systems such as <a href="http://activemq.apache.org/">ActiveMQ</a> or <a href="https://www.rabbitmq.com/">RabbitMQ</a>.
+</p>
+</div></div>
 
 <p>
 このドメインでは、 <a href="http://activemq.apache.org/">ActiveMQ</a> や <a href="https://www.rabbitmq.com">RabbitMQ</a> のような伝統的なメッセージングシステムと Kafka を比較することが出来ます。
@@ -786,6 +1015,16 @@ Kafka はより良いスループット、組込みのパーティショニン�
 <div id="outline-container-sec-1-2-2" class="outline-4">
 <h4 id="sec-1-2-2">Web サイトのアクティビティトラッキング</h4>
 <div class="outline-text-4" id="text-1-2-2">
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+Website Activity Tracking
+</p>
+
+<p>
+The original use case for Kafka was to be able to rebuild a user activity tracking pipeline as a set of real-time publish-subscribe feeds. This means site activity (page views, searches, or other actions users may take) is published to central topics with one topic per activity type. These feeds are available for subscription for a range of use cases including real-time processing, real-time monitoring, and loading into Hadoop or offline data warehousing systems for offline processing and reporting.
+</p>
+</div></div>
+
 <p>
 ユーザ動向追跡パイプラインを、リアルタイムな Pub-Sub フィードの集合として再構築する、というのが Kafka の元々のユースケースでした。
 つまり、サイトアクティビティ(ページビュー、検索等のユーザが取り得る行動)はアクティビティの種別毎にトピック分けされて、
@@ -794,6 +1033,12 @@ Kafka はより良いスループット、組込みのパーティショニン�
 リアルタイム処理やリアルタイム監視のために使われたり、
 オフラインでの処理やレポートで利用するために Hadoop やオフラインのデータウェアハウジングシステムへ保存するために使われたりします。
 </p>
+
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+Activity tracking is often very high volume as many activity messages are generated for each user page view.
+</p>
+</div></div>
 
 <p>
 アクティビティトラッキングは各ユーザのページビューごとに大量のアクティビティメッセージが生成されるため、
@@ -805,6 +1050,16 @@ Kafka はより良いスループット、組込みのパーティショニン�
 <div id="outline-container-sec-1-2-3" class="outline-4">
 <h4 id="sec-1-2-3">メトリクス</h4>
 <div class="outline-text-4" id="text-1-2-3">
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+Metrics
+</p>
+
+<p>
+Kafka is often used for operational monitoring data. This involves aggregating statistics from distributed applications to produce centralized feeds of operational data.
+</p>
+</div></div>
+
 <p>
 Kafka は運用監視データとしても使われることがあります。
 この場合は、運用データの中央フィードを生成するため、分散したアプリケーションの統計を集約するのに用いられます。
@@ -815,6 +1070,16 @@ Kafka は運用監視データとしても使われることがあります。
 <div id="outline-container-sec-1-2-4" class="outline-4">
 <h4 id="sec-1-2-4">ログ集約</h4>
 <div class="outline-text-4" id="text-1-2-4">
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+Log Aggregation
+</p>
+
+<p>
+Many people use Kafka as a replacement for a log aggregation solution. Log aggregation typically collects physical log files off servers and puts them in a central place (a file server or HDFS perhaps) for processing. Kafka abstracts away the details of files and gives a cleaner abstraction of log or event data as a stream of messages. This allows for lower-latency processing and easier support for multiple data sources and distributed data consumption. In comparison to log-centric systems like Scribe or Flume, Kafka offers equally good performance, stronger durability guarantees due to replication, and much lower end-to-end latency.
+</p>
+</div></div>
+
 <p>
 ログ集約ソリューションの代替として Kafka を利用する場合も多いです。
 典型的なログ集約では、物理ログファイルをサーバから収集し、
@@ -829,10 +1094,16 @@ Kafka や同等のパフォーマンスと、複製によるより強い堅牢�
 </div>
 </div>
 
-
 <div id="outline-container-sec-1-2-5" class="outline-4">
 <h4 id="sec-1-2-5">ストリーム処理</h4>
 <div class="outline-text-4" id="text-1-2-5">
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+Stream Processing
+Many users end up doing stage-wise processing of data where data is consumed from topics of raw data and then aggregated, enriched, or otherwise transformed into new Kafka topics for further consumption. For example a processing flow for article recommendation might crawl article content from RSS feeds and publish it to an "articles" topic; further processing might help normalize or deduplicate this content to a topic of cleaned article content; a final stage might attempt to match this content to users. This creates a graph of real-time data flow out of the individual topics. <a href="https://storm.apache.org/">Storm</a> and <a href="http://samza.apache.org/">Samza</a> are popular frameworks for implementing these kinds of transformations.
+</p>
+</div></div>
+
 <p>
 多くのユーザは段階的なデータ処理をすることになります。
 データは生データのトピックからコンシュームされ、集約され、肉付けされ、
@@ -850,6 +1121,16 @@ Kafka や同等のパフォーマンスと、複製によるより強い堅牢�
 <div id="outline-container-sec-1-2-6" class="outline-4">
 <h4 id="sec-1-2-6">イベントソーシング</h4>
 <div class="outline-text-4" id="text-1-2-6">
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+Event Sourcing
+</p>
+
+<p>
+<a href="http://martinfowler.com/eaaDev/EventSourcing.html">Event sourcing</a> is a style of application design where state changes are logged as a time-ordered sequence of records. Kafka's support for very large stored log data makes it an excellent backend for an application built in this style.
+</p>
+</div></div>
+
 <p>
 <a href="http://martinfowler.com/eaaDev/EventSourcing.html">イベントソーシング</a> はアプリケーション設計手法のひとつで、
 状態の変更が時系列順のレコード列として記録されるというものです。
@@ -862,6 +1143,13 @@ Kafka は超巨大なログデータを扱えるため、
 <div id="outline-container-sec-1-2-7" class="outline-4">
 <h4 id="sec-1-2-7">コミットログ</h4>
 <div class="outline-text-4" id="text-1-2-7">
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+Commit Log
+Kafka can serve as a kind of external commit-log for a distributed system. The log helps replicate data between nodes and acts as a re-syncing mechanism for failed nodes to restore their data. The <a href="http://kafka.apache.org/documentation.html#compaction">log compaction</a> feature in Kafka helps support this usage. In this usage Kafka is similar to <a href="http://zookeeper.apache.org/bookkeeper/">Apache BookKeeper</a> project.
+</p>
+</div></div>
+
 <p>
 Kafka を分散システムのための外部コミットログとして使うこともできます。
 ノード間でデータを複製したり、障害ノードの復旧のための再同期機構として、このログを利用することが出来ます。
@@ -875,6 +1163,12 @@ Kafka の <a href="http://kafka.apache.org/documentation.html#compaction">ログ
 <div id="outline-container-sec-1-3" class="outline-3">
 <h3 id="sec-1-3"><span class="section-number-3">1.3</span> クイックスタート</h3>
 <div class="outline-text-3" id="text-1-3">
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+This tutorial assumes you are starting fresh and have no existing Kafka or ZooKeeper data.
+</p>
+</div></div>
+
 <p>
 このチュートリアルは、まっさらな環境で、KafkaやZooKeeperが一切稼動していない前提で進めます。
 </p>
@@ -883,6 +1177,16 @@ Kafka の <a href="http://kafka.apache.org/documentation.html#compaction">ログ
 <div id="outline-container-sec-1-3-1" class="outline-4">
 <h4 id="sec-1-3-1">ステップ 1: コードのダウンロード</h4>
 <div class="outline-text-4" id="text-1-3-1">
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+Step 1: Download the code
+</p>
+
+<p>
+<a href="https://www.apache.org/dyn/closer.cgi?path=/kafka/0.8.2.0/kafka_2.10-0.8.2.0.tgz">Download</a> the 0.8.2.0 release and un-tar it.
+</p>
+</div></div>
+
 <p>
 0.8.2.0 リリースを <a href="https://www.apache.org/dyn/closer.cgi?path=/kafka/0.8.2.0/kafka_2.10-0.8.2.0.tgz">ダウンロード</a> して、解凍しましょう。
 </p>
@@ -897,6 +1201,16 @@ Kafka の <a href="http://kafka.apache.org/documentation.html#compaction">ログ
 <div id="outline-container-sec-1-3-2" class="outline-4">
 <h4 id="sec-1-3-2">ステップ 2: サーバの起動</h4>
 <div class="outline-text-4" id="text-1-3-2">
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+Step 2: Start the server
+</p>
+
+<p>
+Kafka uses ZooKeeper so you need to first start a ZooKeeper server if you don't already have one. You can use the convenience script packaged with kafka to get a quick-and-dirty single-node ZooKeeper instance.
+</p>
+</div></div>
+
 <p>
 Kafka は ZooKeeper を使うため、まずは ZooKeeper サーバを起動する必要があります。
 既に起動している ZooKeeper サーバがある場合は、新たに起動する必要はありません。
@@ -909,6 +1223,12 @@ Kafka は ZooKeeper を使うため、まずは ZooKeeper サーバを起動す�
 [2013-04-22 15:01:37,495] INFO Reading configuration from: config/zookeeper.properties (org.apache.zookeeper.server.quorum.QuorumPeerConfig)
 ...
 </pre>
+
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+Now start the Kafka server:
+</p>
+</div></div>
 
 <p>
 では、 Kafka サーバを起動しましょう:
@@ -926,6 +1246,16 @@ Kafka は ZooKeeper を使うため、まずは ZooKeeper サーバを起動す�
 <div id="outline-container-sec-1-3-3" class="outline-4">
 <h4 id="sec-1-3-3">ステップ 3: トピックの作成</h4>
 <div class="outline-text-4" id="text-1-3-3">
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+Step 3: Create a topic
+</p>
+
+<p>
+Let's create a topic named "test" with a single partition and only one replica:
+</p>
+</div></div>
+
 <p>
 今度は「test」という名前の、単一パーティションで、複製を作らないトピックを作成してみましょう:
 </p>
@@ -933,6 +1263,12 @@ Kafka は ZooKeeper を使うため、まずは ZooKeeper サーバを起動す�
 <pre class="example">
 &gt; bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic test
 </pre>
+
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+We can now see that topic if we run the list topic command:
+</p>
+</div></div>
 
 <p>
 list コマンドで、作成したトピックを参照できるようになるはずです:
@@ -943,6 +1279,12 @@ list コマンドで、作成したトピックを参照できるようになる
 test
 </pre>
 
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+Alternatively, instead of manually creating topics you can also configure your brokers to auto-create topics when a non-existent topic is published to.
+</p>
+</div></div>
+
 <p>
 また、手動でトピックを作成するのではなく、存在しないトピックへパブリッシュされた場合に自動で作成するようにブローカを設定することもできます。
 </p>
@@ -952,10 +1294,26 @@ test
 <div id="outline-container-sec-1-3-4" class="outline-4">
 <h4 id="sec-1-3-4">ステップ 4: メッセージを送ってみる</h4>
 <div class="outline-text-4" id="text-1-3-4">
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+Step 4: Send some messages
+</p>
+
+<p>
+Kafka comes with a command line client that will take input from a file or from standard input and send it out as messages to the Kafka cluster. By default each line will be sent as a separate message.
+</p>
+</div></div>
+
 <p>
 Kafka にはファイルか標準入力から Kafka クラスタにメッセージを送信出来るコマンドラインのクライアントが同梱されています。
 デフォルトでは、各行がそれぞれ異なるメッセージとして送信されます。
 </p>
+
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+Run the producer and then type a few messages into the console to send to the server.
+</p>
+</div></div>
 
 <p>
 プロデューサスクリプトを起動し、コンソールにメッセージを打ちこんでサーバに送信してみましょう。
@@ -972,12 +1330,15 @@ Kafka にはファイルか標準入力から Kafka クラスタにメッセー�
 </div>
 </div>
 
-
-
-
 <div id="outline-container-sec-1-3-5" class="outline-4">
 <h4 id="sec-1-3-5">ステップ 5: コンシューマを起動する</h4>
 <div class="outline-text-4" id="text-1-3-5">
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+Kafka also has a command line consumer that will dump out messages to standard output.
+</p>
+</div></div>
+
 <p>
 Kafka にはメッセージを標準出力にダンプするコマンドラインのコンシューマも付属しています。
 </p>
@@ -989,10 +1350,22 @@ Kafka にはメッセージを標準出力にダンプするコマンドライ�
 ^CConsumed 2 messages
 </pre>
 
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+If you have each of the above commands running in a different terminal then you should now be able to type messages into the producer terminal and see them appear in the consumer terminal.
+</p>
+</div></div>
+
 <p>
 別々のターミナルで上記の両方のコマンドを実行すれば、プロデューサのターミナルでメッセージを打ち込むと、
 コンシューマのターミナルでそれを確認することが出来ます。
 </p>
+
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+All of the command line tools have additional options; running the command with no arguments will display usage information documenting them in more detail.
+</p>
+</div></div>
 
 <p>
 全てのコマンドラインツールには追加のオプションがあります。
@@ -1004,12 +1377,28 @@ Kafka にはメッセージを標準出力にダンプするコマンドライ�
 <div id="outline-container-sec-1-3-6" class="outline-4">
 <h4 id="sec-1-3-6">ステップ 6: マルチブローカクラスタを立ち上げる</h4>
 <div class="outline-text-4" id="text-1-3-6">
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+Step 6: Setting up a multi-broker cluster
+</p>
+
+<p>
+So far we have been running against a single broker, but that's no fun. For Kafka, a single broker is just a cluster of size one, so nothing much changes other than starting a few more broker instances. But just to get feel for it, let's expand our cluster to three nodes (still all on our local machine).
+</p>
+</div></div>
+
 <p>
 ここまでは、単一のブローカ上で動作させて決ましたが、これではあまり面白くないですね。
 単一のブローカというのは Kafka にとってはサイズ1のクラスタに過ぎないので、
 複数のブローカインスタンスを起動することもそれほど違いはありません。
 ですが、感覚を掴む為に3ノードのクラスタに拡張してみましょう(とはいえ、まだ全てのノードは同じローカルマシン上です)。
 </p>
+
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+First we make a config file for each of the brokers:
+</p>
+</div></div>
 
 <p>
 まず、各ブローカ用の設定ファイルを作ります:
@@ -1019,6 +1408,12 @@ Kafka にはメッセージを標準出力にダンプするコマンドライ�
 &gt; cp config/server.properties config/server-1.properties
 &gt; cp config/server.properties config/server-2.properties
 </pre>
+
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+Now edit these new files and set the following properties:
+</p>
+</div></div>
 
 <p>
 続いて、これらのファイルを編集して、以下のプロパティを設定します:
@@ -1038,12 +1433,24 @@ config/server-2.properties:
     log.dirs=/tmp/kafka-logs-2
 </pre>
 
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+The <code>broker.id</code> property is the unique and permanent name of each node in the cluster. We have to override the port and log directory only because we are running these all on the same machine and we want to keep the brokers from all trying to register on the same port or overwrite each others data.
+</p>
+</div></div>
+
 <p>
 <code>broker.id</code> は、各ノードのクラスタ内でユニークな、永続的な名前を表すプロパティです。
 ポート番号とログディレクトリだけは変更が必要です。
 いま、これらのブローカは全て同一のマシン上で稼動しているので、
 同じポート番号に登録しようとしたり、お互いのデータを上書きしあったりしてしまわないようにする必要があるためです。
 </p>
+
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+We already have Zookeeper and our single node started, so we just need to start the two new nodes:
+</p>
+</div></div>
 
 <p>
 既に ZooKeeper と単一ノードは起動しているので、3ノードのクラスタにするには、新しく2つのノードを立ち上げるだけです:
@@ -1056,6 +1463,12 @@ config/server-2.properties:
 ...
 </pre>
 
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+Now create a new topic with a replication factor of three:
+</p>
+</div></div>
+
 <p>
 では、レプリケーションファクタ3のトピックを作成してみます:
 </p>
@@ -1063,6 +1476,12 @@ config/server-2.properties:
 <pre class="example">
 &gt; bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 3 --partitions 1 --topic my-replicated-topic
 </pre>
+
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+Okay but now that we have a cluster how can we know which broker is doing what? To see that run the "describe topics" command:
+</p>
+</div></div>
 
 <p>
 出来ました、が、クラスタ上のブローカの状態を見るにはどうすればよいのでしょう？
@@ -1075,11 +1494,28 @@ Topic:my-replicated-topic	PartitionCount:1	ReplicationFactor:3	Configs:
 	Topic: my-replicated-topic	Partition: 0	Leader: 1	Replicas: 1,2,0	Isr: 1,2,0
 </pre>
 
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+Here is an explanation of output. The first line gives a summary of all the partitions, each additional line gives information about one partition. Since we have only one partition for this topic there is only one line.
+</p>
+</div></div>
+
 <p>
 出力内容の説明をします。
 最初の行が全パーティションの要約で、続く各行がそれぞれ1パーティションの情報を表します。
 このトピックにはパーティションが一つしかないので、出力は1行しかありません。
 </p>
+
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<ul class="org-ul">
+<li>"leader" is the node responsible for all reads and writes for the given partition. Each node will be the leader for a randomly selected portion of the partitions.
+</li>
+<li>"replicas" is the list of nodes that replicate the log for this partition regardless of whether they are the leader or even if they are currently alive.
+</li>
+<li>"isr" is the set of "in-sync" replicas. This is the subset of the replicas list that is currently alive and caught-up to the leader. 
+</li>
+</ul>
+</div></div>
 
 <ul class="org-ul">
 <li><code>Leader</code> はそのパーティションの全読み書きの責務を負うノードです。各ノードは、ランダムに選択されたパーティションのリーダになり得ます
@@ -1090,9 +1526,21 @@ Topic:my-replicated-topic	PartitionCount:1	ReplicationFactor:3	Configs:
 </li>
 </ul>
 
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+Note that in my example node 1 is the leader for the only partition of the topic.
+</p>
+</div></div>
+
 <p>
 この例では、ノード1はこのトピックの唯一のパーティションのリーダであることに着目してください。
 </p>
+
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+We can run the same command on the original topic we created to see where it is:
+</p>
+</div></div>
 
 <p>
 同じコマンドを最初に作ったトピックについて実行して、ブローカの状況を見てみましょう:
@@ -1104,9 +1552,21 @@ Topic:test	PartitionCount:1	ReplicationFactor:1	Configs:
 	Topic: test	Partition: 0	Leader: 0	Replicas: 0	Isr: 0
 </pre>
 
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+So there is no surprise there—the original topic has no replicas and is on server 0, the only server in our cluster when we created it.
+</p>
+</div></div>
+
 <p>
 特に変わったところはありません——このトピックは複製を一切持たず、元々クラスタを作成したときの唯一のノードである server 0 上にあります。
 </p>
+
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+Let's publish a few messages to our new topic:
+</p>
+</div></div>
 
 <p>
 さて、新しく作った方のトピックにいくつかメッセージをパブリッシュしてみましょう:
@@ -1120,6 +1580,12 @@ my test message 2
 ^D
 </pre>
 
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+Now let's consume these messages:
+</p>
+</div></div>
+
 <p>
 続いてこれらのメッセージをコンシュームします:
 </p>
@@ -1132,6 +1598,12 @@ my test message 2
 ^C
 </pre>
 
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+Now let's test out fault-tolerance. Broker 1 was acting as the leader so let's kill it:
+</p>
+</div></div>
+
 <p>
 ここで、耐障害性のテストをしてみましょう。
 今はブローカ1がリーダなので、こいつを殺しましょう:
@@ -1143,6 +1615,12 @@ my test message 2
 &gt; kill -9 7564
 </pre>
 
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+Leadership has switched to one of the slaves and node 1 is no longer in the in-sync replica set:
+</p>
+</div></div>
+
 <p>
 リーダシップがスレーブノードの1つに移され、ノード1は <code>Isr</code> から外れます:
 </p>
@@ -1152,6 +1630,12 @@ my test message 2
 Topic:my-replicated-topic	PartitionCount:1	ReplicationFactor:3	Configs:
 	Topic: my-replicated-topic	Partition: 0	Leader: 2	Replicas: 1,2,0	Isr: 2,0
 </pre>
+
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+But the messages are still be available for consumption even though the leader that took the writes originally is down:
+</p>
+</div></div>
 
 <p>
 元々の書き込みを引き受けたリーダがダウンしているにもかかわらず、なおメッセージはコンシューム可能です。
@@ -1171,6 +1655,16 @@ my test message 2
 <div id="outline-container-sec-1-4" class="outline-3">
 <h3 id="sec-1-4"><span class="section-number-3">1.4</span> エコシステム</h3>
 <div class="outline-text-3" id="text-1-4">
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+Ecosystem
+</p>
+
+<p>
+There are a plethora of tools that integrate with Kafka outside the main distribution. The <a href="https://cwiki.apache.org/confluence/display/KAFKA/Ecosystem"> ecosystem page</a> lists many of these, including stream processing systems, Hadoop integration, monitoring, and deployment tools.
+</p>
+</div></div>
+
 <p>
 メインディストリビューション外にも、Kafka 関連のツールが大量にあります。
 <a href="https://cwiki.apache.org/confluence/display/KAFKA/Ecosystem">エコシステムのページ</a> に、ストリームプロセッシングシステムやHadoopとの統合、モニタリング、デプロイ等、
@@ -1182,9 +1676,26 @@ my test message 2
 <div id="outline-container-sec-1-5" class="outline-3">
 <h3 id="sec-1-5"><span class="section-number-3">1.5</span> 以前のバージョンからのアップグレード</h3>
 <div class="outline-text-3" id="text-1-5">
-</div><div id="outline-container-sec-1-5-1" class="outline-4">
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+Upgrading From Previous Versions
+</p>
+</div></div>
+</div>
+
+<div id="outline-container-sec-1-5-1" class="outline-4">
 <h4 id="sec-1-5-1">0.8.1 から 0.8.2.0 へのアップグレード</h4>
 <div class="outline-text-4" id="text-1-5-1">
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+Upgrading from 0.8.1 to 0.8.2.0
+</p>
+
+<p>
+0.8.2.0 is fully compatible with 0.8.1. The upgrade can be done one broker at a time by simply bringing it down, updating the code, and restarting it.
+</p>
+</div></div>
+
 <p>
 0.8.2.0 は 0.8.1 と完全に互換性があります。
 単純に1台ずつブローカ停止し、コードを更新し、再起動することでアップグレード出来ます。
@@ -1195,6 +1706,16 @@ my test message 2
 <div id="outline-container-sec-1-5-2" class="outline-4">
 <h4 id="sec-1-5-2">0.8.0 から 0.8.1 へのアップグレード</h4>
 <div class="outline-text-4" id="text-1-5-2">
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+Upgrading from 0.8.0 to 0.8.1
+</p>
+
+<p>
+0.8.1 is fully compatible with 0.8. The upgrade can be done one broker at a time by simply bringing it down, updating the code, and restarting it.
+</p>
+</div></div>
+
 <p>
 0.8.1 は 0.8 と完全に互換性があります。
 単純に1台ずつブローカ停止し、コードを更新し、再起動することでアップグレード出来ます。
@@ -1205,12 +1726,19 @@ my test message 2
 <div id="outline-container-sec-1-5-3" class="outline-4">
 <h4 id="sec-1-5-3">0.7 からのアップグレード</h4>
 <div class="outline-text-4" id="text-1-5-3">
+<div class="orig-text"><h6>▶ show original text</h6><div>
 <p>
-レプリケーションが追加された 0.8 は、初めて後方互換性が失われたリリースでした。
-API、 ZooKeeper のデータ構造、プロトコル、設定に主要な変更が入りました。
+Upgrading from 0.7
 </p>
 
 <p>
+0.8, the release in which added replication, was our first backwards-incompatible release: major changes were made to the API, ZooKeeper data structures, and protocol, and configuration. The upgrade from 0.7 to 0.8.x requires a <a href="https://cwiki.apache.org/confluence/display/KAFKA/Migrating+from+0.7+to+0.8">special tool</a> for migration. This migration can be done without downtime.
+</p>
+</div></div>
+
+<p>
+レプリケーションが追加された 0.8 は、初めて後方互換性が失われたリリースでした。
+API、 ZooKeeper のデータ構造、プロトコル、設定に主要な変更が入りました。
 0.7 から 0.8.x へのアップグレードには、移行のための <a href="https://cwiki.apache.org/confluence/display/KAFKA/Migrating+from+0.7+to+0.8">特別なツール</a> が必要です。
 移行は無停止で行なうことが可能です。
 </p>
@@ -9018,7 +9546,7 @@ Overall, we try to keep the ZooKeeper system as small as will handle the load (p
 </div></div>
 <div id="postamble" class="status">
 <p class="author">Author: yewton</p>
-<p class="date">Created: 2015-08-06 木 17:49</p>
+<p class="date">Created: 2015-08-06 木 20:03</p>
 <p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.4.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
