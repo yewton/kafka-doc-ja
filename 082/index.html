@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 <title>Apache Kafka</title>
-<!-- 2015-08-06 木 20:03 -->
+<!-- 2015-08-07 金 16:58 -->
 <meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta  name="generator" content="Org-mode" />
 <meta  name="author" content="yewton" />
@@ -454,12 +454,12 @@ for the JavaScript code in this tag.
 </li>
 <li><a href="#sec-6">6. 運用</a>
 <ul>
-<li><a href="#sec-6-1">6.1. Basic Kafka Operations</a>
+<li><a href="#sec-6-1">6.1. Kafkaの基本的な運用</a>
 <ul>
 <li><a href="#sec-6-1-1">Adding and removing topics</a></li>
-<li><a href="#sec-6-1-2">Modifying topics</a></li>
-<li><a href="#sec-6-1-3">Graceful shutdown</a></li>
-<li><a href="#sec-6-1-4">Balancing leadership</a></li>
+<li><a href="#sec-6-1-2">トピックの修正</a></li>
+<li><a href="#sec-6-1-3">緩やかなシャットダウン</a></li>
+<li><a href="#sec-6-1-4">リーダ権のバランシング</a></li>
 <li><a href="#basic_ops_mirror_maker">Mirroring data between clusters</a></li>
 <li><a href="#sec-6-1-6">Checking consumer position</a></li>
 <li><a href="#sec-6-1-7">Expanding your cluster</a></li>
@@ -7851,144 +7851,370 @@ When rebalancing is triggered at one consumer, rebalancing should be triggered i
 <div id="outline-container-sec-6" class="outline-2">
 <h2 id="sec-6"><span class="section-number-2">6</span> 運用</h2>
 <div class="outline-text-2" id="text-6">
+<div class="orig-text"><h6>▶ show original text</h6><div>
 <p>
-Here is some information on actually running Kafka as a production system based on usage and experience at LinkedIn. Please send us any additional tips you know of.
+Operation
+</p>
+
+<p>
+Here is some information on actually running Kafka as a production system based on usage and
+experience at LinkedIn. Please send us any additional tips you know of.
+</p>
+</div></div>
+
+<p>
+LinkedInでの使用例や実績をもとに、実際にKafkaを商用システムで稼動させるにあたっての情報を載せていま
+す。追加情報があればご連絡下さい。
 </p>
 </div>
 
 <div id="outline-container-sec-6-1" class="outline-3">
-<h3 id="sec-6-1"><span class="section-number-3">6.1</span> Basic Kafka Operations</h3>
+<h3 id="sec-6-1"><span class="section-number-3">6.1</span> Kafkaの基本的な運用</h3>
 <div class="outline-text-3" id="text-6-1">
+<div class="orig-text"><h6>▶ show original text</h6><div>
 <p>
-This section will review the most common operations you will perform on your Kafka cluster. All of the tools reviewed in this section are available under the <code>bin/</code> directory of the Kafka distribution and each tool will print details on all possible commandline options if it is run with no arguments.
+Basic Kafka Operations
+</p>
+
+<p>
+This section will review the most common operations you will perform on your Kafka cluster.  All of
+the tools reviewed in this section are available under the <code>bin/</code> directory of the Kafka
+distribution and each tool will print details on all possible commandline options if it is run with
+no arguments.
+</p>
+</div></div>
+
+<p>
+本節では、一般的なKafkaクラスタの運用について述べます。
+言及されているツールは全てKafkaの <code>bin/</code> ディレクトリ以下に配置されており、
+引数無しでそれらのツールを実行することで詳細を確認することが出来ます。
 </p>
 </div>
 
 <div id="outline-container-sec-6-1-1" class="outline-4">
 <h4 id="sec-6-1-1">Adding and removing topics</h4>
 <div class="outline-text-4" id="text-6-1-1">
+<div class="orig-text"><h6>▶ show original text</h6><div>
 <p>
-You have the option of either adding topics manually or having them be created automatically when data is first published to a non-existent topic. If topics are auto-created then you may want to tune the default <a href="#topic-config">topic configurations</a> used for auto-created topics.
+Adding and removing topics
 </p>
 
+<p>
+You have the option of either adding topics manually or having them be created automatically when
+data is first published to a non-existent topic. If topics are auto-created then you may want to
+tune the default <a href="#topic-config">topic configurations</a> used for auto-created topics.
+</p>
+</div></div>
+
+<p>
+トピックの追加と削除
+</p>
+
+<p>
+トピックは手動で作成する方法と、
+初回のパブリッシュ時に存在しなかった場合に自動で作成させる方法があります。
+トピックの自動作成時は、デフォルトの <a href="#topic-config">トピックの設定値</a> がトピックの設定として利用されるため、
+調整しましょう。
+</p>
+
+<div class="orig-text"><h6>▶ show original text</h6><div>
 <p>
 Topics are added and modified using the topic tool:
 </p>
+</div></div>
+
+<p>
+付属のトピックツールを使ってトピックの作成及び修正が出来ます:
+</p>
 
 <pre class="example">
-&gt; bin/kafka-topics.sh --zookeeper zk_host:port/chroot --create --topic my_topic_name
-      --partitions 20 --replication-factor 3 --config x=y
+&gt; bin/kafka-topics.sh --zookeeper zk_host:port/chroot --create --topic my_topic_name --partitions
+20 --replication-factor 3 --config x=y
 </pre>
 
+<div class="orig-text"><h6>▶ show original text</h6><div>
 <p>
-The replication factor controls how many servers will replicate each message that is written. If you have a replication factor of 3 then up to 2 servers can fail before you will lose access to your data. We recommend you use a replication factor of 2 or 3 so that you can transparently bounce machines without interrupting data consumption.
+The replication factor controls how many servers will replicate each message that is written. If you
+have a replication factor of 3 then up to 2 servers can fail before you will lose access to your
+data. We recommend you use a replication factor of 2 or 3 so that you can transparently bounce
+machines without interrupting data consumption.
 </p>
+</div></div>
 
 <p>
-The partition count controls how many logs the topic will be sharded into. There are several impacts of the partition count. First each partition must fit entirely on a single server. So if you have 20 partitions the full data set (and read and write load) will be handled by no more than 20 servers (no counting replicas). Finally the partition count impacts the maximum parallelism of your consumers. This is discussed in greater detail in the <a href="#intro_consumers">concepts section</a>.
+レプリケーションファクタは書き込まれる各メッセージについて、
+いくつのサーバに複製を作成するかを制御します。
+レプリケーションファクタが3の場合、サーバに障害が発生しても最大2つまでは
+データにアクセスすることが出来ます。
 </p>
 
+<div class="orig-text"><h6>▶ show original text</h6><div>
 <p>
-The configurations added on the command line override the default settings the server has for things like the length of time data should be retained. The complete set of per-topic configurations is documented <a href="#topic-config">here</a>.
+The partition count controls how many logs the topic will be sharded into. There are several impacts
+of the partition count. First each partition must fit entirely on a single server. So if you have 20
+partitions the full data set (and read and write load) will be handled by no more than 20 servers
+(no counting replicas). Finally the partition count impacts the maximum parallelism of your
+consumers. This is discussed in greater detail in the <a href="#intro_consumers">concepts section</a>.
+</p>
+</div></div>
+
+<p>
+パーティション数はトピックをいくつのログにシャーディングするかを制御します。
+パーティション数の影響を受けるものはいくつかあります。
+まず、各パーティションは一つのサーバに全体が収まるようにしなければなりません。
+そのため20パーティションの場合、データセット全体(そして読み書きの負荷)は
+20台よりも多いサーバに分散することはありません(複製は除く)。
+そして、パーティション数はコンシューマの最大並列度に影響を与えます。
+より詳細な議論は <a href="#intro_consumers">コンセプトの節</a> を参照してください。
+</p>
+
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+The configurations added on the command line override the default settings the server has for things
+like the length of time data should be retained. The complete set of per-topic configurations is
+documented <a href="#topic-config">here</a>.
+</p>
+</div></div>
+
+<p>
+コマンドラインで与えられた設定は、データ保持期間等のサーバ側のデフォルト設定を上書きします。
+トピック毎の設定については <a href="#topic-config">こちら</a> を参照してください。
 </p>
 </div>
 </div>
 
 <div id="outline-container-sec-6-1-2" class="outline-4">
-<h4 id="sec-6-1-2">Modifying topics</h4>
+<h4 id="sec-6-1-2">トピックの修正</h4>
 <div class="outline-text-4" id="text-6-1-2">
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+Modifying topics
+</p>
+
 <p>
 You can change the configuration or partitioning of a topic using the same topic tool.
 </p>
+</div></div>
 
+<p>
+同じトピックツールを利用して設定やパーティションを変更することも出来ます。
+</p>
+
+<div class="orig-text"><h6>▶ show original text</h6><div>
 <p>
 To add partitions you can do
 </p>
-
-<pre class="example">
-&gt; bin/kafka-topics.sh --zookeeper zk_host:port/chroot --alter --topic my_topic_name
-      --partitions 40
-</pre>
+</div></div>
 
 <p>
-Be aware that one use case for partitions is to semantically partition data, and adding partitions doesn't change the partitioning of existing data so this may disturb consumers if they rely on that partition. That is if data is partitioned by <code>hash(key) % number_of_partitions</code> then this partitioning will potentially be shuffled by adding partitions but Kafka will not attempt to automatically redistribute data in any way.
+パーティションを追加するには以下のようにします
 </p>
 
+<pre class="example">
+&gt; bin/kafka-topics.sh --zookeeper zk_host:port/chroot --alter --topic my_topic_name --partitions 40
+</pre>
+
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+Be aware that one use case for partitions is to semantically partition data, and adding partitions
+doesn't change the partitioning of existing data so this may disturb consumers if they rely on that
+partition. That is if data is partitioned by <code>hash(key) % number_of_partitions</code> then this
+partitioning will potentially be shuffled by adding partitions but Kafka will not attempt to
+automatically redistribute data in any way.
+</p>
+</div></div>
+
+<p>
+意味的にデータを分割するというのがパーティションの利用ケースのひとつとして考えられますが、
+パーティションを追加しても既存のデータは変更されない為、
+コンシューマがパーティション構成に依存している場合は混乱を生じる可能性があることに注意して下さい。
+つまり、例えばデータが <code>ハッシュ関数(key) % パーティション数</code> という法則で分割されていた場合、
+パーティションを追加によってデータの配置場所が滅茶苦茶になる可能性があります。
+Kafkaは自動的にデータを再配布しようとすることは決してありません。
+</p>
+
+<div class="orig-text"><h6>▶ show original text</h6><div>
 <p>
 To add configs:
+</p>
+</div></div>
+
+<p>
+設定を追加するには:
 </p>
 
 <pre class="example">
 &gt; bin/kafka-topics.sh --zookeeper zk_host:port/chroot --alter --topic my_topic_name --config x=y
 </pre>
 
+<div class="orig-text"><h6>▶ show original text</h6><div>
 <p>
 To remove a config:
 </p>
-
-<pre class="example">
-&gt; bin/kafka-topics.sh --zookeeper zk_host:port/chroot --alter --topic my_topic_name --deleteConfig x
-</pre>
+</div></div>
 
 <p>
+設定を削除するには:
+</p>
+
+<pre class="example">
+&gt; bin/kafka-topics.sh --zookeeper zk_host:port/chroot --alter --topic my_topic_name --deleteConfig
+  x
+</pre>
+
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
 And finally deleting a topic:
+</p>
+</div></div>
+
+<p>
+トピックを削除するには:
 </p>
 
 <pre class="example">
 &gt; bin/kafka-topics.sh --zookeeper zk_host:port/chroot --delete --topic my_topic_name
 </pre>
 
+<div class="orig-text"><h6>▶ show original text</h6><div>
 <p>
 Topic deletion option is disabled by default. To enable it set the server config
+</p>
+</div></div>
+
+<p>
+トピックはデフォルトでは削除出来ないように設定されています。
+削除可能にするには以下のサーバ設定を追加してください。
 </p>
 
 <pre class="example">
 delete.topic.enable=true
 </pre>
 
+<div class="orig-text"><h6>▶ show original text</h6><div>
 <p>
-Kafka does not currently support reducing the number of partitions for a topic or changing the replication factor.
+Kafka does not currently support reducing the number of partitions for a topic or changing the
+replication factor.
+</p>
+
+</div></div>
+
+<p>
+Kafkaは現在パーティション数やレプリケーションファクタを減らすことはサポートしていません。
 </p>
 </div>
 </div>
 
 <div id="outline-container-sec-6-1-3" class="outline-4">
-<h4 id="sec-6-1-3">Graceful shutdown</h4>
+<h4 id="sec-6-1-3">緩やかなシャットダウン</h4>
 <div class="outline-text-4" id="text-6-1-3">
+<div class="orig-text"><h6>▶ show original text</h6><div>
 <p>
-The Kafka cluster will automatically detect any broker shutdown or failure and elect new leaders for the partitions on that machine. This will occur whether a server fails or it is brought down intentionally for maintenance or configuration changes. For the later cases Kafka supports a more graceful mechanism for stoping a server then just killing it. When a server is stopped gracefully it has two optimizations it will take advantage of:
+Graceful shutdown
 </p>
 
+<p>
+The Kafka cluster will automatically detect any broker shutdown or failure and elect new leaders for
+the partitions on that machine. This will occur whether a server fails or it is brought down
+intentionally for maintenance or configuration changes. For the later cases Kafka supports a more
+graceful mechanism for stoping a server then just killing it. When a server is stopped gracefully it
+has two optimizations it will take advantage of:
+</p>
+</div></div>
+
+<p>
+Kafkaクラスタは自動的にブローカのシャットダウンや障害を検知し、
+対象のブローカが担当していたパーティションに対する新たなリーダを選びます。
+新たなリーダの選択は、サーバの障害時、あるいはメンテナンスや設定変更の為に意図的に落とした場合、
+両方の場合に同様に発生します。
+後者の場合は、単にサーバを落とすよりもより緩やかに停止するための機構をサポートしています。
+緩やかに停止する場合は以下の利点が得られるように2つの最適化が行なわれます:
+</p>
+
+<div class="orig-text"><h6>▶ show original text</h6><div>
 <ol class="org-ol">
 <li>It will sync all its logs to disk to avoid needing to do any log recovery when it restarts (i.e. validating the checksum for all messages in the tail of the log). Log recovery takes time so this speeds up intentional restarts.
 </li>
 <li>It will migrate any partitions the server is the leader for to other replicas prior to shutting down. This will make the leadership transfer faster and minimize the time each partition is unavailable to a few milliseconds.
 </li>
 </ol>
+</div></div>
+
+<ol class="org-ol">
+<li>保持している全てのログをディスクに同期し、再起動時のログリカバリ(ログ末尾の全メッセージについてチェックサムを検証する)を不要にします
+<sup><a id="fnr.15" name="fnr.15" class="footref" href="#fn.15">15</a></sup>
+</li>
+<li>自身がリーダとなっている全パーティションを、シャットダウン前に他の複製に移行します。
+これにより速やかにリーダ権を移行でき、各パーティションへのアクセス不能時間を数ミリ秒にまで最小化出来ます。
+</li>
+</ol>
+
+<div class="orig-text"><h6>▶ show original text</h6><div>
+<p>
+Syncing the logs will happen automatically happen whenever the server is stopped other than by a
+hard kill, but the controlled leadership migration requires using a special setting:
+</p>
+</div></div>
 
 <p>
-Syncing the logs will happen automatically happen whenever the server is stopped other than by a hard kill, but the controlled leadership migration requires using a special setting:
+ログの同期は強制シャットダウン以外の場合は自動的に行なわれますが、
+制御されたリーダ権の移行は特別な設定が必要です:
 </p>
 
 <pre class="example">
 controlled.shutdown.enable=true
 </pre>
 
+<div class="note">
+<div class="orig-text"><h6>▶ show original text</h6><div>
 <p>
-Note that controlled shutdown will only succeed if <i>all</i> the partitions hosted on the broker have replicas (i.e. the replication factor is greater than 1 <i>and</i> at least one of these replicas is alive). This is generally what you want since shutting down the last replica would make that topic partition unavailable.
+Note that controlled shutdown will only succeed if <i>all</i> the partitions hosted on the broker have
+replicas (i.e. the replication factor is greater than 1 <i>and</i> at least one of these replicas is
+alive). This is generally what you want since shutting down the last replica would make that topic
+partition unavailable.
 </p>
+</div></div>
+
+<p>
+制御されたシャットダウンは、
+そのブローカが保持する <b>全ての</b> パーティションが複製を持つ場合に限り成功します
+(つまり、レプリケーションファクタが2以上で <b>かつ</b> そのうち最低1つの複製が生存している場合)。
+最後の複製をシャットダウンしてしまえばそのトピックはアクセス不能になってしまうため、
+このことは通常は問題にならないでしょう。
+</p>
+
+</div>
 </div>
 </div>
 
 <div id="outline-container-sec-6-1-4" class="outline-4">
-<h4 id="sec-6-1-4">Balancing leadership</h4>
+<h4 id="sec-6-1-4">リーダ権のバランシング</h4>
 <div class="outline-text-4" id="text-6-1-4">
+<div class="orig-text"><h6>▶ show original text</h6><div>
 <p>
-Whenever a broker stops or crashes leadership for that broker's partitions transfers to other replicas. This means that by default when the broker is restarted it will only be a follower for all its partitions, meaning it will not be used for client reads and writes.
+Balancing leadership
 </p>
 
 <p>
-To avoid this imbalance, Kafka has a notion of preferred replicas. If the list of replicas for a partition is 1,5,9 then node 1 is preferred as the leader to either node 5 or 9 because it is earlier in the replica list. You can have the Kafka cluster try to restore leadership to the restored replicas by running the command:
+Whenever a broker stops or crashes leadership for that broker's partitions transfers to other
+replicas. This means that by default when the broker is restarted it will only be a follower for all
+its partitions, meaning it will not be used for client reads and writes.
+</p>
+</div></div>
+
+<p>
+ブローカが停止したりクラッシュした場合は常に、
+そのブローカのパーティションのリーダ権の他の複製への移行が行われます。
+つまりデフォルトではブローカが再起動した場合、
+全パーティションについてフォロワにしかならず、
+クライアントからの読み書きに利用されなくなるということを意味します。
+</p>
+
+<p>
+To avoid this imbalance, Kafka has a notion of preferred replicas. If the list of replicas for a
+partition is 1,5,9 then node 1 is preferred as the leader to either node 5 or 9 because it is
+earlier in the replica list. You can have the Kafka cluster try to restore leadership to the
+restored replicas by running the command:
 </p>
 
 <pre class="example">
@@ -7996,7 +8222,8 @@ To avoid this imbalance, Kafka has a notion of preferred replicas. If the list o
 </pre>
 
 <p>
-Since running this command can be tedious you can also configure Kafka to do this automatically by setting the following configuration:
+Since running this command can be tedious you can also configure Kafka to do this automatically by
+setting the following configuration:
 </p>
 
 <pre class="example">
@@ -8010,7 +8237,10 @@ auto.leader.rebalance.enable=true
 <div class="outline-text-4" id="text-basic_ops_mirror_maker">
 
 <p>
-We refer to the process of replicating data <i>between</i> Kafka clusters "mirroring" to avoid confusion with the replication that happens amongst the nodes in a single cluster. Kafka comes with a tool for mirroring data between Kafka clusters. The tool reads from one or more source clusters and writes to a destination cluster, like this:
+We refer to the process of replicating data <i>between</i> Kafka clusters "mirroring" to avoid confusion
+with the replication that happens amongst the nodes in a single cluster. Kafka comes with a tool for
+mirroring data between Kafka clusters. The tool reads from one or more source clusters and writes to
+a destination cluster, like this:
 </p>
 
 
@@ -8020,19 +8250,27 @@ We refer to the process of replicating data <i>between</i> Kafka clusters "mirro
 </div>
 
 <p>
-A common use case for this kind of mirroring is to provide a replica in another datacenter. This scenario will be discussed in more detail in the next section.
+A common use case for this kind of mirroring is to provide a replica in another datacenter. This
+scenario will be discussed in more detail in the next section.
 </p>
 
 <p>
-You can run many such mirroring processes to increase throughput and for fault-tolerance (if one process dies, the others will take overs the additional load).
+You can run many such mirroring processes to increase throughput and for fault-tolerance (if one
+process dies, the others will take overs the additional load).
 </p>
 
 <p>
-Data will be read from topics in the source cluster and written to a topic with the same name in the destination cluster. In fact the mirror maker is little more than a Kafka consumer and producer hooked together.
+Data will be read from topics in the source cluster and written to a topic with the same name in the
+destination cluster. In fact the mirror maker is little more than a Kafka consumer and producer
+hooked together.
 </p>
 
 <p>
-The source and destination clusters are completely independent entities: they can have different numbers of partitions and the offsets will not be the same. For this reason the mirror cluster is not really intended as a fault-tolerance mechanism (as the consumer position will be different); for that we recommend using normal in-cluster replication. The mirror maker process will, however, retain and use the message key for partitioning so order is preserved on a per-key basis.
+The source and destination clusters are completely independent entities: they can have different
+numbers of partitions and the offsets will not be the same. For this reason the mirror cluster is
+not really intended as a fault-tolerance mechanism (as the consumer position will be different); for
+that we recommend using normal in-cluster replication. The mirror maker process will, however,
+retain and use the message key for partitioning so order is preserved on a per-key basis.
 </p>
 
 <p>
@@ -8040,25 +8278,30 @@ Here is an example showing how to mirror a single topic (named <i>my-topic</i>) 
 </p>
 
 <pre class="example">
-&gt; bin/kafka-run-class.sh kafka.tools.MirrorMaker
-      --consumer.config consumer-1.properties --consumer.config consumer-2.properties
-      --producer.config producer.properties --whitelist my-topic
+&gt; bin/kafka-run-class.sh kafka.tools.MirrorMaker --consumer.config consumer-1.properties
+--consumer.config consumer-2.properties --producer.config producer.properties --whitelist my-topic
 </pre>
 
 <p>
-Note that we specify the list of topics with the <code>--whitelist</code> option.
-This option allows any regular expression using <a href="http://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html">Java-style regular expressions</a>.
-So you could mirror two topics named <i>A</i> and <i>B</i> using <code>--whitelist 'A|B'</code>.
-Or you could mirror <i>all</i> topics using <code>--whitelist '*'</code>.
-Make sure to quote any regular expression to ensure the shell doesn't try to expand it as a file path. For convenience we allow the use of <code>,</code> instead of <code>|</code> to specify a list of topics.
+Note that we specify the list of topics with the <code>--whitelist</code> option.  This option allows any
+regular expression using
+<a href="http://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html">Java-style regular
+expressions</a>.  So you could mirror two topics named <i>A</i> and <i>B</i> using <code>--whitelist 'A|B'</code>.  Or you
+could mirror <i>all</i> topics using <code>--whitelist '*'</code>.  Make sure to quote any regular expression to
+ensure the shell doesn't try to expand it as a file path. For convenience we allow the use of <code>,</code>
+instead of <code>|</code> to specify a list of topics.
 </p>
 
 <p>
-Sometime it is easier to say what it is that you don't want. Instead of using <code>--whitelist</code> to say what you want to mirror you can use <code>--blacklist</code> to say what to exclude. This also takes a regular expression argument.
+Sometime it is easier to say what it is that you don't want. Instead of using <code>--whitelist</code> to say
+what you want to mirror you can use <code>--blacklist</code> to say what to exclude. This also takes a regular
+expression argument.
 </p>
 
 <p>
-Combining mirroring with the configuration <code>auto.create.topics.enable=true</code> makes it possible to have a replica cluster that will automatically create and replicate all data in a source cluster even as new topics are added.
+Combining mirroring with the configuration <code>auto.create.topics.enable=true</code> makes it possible to
+have a replica cluster that will automatically create and replicate all data in a source cluster
+even as new topics are added.
 </p>
 </div>
 </div>
@@ -8067,14 +8310,17 @@ Combining mirroring with the configuration <code>auto.create.topics.enable=true<
 <h4 id="sec-6-1-6">Checking consumer position</h4>
 <div class="outline-text-4" id="text-6-1-6">
 <p>
-Sometimes it's useful to see the position of your consumers. We have a tool that will show the position of all consumers in a consumer group as well as how far behind the end of the log they are. To run this tool on a consumer group named <i>my-group</i> consuming a topic named <i>my-topic</i> would look like this:
+Sometimes it's useful to see the position of your consumers. We have a tool that will show the
+position of all consumers in a consumer group as well as how far behind the end of the log they
+are. To run this tool on a consumer group named <i>my-group</i> consuming a topic named <i>my-topic</i> would
+look like this:
 </p>
 
 <pre class="example">
  &gt; bin/kafka-run-class.sh kafka.tools.ConsumerOffsetChecker --zkconnect localhost:2181 --group test
-Group           Topic                          Pid Offset          logSize         Lag             Owner
-my-group        my-topic                       0   0               0               0               test_jkreps-mn-1394154511599-60744496-0
-my-group        my-topic                       1   0               0               0               test_jkreps-mn-1394154521217-1a0be913-0
+Group Topic Pid Offset logSize Lag Owner my-group my-topic 0 0 0 0
+test_jkreps-mn-1394154511599-60744496-0 my-group my-topic 1 0 0 0
+test_jkreps-mn-1394154521217-1a0be913-0
 </pre>
 </div>
 </div>
@@ -8083,15 +8329,27 @@ my-group        my-topic                       1   0               0            
 <h4 id="sec-6-1-7">Expanding your cluster</h4>
 <div class="outline-text-4" id="text-6-1-7">
 <p>
-Adding servers to a Kafka cluster is easy, just assign them a unique broker id and start up Kafka on your new servers. However these new servers will not automatically be assigned any data partitions, so unless partitions are moved to them they won't be doing any work until new topics are created. So usually when you add machines to your cluster you will want to migrate some existing data to these machines.
+Adding servers to a Kafka cluster is easy, just assign them a unique broker id and start up Kafka on
+your new servers. However these new servers will not automatically be assigned any data partitions,
+so unless partitions are moved to them they won't be doing any work until new topics are created. So
+usually when you add machines to your cluster you will want to migrate some existing data to these
+machines.
 </p>
 
 <p>
-The process of migrating data is manually initiated but fully automated. Under the covers what happens is that Kafka will add the new server as a follower of the partition it is migrating and allow it to fully replicate the existing data in that partition. When the new server has fully replicated the contents of this partition and joined the in-sync replica one of the existing replicas will delete their partition's data.
+The process of migrating data is manually initiated but fully automated. Under the covers what
+happens is that Kafka will add the new server as a follower of the partition it is migrating and
+allow it to fully replicate the existing data in that partition. When the new server has fully
+replicated the contents of this partition and joined the in-sync replica one of the existing
+replicas will delete their partition's data.
 </p>
 
 <p>
-The partition reassignment tool can be used to move partitions across brokers. An ideal partition distribution would ensure even data load and partition sizes across all brokers. In 0.8.1, the partition reassignment tool does not have the capability to automatically study the data distribution in a Kafka cluster and move partitions around to attain an even load distribution. As such, the admin has to figure out which topics or partitions should be moved around.
+The partition reassignment tool can be used to move partitions across brokers. An ideal partition
+distribution would ensure even data load and partition sizes across all brokers. In 0.8.1, the
+partition reassignment tool does not have the capability to automatically study the data
+distribution in a Kafka cluster and move partitions around to attain an even load distribution. As
+such, the admin has to figure out which topics or partitions should be moved around.
 </p>
 
 <p>
@@ -8113,23 +8371,29 @@ The partition reassignment tool can run in 3 mutually exclusive modes -
 <h5 id="sec-6-1-7-1">Automatically migrating data to new machines</h5>
 <div class="outline-text-5" id="text-6-1-7-1">
 <p>
-The partition reassignment tool can be used to move some topics off of the current set of brokers to the newly added brokers. This is typically useful while expanding an existing cluster since it is easier to move entire topics to the new set of brokers, than moving one partition at a time. When used to do this, the user should provide a list of topics that should be moved to the new set of brokers and a target list of new brokers. The tool then evenly distributes all partitions for the given list of topics across the new set of brokers. During this move, the replication factor of the topic is kept constant. Effectively the replicas for all partitions for the input list of topics are moved from the old set of brokers to the newly added brokers.
+The partition reassignment tool can be used to move some topics off of the current set of brokers to
+the newly added brokers. This is typically useful while expanding an existing cluster since it is
+easier to move entire topics to the new set of brokers, than moving one partition at a time. When
+used to do this, the user should provide a list of topics that should be moved to the new set of
+brokers and a target list of new brokers. The tool then evenly distributes all partitions for the
+given list of topics across the new set of brokers. During this move, the replication factor of the
+topic is kept constant. Effectively the replicas for all partitions for the input list of topics are
+moved from the old set of brokers to the newly added brokers.
 </p>
 
 <p>
-For instance, the following example will move all partitions for topics foo1,foo2 to the new set of brokers 5,6. At the end of this move, all partitions for topics foo1 and foo2 will only exist on brokers 5,6
+For instance, the following example will move all partitions for topics foo1,foo2 to the new set of
+brokers 5,6. At the end of this move, all partitions for topics foo1 and foo2 will only exist on
+brokers 5,6
 </p>
 
 <p>
-Since, the tool accepts the input list of topics as a json file, you first need to identify the topics you want to move and create the json file as follows-
+Since, the tool accepts the input list of topics as a json file, you first need to identify the
+topics you want to move and create the json file as follows-
 </p>
 
 <pre class="example">
-&gt; cat topics-to-move.json
-{"topics": [{"topic": "foo1"},
-            {"topic": "foo2"}],
- "version":1
-}
+&gt; cat topics-to-move.json {"topics": [{"topic": "foo1"}, {"topic": "foo2"}], "version":1 }
 </pre>
 
 <p>
@@ -8137,72 +8401,61 @@ Once the json file is ready, use the partition reassignment tool to generate a c
 </p>
 
 <pre class="example">
-&gt; bin/kafka-reassign-partitions.sh --zookeeper localhost:2181 --topics-to-move-json-file topics-to-move.json --broker-list "5,6" --generate
-Current partition replica assignment
+&gt; bin/kafka-reassign-partitions.sh --zookeeper localhost:2181 --topics-to-move-json-file
+topics-to-move.json --broker-list "5,6" --generate Current partition replica assignment
 
-{"version":1,
- "partitions":[{"topic":"foo1","partition":2,"replicas":[1,2]},
-               {"topic":"foo1","partition":0,"replicas":[3,4]},
-               {"topic":"foo2","partition":2,"replicas":[1,2]},
-               {"topic":"foo2","partition":0,"replicas":[3,4]},
-               {"topic":"foo1","partition":1,"replicas":[2,3]},
-               {"topic":"foo2","partition":1,"replicas":[2,3]}]
-}
+{"version":1, "partitions":[{"topic":"foo1","partition":2,"replicas":[1,2]},
+ {"topic":"foo1","partition":0,"replicas":[3,4]}, {"topic":"foo2","partition":2,"replicas":[1,2]},
+ {"topic":"foo2","partition":0,"replicas":[3,4]}, {"topic":"foo1","partition":1,"replicas":[2,3]},
+ {"topic":"foo2","partition":1,"replicas":[2,3]}] }
 
 Proposed partition reassignment configuration
 
-{"version":1,
- "partitions":[{"topic":"foo1","partition":2,"replicas":[5,6]},
-               {"topic":"foo1","partition":0,"replicas":[5,6]},
-               {"topic":"foo2","partition":2,"replicas":[5,6]},
-               {"topic":"foo2","partition":0,"replicas":[5,6]},
-               {"topic":"foo1","partition":1,"replicas":[5,6]},
-               {"topic":"foo2","partition":1,"replicas":[5,6]}]
-}
+{"version":1, "partitions":[{"topic":"foo1","partition":2,"replicas":[5,6]},
+ {"topic":"foo1","partition":0,"replicas":[5,6]}, {"topic":"foo2","partition":2,"replicas":[5,6]},
+ {"topic":"foo2","partition":0,"replicas":[5,6]}, {"topic":"foo1","partition":1,"replicas":[5,6]},
+ {"topic":"foo2","partition":1,"replicas":[5,6]}] }
 </pre>
 
 <p>
-The tool generates a candidate assignment that will move all partitions from topics foo1,foo2 to brokers 5,6. Note, however, that at this point, the partition movement has not started, it merely tells you the current assignment and the proposed new assignment. The current assignment should be saved in case you want to rollback to it. The new assignment should be saved in a json file (e.g. expand-cluster-reassignment.json) to be input to the tool with the &#x2013;execute option as follows-
+The tool generates a candidate assignment that will move all partitions from topics foo1,foo2 to
+brokers 5,6. Note, however, that at this point, the partition movement has not started, it merely
+tells you the current assignment and the proposed new assignment. The current assignment should be
+saved in case you want to rollback to it. The new assignment should be saved in a json file
+(e.g. expand-cluster-reassignment.json) to be input to the tool with the &#x2013;execute option as
+follows-
 </p>
 
 <pre class="example">
-&gt; bin/kafka-reassign-partitions.sh --zookeeper localhost:2181 --reassignment-json-file expand-cluster-reassignment.json --execute
-Current partition replica assignment
+&gt; bin/kafka-reassign-partitions.sh --zookeeper localhost:2181 --reassignment-json-file
+expand-cluster-reassignment.json --execute Current partition replica assignment
 
-{"version":1,
- "partitions":[{"topic":"foo1","partition":2,"replicas":[1,2]},
-               {"topic":"foo1","partition":0,"replicas":[3,4]},
-               {"topic":"foo2","partition":2,"replicas":[1,2]},
-               {"topic":"foo2","partition":0,"replicas":[3,4]},
-               {"topic":"foo1","partition":1,"replicas":[2,3]},
-               {"topic":"foo2","partition":1,"replicas":[2,3]}]
-}
+{"version":1, "partitions":[{"topic":"foo1","partition":2,"replicas":[1,2]},
+ {"topic":"foo1","partition":0,"replicas":[3,4]}, {"topic":"foo2","partition":2,"replicas":[1,2]},
+ {"topic":"foo2","partition":0,"replicas":[3,4]}, {"topic":"foo1","partition":1,"replicas":[2,3]},
+ {"topic":"foo2","partition":1,"replicas":[2,3]}] }
 
-Save this to use as the --reassignment-json-file option during rollback
-Successfully started reassignment of partitions
-{"version":1,
- "partitions":[{"topic":"foo1","partition":2,"replicas":[5,6]},
-               {"topic":"foo1","partition":0,"replicas":[5,6]},
-               {"topic":"foo2","partition":2,"replicas":[5,6]},
-               {"topic":"foo2","partition":0,"replicas":[5,6]},
-               {"topic":"foo1","partition":1,"replicas":[5,6]},
-               {"topic":"foo2","partition":1,"replicas":[5,6]}]
-}
+Save this to use as the --reassignment-json-file option during rollback Successfully started
+reassignment of partitions {"version":1,
+"partitions":[{"topic":"foo1","partition":2,"replicas":[5,6]},
+{"topic":"foo1","partition":0,"replicas":[5,6]}, {"topic":"foo2","partition":2,"replicas":[5,6]},
+{"topic":"foo2","partition":0,"replicas":[5,6]}, {"topic":"foo1","partition":1,"replicas":[5,6]},
+{"topic":"foo2","partition":1,"replicas":[5,6]}] }
 </pre>
 
 <p>
-Finally, the &#x2013;verify option can be used with the tool to check the status of the partition reassignment. Note that the same expand-cluster-reassignment.json (used with the &#x2013;execute option) should be used with the &#x2013;verify option
+Finally, the &#x2013;verify option can be used with the tool to check the status of the partition
+reassignment. Note that the same expand-cluster-reassignment.json (used with the &#x2013;execute option)
+should be used with the &#x2013;verify option
 </p>
 
 <pre class="example">
-&gt; bin/kafka-reassign-partitions.sh --zookeeper localhost:2181 --reassignment-json-file expand-cluster-reassignment.json --verify
-Status of partition reassignment:
-Reassignment of partition [foo1,0] completed successfully
-Reassignment of partition [foo1,1] is in progress
-Reassignment of partition [foo1,2] is in progress
-Reassignment of partition [foo2,0] completed successfully
-Reassignment of partition [foo2,1] completed successfully
-Reassignment of partition [foo2,2] completed successfully
+&gt; bin/kafka-reassign-partitions.sh --zookeeper localhost:2181 --reassignment-json-file
+expand-cluster-reassignment.json --verify Status of partition reassignment: Reassignment of
+partition [foo1,0] completed successfully Reassignment of partition [foo1,1] is in progress
+Reassignment of partition [foo1,2] is in progress Reassignment of partition [foo2,0] completed
+successfully Reassignment of partition [foo2,1] completed successfully Reassignment of partition
+[foo2,2] completed successfully
 </pre>
 </div>
 </div>
@@ -8211,11 +8464,15 @@ Reassignment of partition [foo2,2] completed successfully
 <h5 id="sec-6-1-7-2">Custom partition assignment and migration</h5>
 <div class="outline-text-5" id="text-6-1-7-2">
 <p>
-The partition reassignment tool can also be used to selectively move replicas of a partition to a specific set of brokers. When used in this manner, it is assumed that the user knows the reassignment plan and does not require the tool to generate a candidate reassignment, effectively skipping the &#x2013;generate step and moving straight to the &#x2013;execute step
+The partition reassignment tool can also be used to selectively move replicas of a partition to a
+specific set of brokers. When used in this manner, it is assumed that the user knows the
+reassignment plan and does not require the tool to generate a candidate reassignment, effectively
+skipping the &#x2013;generate step and moving straight to the &#x2013;execute step
 </p>
 
 <p>
-For instance, the following example moves partition 0 of topic foo1 to brokers 5,6 and partition 1 of topic foo2 to brokers 2,3
+For instance, the following example moves partition 0 of topic foo1 to brokers 5,6 and partition 1
+of topic foo2 to brokers 2,3
 </p>
 
 <p>
@@ -8232,31 +8489,28 @@ Then, use the json file with the &#x2013;execute option to start the reassignmen
 </p>
 
 <pre class="example">
-&gt; bin/kafka-reassign-partitions.sh --zookeeper localhost:2181 --reassignment-json-file custom-reassignment.json --execute
-Current partition replica assignment
+&gt; bin/kafka-reassign-partitions.sh --zookeeper localhost:2181 --reassignment-json-file
+custom-reassignment.json --execute Current partition replica assignment
 
-{"version":1,
- "partitions":[{"topic":"foo1","partition":0,"replicas":[1,2]},
-               {"topic":"foo2","partition":1,"replicas":[3,4]}]
-}
+{"version":1, "partitions":[{"topic":"foo1","partition":0,"replicas":[1,2]},
+ {"topic":"foo2","partition":1,"replicas":[3,4]}] }
 
-Save this to use as the --reassignment-json-file option during rollback
-Successfully started reassignment of partitions
-{"version":1,
- "partitions":[{"topic":"foo1","partition":0,"replicas":[5,6]},
-               {"topic":"foo2","partition":1,"replicas":[2,3]}]
-}
+Save this to use as the --reassignment-json-file option during rollback Successfully started
+reassignment of partitions {"version":1,
+"partitions":[{"topic":"foo1","partition":0,"replicas":[5,6]},
+{"topic":"foo2","partition":1,"replicas":[2,3]}] }
 </pre>
 
 <p>
-The &#x2013;verify option can be used with the tool to check the status of the partition reassignment. Note that the same expand-cluster-reassignment.json (used with the &#x2013;execute option) should be used with the &#x2013;verify option
+The &#x2013;verify option can be used with the tool to check the status of the partition
+reassignment. Note that the same expand-cluster-reassignment.json (used with the &#x2013;execute option)
+should be used with the &#x2013;verify option
 </p>
 
 <pre class="example">
-bin/kafka-reassign-partitions.sh --zookeeper localhost:2181 --reassignment-json-file custom-reassignment.json --verify
-Status of partition reassignment:
-Reassignment of partition [foo1,0] completed successfully
-Reassignment of partition [foo2,1] completed successfully
+bin/kafka-reassign-partitions.sh --zookeeper localhost:2181 --reassignment-json-file
+custom-reassignment.json --verify Status of partition reassignment: Reassignment of partition
+[foo1,0] completed successfully Reassignment of partition [foo2,1] completed successfully
 </pre>
 </div>
 </div>
@@ -8266,7 +8520,12 @@ Reassignment of partition [foo2,1] completed successfully
 <h4 id="sec-6-1-8">Decommissioning brokers</h4>
 <div class="outline-text-4" id="text-6-1-8">
 <p>
-The partition reassignment tool does not have the ability to automatically generate a reassignment plan for decommissioning brokers yet. As such, the admin has to come up with a reassignment plan to move the replica for all partitions hosted on the broker to be decommissioned, to the rest of the brokers. This can be relatively tedious as the reassignment needs to ensure that all the replicas are not moved from the decommissioned broker to only one other broker. To make this process effortless, we plan to add tooling support for decommissioning brokers in 0.8.2.
+The partition reassignment tool does not have the ability to automatically generate a reassignment
+plan for decommissioning brokers yet. As such, the admin has to come up with a reassignment plan to
+move the replica for all partitions hosted on the broker to be decommissioned, to the rest of the
+brokers. This can be relatively tedious as the reassignment needs to ensure that all the replicas
+are not moved from the decommissioned broker to only one other broker. To make this process
+effortless, we plan to add tooling support for decommissioning brokers in 0.8.2.
 </p>
 </div>
 </div>
@@ -8275,11 +8534,16 @@ The partition reassignment tool does not have the ability to automatically gener
 <h4 id="sec-6-1-9">Increasing replication factor</h4>
 <div class="outline-text-4" id="text-6-1-9">
 <p>
-Increasing the replication factor of an existing partition is easy. Just specify the extra replicas in the custom reassignment json file and use it with the &#x2013;execute option to increase the replication factor of the specified partitions.
+Increasing the replication factor of an existing partition is easy. Just specify the extra replicas
+in the custom reassignment json file and use it with the &#x2013;execute option to increase the
+replication factor of the specified partitions.
 </p>
 
 <p>
-For instance, the following example increases the replication factor of partition 0 of topic foo from 1 to 3. Before increasing the replication factor, the partition's only replica existed on broker 5. As part of increasing the replication factor, we will add more replicas on brokers 6 and 7.
+For instance, the following example increases the replication factor of partition 0 of topic foo
+from 1 to 3. Before increasing the replication factor, the partition's only replica existed on
+broker 5. As part of increasing the replication factor, we will add more replicas on brokers 6
+and 7.
 </p>
 
 <p>
@@ -8287,9 +8551,8 @@ The first step is to hand craft the custom reassignment plan in a json file-
 </p>
 
 <pre class="example">
-&gt; cat increase-replication-factor.json
-{"version":1,
- "partitions":[{"topic":"foo","partition":0,"replicas":[5,6,7]}]}
+&gt; cat increase-replication-factor.json {"version":1,
+"partitions":[{"topic":"foo","partition":0,"replicas":[5,6,7]}]}
 </pre>
 
 <p>
@@ -8297,26 +8560,26 @@ Then, use the json file with the &#x2013;execute option to start the reassignmen
 </p>
 
 <pre class="example">
-&gt; bin/kafka-reassign-partitions.sh --zookeeper localhost:2181 --reassignment-json-file increase-replication-factor.json --execute
-Current partition replica assignment
+&gt; bin/kafka-reassign-partitions.sh --zookeeper localhost:2181 --reassignment-json-file
+increase-replication-factor.json --execute Current partition replica assignment
 
-{"version":1,
- "partitions":[{"topic":"foo","partition":0,"replicas":[5]}]}
+{"version":1, "partitions":[{"topic":"foo","partition":0,"replicas":[5]}]}
 
-Save this to use as the --reassignment-json-file option during rollback
-Successfully started reassignment of partitions
-{"version":1,
- "partitions":[{"topic":"foo","partition":0,"replicas":[5,6,7]}]}
+Save this to use as the --reassignment-json-file option during rollback Successfully started
+reassignment of partitions {"version":1,
+"partitions":[{"topic":"foo","partition":0,"replicas":[5,6,7]}]}
 </pre>
 
 <p>
-The &#x2013;verify option can be used with the tool to check the status of the partition reassignment. Note that the same increase-replication-factor.json (used with the &#x2013;execute option) should be used with the &#x2013;verify option
+The &#x2013;verify option can be used with the tool to check the status of the partition
+reassignment. Note that the same increase-replication-factor.json (used with the &#x2013;execute option)
+should be used with the &#x2013;verify option
 </p>
 
 <pre class="example">
-bin/kafka-reassign-partitions.sh --zookeeper localhost:2181 --reassignment-json-file increase-replication-factor.json --verify
-Status of partition reassignment:
-Reassignment of partition [foo,0] completed successfully
+bin/kafka-reassign-partitions.sh --zookeeper localhost:2181 --reassignment-json-file
+increase-replication-factor.json --verify Status of partition reassignment: Reassignment of
+partition [foo,0] completed successfully
 </pre>
 
 <p>
@@ -8324,9 +8587,8 @@ You can also verify the increase in replication factor with the kafka-topics too
 </p>
 
 <pre class="example">
-&gt; bin/kafka-topics.sh --zookeeper localhost:2181 --topic foo --describe
-Topic:foo	PartitionCount:1	ReplicationFactor:3	Configs:
-	Topic: foo	Partition: 0	Leader: 5	Replicas: 5,6,7	Isr: 5,6,7
+&gt; bin/kafka-topics.sh --zookeeper localhost:2181 --topic foo --describe Topic:foo PartitionCount:1
+ReplicationFactor:3 Configs: Topic: foo Partition: 0 Leader: 5 Replicas: 5,6,7 Isr: 5,6,7
 </pre>
 </div>
 </div>
@@ -8336,27 +8598,44 @@ Topic:foo	PartitionCount:1	ReplicationFactor:3	Configs:
 <h3 id="sec-6-2"><span class="section-number-3">6.2</span> Datacenters</h3>
 <div class="outline-text-3" id="text-6-2">
 <p>
-Some deployments will need to manage a data pipeline that spans multiple datacenters. Our recommended approach to this is to deploy a local Kafka cluster in each datacenter with application instances in each datacenter interacting only with their local cluster and mirroring between clusters (see the documentation on the <a href="#basic_ops_mirror_maker">mirror maker tool</a> for how to do this).
+Some deployments will need to manage a data pipeline that spans multiple datacenters. Our
+recommended approach to this is to deploy a local Kafka cluster in each datacenter with application
+instances in each datacenter interacting only with their local cluster and mirroring between
+clusters (see the documentation on the <a href="#basic_ops_mirror_maker">mirror maker tool</a> for how to do this).
 </p>
 
 <p>
-This deployment pattern allows datacenters to act as independent entities and allows us to manage and tune inter-datacenter replication centrally. This allows each facility to stand alone and operate even if the inter-datacenter links are unavailable: when this occurs the mirroring falls behind until the link is restored at which time it catches up.
+This deployment pattern allows datacenters to act as independent entities and allows us to manage
+and tune inter-datacenter replication centrally. This allows each facility to stand alone and
+operate even if the inter-datacenter links are unavailable: when this occurs the mirroring falls
+behind until the link is restored at which time it catches up.
 </p>
 
 <p>
-For applications that need a global view of all data you can use mirroring to provide clusters which have aggregate data mirrored from the local clusters in <i>all</i> datacenters. These aggregate clusters are used for reads by applications that require the full data set.
+For applications that need a global view of all data you can use mirroring to provide clusters which
+have aggregate data mirrored from the local clusters in <i>all</i> datacenters. These aggregate clusters
+are used for reads by applications that require the full data set.
 </p>
 
 <p>
-This is not the only possible deployment pattern. It is possible to read from or write to a remote Kafka cluster over the WAN, though obviously this will add whatever latency is required to get the cluster.
+This is not the only possible deployment pattern. It is possible to read from or write to a remote
+Kafka cluster over the WAN, though obviously this will add whatever latency is required to get the
+cluster.
 </p>
 
 <p>
-Kafka naturally batches data in both the producer and consumer so it can achieve high-throughput even over a high-latency connection. To allow this though it may be necessary to increase the TCP socket buffer sizes for the producer, consumer, and broker using the <code>socket.send.buffer.bytes</code> and <code>socket.receive.buffer.bytes</code> configurations. The appropriate way to set this is documented <a href="http://en.wikipedia.org/wiki/Bandwidth-delay_product">here</a>.
+Kafka naturally batches data in both the producer and consumer so it can achieve high-throughput
+even over a high-latency connection. To allow this though it may be necessary to increase the TCP
+socket buffer sizes for the producer, consumer, and broker using the <code>socket.send.buffer.bytes</code> and
+<code>socket.receive.buffer.bytes</code> configurations. The appropriate way to set this is documented
+<a href="http://en.wikipedia.org/wiki/Bandwidth-delay_product">here</a>.
 </p>
 
 <p>
-It is generally <i>not</i> advisable to run a <i>single</i> Kafka cluster that spans multiple datacenters over a high-latency link. This will incur very high replication latency both for Kafka writes and ZooKeeper writes, and neither Kafka nor ZooKeeper will remain available in all locations if the network between locations is unavailable.
+It is generally <i>not</i> advisable to run a <i>single</i> Kafka cluster that spans multiple datacenters over
+a high-latency link. This will incur very high replication latency both for Kafka writes and
+ZooKeeper writes, and neither Kafka nor ZooKeeper will remain available in all locations if the
+network between locations is unavailable.
 </p>
 </div>
 </div>
@@ -8399,45 +8678,26 @@ Here is our server production server configuration:
 
 <pre class="example">
 # Replication configurations
-num.replica.fetchers=4
-replica.fetch.max.bytes=1048576
-replica.fetch.wait.max.ms=500
-replica.high.watermark.checkpoint.interval.ms=5000
-replica.socket.timeout.ms=30000
-replica.socket.receive.buffer.bytes=65536
-replica.lag.time.max.ms=10000
+num.replica.fetchers=4 replica.fetch.max.bytes=1048576 replica.fetch.wait.max.ms=500
+replica.high.watermark.checkpoint.interval.ms=5000 replica.socket.timeout.ms=30000
+replica.socket.receive.buffer.bytes=65536 replica.lag.time.max.ms=10000
 replica.lag.max.messages=4000
 
-controller.socket.timeout.ms=30000
-controller.message.queue.size=10
+controller.socket.timeout.ms=30000 controller.message.queue.size=10
 
 # Log configuration
-num.partitions=8
-message.max.bytes=1000000
-auto.create.topics.enable=true
-log.index.interval.bytes=4096
-log.index.size.max.bytes=10485760
-log.retention.hours=168
-log.flush.interval.ms=10000
-log.flush.interval.messages=20000
-log.flush.scheduler.interval.ms=2000
-log.roll.hours=168
-log.retention.check.interval.ms=300000
-log.segment.bytes=1073741824
+num.partitions=8 message.max.bytes=1000000 auto.create.topics.enable=true
+log.index.interval.bytes=4096 log.index.size.max.bytes=10485760 log.retention.hours=168
+log.flush.interval.ms=10000 log.flush.interval.messages=20000 log.flush.scheduler.interval.ms=2000
+log.roll.hours=168 log.retention.check.interval.ms=300000 log.segment.bytes=1073741824
 
 # ZK configuration
-zookeeper.connection.timeout.ms=6000
-zookeeper.sync.time.ms=2000
+zookeeper.connection.timeout.ms=6000 zookeeper.sync.time.ms=2000
 
 # Socket server configuration
-num.io.threads=8
-num.network.threads=8
-socket.request.max.bytes=104857600
-socket.receive.buffer.bytes=1048576
-socket.send.buffer.bytes=1048576
-queued.max.requests=16
-fetch.purgatory.purge.interval.requests=100
-producer.purgatory.purge.interval.requests=100
+num.io.threads=8 num.network.threads=8 socket.request.max.bytes=104857600
+socket.receive.buffer.bytes=1048576 socket.send.buffer.bytes=1048576 queued.max.requests=16
+fetch.purgatory.purge.interval.requests=100 producer.purgatory.purge.interval.requests=100
 </pre>
 
 <p>
@@ -8450,16 +8710,21 @@ Our client configuration varies a fair amount between different use cases.
 <h4 id="sec-6-3-3">Java Version</h4>
 <div class="outline-text-4" id="text-6-3-3">
 <p>
-We're currently running JDK 1.7 u51, and we've switched over to the G1 collector. If you do this (and we highly recommend it), make sure you're on u51. We tried out u21 in testing, but we had a number of problems with the GC implementation in that version. Our tuning looks like this:
+We're currently running JDK 1.7 u51, and we've switched over to the G1 collector. If you do this
+(and we highly recommend it), make sure you're on u51. We tried out u21 in testing, but we had a
+number of problems with the GC implementation in that version. Our tuning looks like this:
 </p>
 
 <pre class="example">
--Xms4g -Xmx4g -XX:PermSize=48m -XX:MaxPermSize=48m -XX:+UseG1GC
--XX:MaxGCPauseMillis=20 -XX:InitiatingHeapOccupancyPercent=35
+-Xms4g -Xmx4g -XX:PermSize=48m -XX:MaxPermSize=48m -XX:+UseG1GC XX:MaxGCPauseMillis=20
+--XX:InitiatingHeapOccupancyPercent=35
 </pre>
 
 <p>
-For reference, here are the stats on one of LinkedIn's busiest clusters (at peak): - 15 brokers - 15.5k partitions (replication factor 2) - 400k messages/sec in - 70 MB/sec inbound, 400 MB/sec+ outbound The tuning looks fairly aggressive, but all of the brokers in that cluster have a 90% GC pause time of about 21ms, and they're doing less than 1 young GC per second.
+For reference, here are the stats on one of LinkedIn's busiest clusters (at peak): - 15 brokers -
+15.5k partitions (replication factor 2) - 400k messages/sec in - 70 MB/sec inbound, 400 MB/sec+
+outbound The tuning looks fairly aggressive, but all of the brokers in that cluster have a 90% GC
+pause time of about 21ms, and they're doing less than 1 young GC per second.
 </p>
 </div>
 </div>
@@ -8473,11 +8738,16 @@ We are using dual quad-core Intel Xeon machines with 24GB of memory.
 </p>
 
 <p>
-You need sufficient memory to buffer active readers and writers. You can do a back-of-the-envelope estimate of memory needs by assuming you want to be able to buffer for 30 seconds and compute your memory need as write_throughput*30.
+You need sufficient memory to buffer active readers and writers. You can do a back-of-the-envelope
+estimate of memory needs by assuming you want to be able to buffer for 30 seconds and compute your
+memory need as write_throughput*30.
 </p>
 
 <p>
-The disk throughput is important. We have 8x7200 rpm SATA drives. In general disk throughput is the performance bottleneck, and more disks is more better. Depending on how you configure flush behavior you may or may not benefit from more expensive disks (if you force flush often then higher RPM SAS drives may be better).
+The disk throughput is important. We have 8x7200 rpm SATA drives. In general disk throughput is the
+performance bottleneck, and more disks is more better. Depending on how you configure flush behavior
+you may or may not benefit from more expensive disks (if you force flush often then higher RPM SAS
+drives may be better).
 </p>
 </div>
 
@@ -8489,11 +8759,13 @@ Kafka should run well on any unix system and has been tested on Linux and Solari
 </p>
 
 <p>
-We have seen a few issues running on Windows and Windows is not currently a well supported platform though we would be happy to change that.
+We have seen a few issues running on Windows and Windows is not currently a well supported platform
+though we would be happy to change that.
 </p>
 
 <p>
-You likely don't need to do much OS-level tuning though there are a few things that will help performance.
+You likely don't need to do much OS-level tuning though there are a few things that will help
+performance.
 </p>
 
 <p>
@@ -8513,19 +8785,29 @@ Two configurations that may be important:
 <h4 id="sec-6-4-2">Disks and Filesystem</h4>
 <div class="outline-text-4" id="text-6-4-2">
 <p>
-We recommend using multiple drives to get good throughput and not sharing the same drives used for Kafka data with application logs or other OS filesystem activity to ensure good latency. As of 0.8 you can either RAID these drives together into a single volume or format and mount each drive as its own directory. Since Kafka has replication the redundancy provided by RAID can also be provided at the application level. This choice has several tradeoffs.
+We recommend using multiple drives to get good throughput and not sharing the same drives used for
+Kafka data with application logs or other OS filesystem activity to ensure good latency. As of 0.8
+you can either RAID these drives together into a single volume or format and mount each drive as its
+own directory. Since Kafka has replication the redundancy provided by RAID can also be provided at
+the application level. This choice has several tradeoffs.
 </p>
 
 <p>
-If you configure multiple data directories partitions will be assigned round-robin to data directories. Each partition will be entirely in one of the data directories. If data is not well balanced among partitions this can lead to load imbalance between disks.
+If you configure multiple data directories partitions will be assigned round-robin to data
+directories. Each partition will be entirely in one of the data directories. If data is not well
+balanced among partitions this can lead to load imbalance between disks.
 </p>
 
 <p>
-RAID can potentially do better at balancing load between disks (although it doesn't always seem to) because it balances load at a lower level. The primary downside of RAID is that it is usually a big performance hit for write throughput and reduces the available disk space.
+RAID can potentially do better at balancing load between disks (although it doesn't always seem to)
+because it balances load at a lower level. The primary downside of RAID is that it is usually a big
+performance hit for write throughput and reduces the available disk space.
 </p>
 
 <p>
-Another potential benefit of RAID is the ability to tolerate disk failures. However our experience has been that rebuilding the RAID array is so I/O intensive that it effectively disables the server, so this does not provide much real availability improvement.
+Another potential benefit of RAID is the ability to tolerate disk failures. However our experience
+has been that rebuilding the RAID array is so I/O intensive that it effectively disables the server,
+so this does not provide much real availability improvement.
 </p>
 </div>
 </div>
@@ -8534,27 +8816,43 @@ Another potential benefit of RAID is the ability to tolerate disk failures. Howe
 <h4 id="sec-6-4-3">Application vs. OS Flush Management</h4>
 <div class="outline-text-4" id="text-6-4-3">
 <p>
-Kafka always immediately writes all data to the filesystem and supports the ability to configure the flush policy that controls when data is forced out of the OS cache and onto disk using the and flush. This flush policy can be controlled to force data to disk after a period of time or after a certain number of messages has been written. There are several choices in this configuration.
+Kafka always immediately writes all data to the filesystem and supports the ability to configure the
+flush policy that controls when data is forced out of the OS cache and onto disk using the and
+flush. This flush policy can be controlled to force data to disk after a period of time or after a
+certain number of messages has been written. There are several choices in this configuration.
 </p>
 
 <p>
-Kafka must eventually call fsync to know that data was flushed. When recovering from a crash for any log segment not known to be fsync'd Kafka will check the integrity of each message by checking its CRC and also rebuild the accompanying offset index file as part of the recovery process executed on startup.
+Kafka must eventually call fsync to know that data was flushed. When recovering from a crash for any
+log segment not known to be fsync'd Kafka will check the integrity of each message by checking its
+CRC and also rebuild the accompanying offset index file as part of the recovery process executed on
+startup.
 </p>
 
 <p>
-Note that durability in Kafka does not require syncing data to disk, as a failed node will always recover from its replicas.
+Note that durability in Kafka does not require syncing data to disk, as a failed node will always
+recover from its replicas.
 </p>
 
 <p>
-We recommend using the default flush settings which disable application fsync entirely. This means relying on the background flush done by the OS and Kafka's own background flush. This provides the best of all worlds for most uses: no knobs to tune, great throughput and latency, and full recovery guarantees. We generally feel that the guarantees provided by replication are stronger than sync to local disk, however the paranoid still may prefer having both and application level fsync policies are still supported.
+We recommend using the default flush settings which disable application fsync entirely. This means
+relying on the background flush done by the OS and Kafka's own background flush. This provides the
+best of all worlds for most uses: no knobs to tune, great throughput and latency, and full recovery
+guarantees. We generally feel that the guarantees provided by replication are stronger than sync to
+local disk, however the paranoid still may prefer having both and application level fsync policies
+are still supported.
 </p>
 
 <p>
-The drawback of using application level flush settings are that this is less efficient in it's disk usage pattern (it gives the OS less leeway to re-order writes) and it can introduce latency as fsync in most Linux filesystems blocks writes to the file whereas the background flushing does much more granular page-level locking.
+The drawback of using application level flush settings are that this is less efficient in it's disk
+usage pattern (it gives the OS less leeway to re-order writes) and it can introduce latency as fsync
+in most Linux filesystems blocks writes to the file whereas the background flushing does much more
+granular page-level locking.
 </p>
 
 <p>
-In general you don't need to do any low-level tuning of the filesystem, but in the next few sections we will go over some of this in case it is useful.
+In general you don't need to do any low-level tuning of the filesystem, but in the next few sections
+we will go over some of this in case it is useful.
 </p>
 </div>
 </div>
@@ -8563,11 +8861,16 @@ In general you don't need to do any low-level tuning of the filesystem, but in t
 <h4 id="sec-6-4-4">Understanding Linux OS Flush Behavior</h4>
 <div class="outline-text-4" id="text-6-4-4">
 <p>
-In Linux, data written to the filesystem is maintained in <a href="http://en.wikipedia.org/wiki/Page_cache">pagecache</a> until it must be written out to disk (due to an application-level fsync or the OS's own flush policy). The flushing of data is done by a set of background threads called pdflush (or in post 2.6.32 kernels "flusher threads").
+In Linux, data written to the filesystem is maintained in <a href="http://en.wikipedia.org/wiki/Page_cache">pagecache</a> until it must be written out to
+disk (due to an application-level fsync or the OS's own flush policy). The flushing of data is done
+by a set of background threads called pdflush (or in post 2.6.32 kernels "flusher threads").
 </p>
 
 <p>
-Pdflush has a configurable policy that controls how much dirty data can be maintained in cache and for how long before it must be written back to disk. This policy is described <a href="http://www.westnet.com/~gsmith/content/linux-pdflush.htm">here</a>. When Pdflush cannot keep up with the rate of data being written it will eventually cause the writing process to block incurring latency in the writes to slow down the accumulation of data.
+Pdflush has a configurable policy that controls how much dirty data can be maintained in cache and
+for how long before it must be written back to disk. This policy is described <a href="http://www.westnet.com/~gsmith/content/linux-pdflush.htm">here</a>. When Pdflush
+cannot keep up with the rate of data being written it will eventually cause the writing process to
+block incurring latency in the writes to slow down the accumulation of data.
 </p>
 
 <p>
@@ -8583,7 +8886,8 @@ The meaning of these values are described in the link above.
 </p>
 
 <p>
-Using pagecache has several advantages over an in-process cache for storing data that will be written out to disk:
+Using pagecache has several advantages over an in-process cache for storing data that will be
+written out to disk:
 </p>
 
 <ul class="org-ul">
@@ -8601,11 +8905,13 @@ Using pagecache has several advantages over an in-process cache for storing data
 <h4 id="sec-6-4-5">Ext4 Notes</h4>
 <div class="outline-text-4" id="text-6-4-5">
 <p>
-Ext4 may or may not be the best filesystem for Kafka. Filesystems like XFS supposedly handle locking during fsync better. We have only tried Ext4, though.
+Ext4 may or may not be the best filesystem for Kafka. Filesystems like XFS supposedly handle locking
+during fsync better. We have only tried Ext4, though.
 </p>
 
 <p>
-It is not necessary to tune these settings, however those wanting to optimize performance have a few knobs that will help:
+It is not necessary to tune these settings, however those wanting to optimize performance have a few
+knobs that will help:
 </p>
 
 
@@ -8629,11 +8935,13 @@ It is not necessary to tune these settings, however those wanting to optimize pe
 <h3 id="sec-6-5"><span class="section-number-3">6.5</span> Monitoring</h3>
 <div class="outline-text-3" id="text-6-5">
 <p>
-Kafka uses Yammer Metrics for metrics reporting in both the server and the client. This can be configured to report stats using pluggable stats reporters to hook up to your monitoring system.
+Kafka uses Yammer Metrics for metrics reporting in both the server and the client. This can be
+configured to report stats using pluggable stats reporters to hook up to your monitoring system.
 </p>
 
 <p>
-The easiest way to see the available metrics to fire up jconsole and point it at a running kafka client or server; this will all browsing all metrics with JMX.
+The easiest way to see the available metrics to fire up jconsole and point it at a running kafka
+client or server; this will all browsing all metrics with JMX.
 </p>
 
 <p>
@@ -8768,8 +9076,8 @@ We pay particular we do graphing and alerting on the following metrics:
 <dt> Mbean name </dt><dd><code>kafka.server:type=ReplicaManager,name=IsrShrinksPerSec</code>
 </dd>
 <dt> Normal value </dt><dd>If a broker goes down, ISR for some of the partitions will shrink.
-When that broker is up again, ISR will be expanded once the replicas are fully caught up.
-Other than that, the expected value for both ISR shrink rate and expansion rate is 0.
+When that broker is up again, ISR will be expanded once the replicas are fully caught up.  Other
+                than that, the expected value for both ISR shrink rate and expansion rate is 0.
 </dd>
 </dl>
 </div>
@@ -9440,10 +9748,11 @@ The following metrics are available on new producer instances.
 </dl>
 
 <p>
-We recommend monitor GC time and other stats and various server stats such as CPU utilization, I/O service time, etc.
-On the client side, we recommend monitor the message/byte rate (global and per topic), request rate/size/time, and on the consumer side,
-max lag in messages among all partitions and min fetch request rate.
-For a consumer to keep up, max lag needs to be less than a threshold and min fetch rate needs to be larger than 0.
+We recommend monitor GC time and other stats and various server stats such as CPU utilization, I/O
+service time, etc.  On the client side, we recommend monitor the message/byte rate (global and per
+topic), request rate/size/time, and on the consumer side, max lag in messages among all partitions
+and min fetch request rate.  For a consumer to keep up, max lag needs to be less than a threshold
+and min fetch rate needs to be larger than 0.
 </p>
 </div>
 </div>
@@ -9453,7 +9762,10 @@ For a consumer to keep up, max lag needs to be less than a threshold and min fet
 <h4 id="sec-6-5-3">Audit</h4>
 <div class="outline-text-4" id="text-6-5-3">
 <p>
-The final alerting we do is on the correctness of the data delivery. We audit that every message that is sent is consumed by all consumers and measure the lag for this to occur. For important topics we alert if a certain completeness is not achieved in a certain time period. The details of this are discussed in <a href="https://issues.apache.org/jira/browse/KAFKA-260">KAFKA-260</a>.
+The final alerting we do is on the correctness of the data delivery. We audit that every message
+that is sent is consumed by all consumers and measure the lag for this to occur. For important
+topics we alert if a certain completeness is not achieved in a certain time period. The details of
+this are discussed in <a href="https://issues.apache.org/jira/browse/KAFKA-260">KAFKA-260</a>.
 </p>
 </div>
 </div>
@@ -9466,7 +9778,9 @@ The final alerting we do is on the correctness of the data delivery. We audit th
 <h4 id="sec-6-6-1">Stable version</h4>
 <div class="outline-text-4" id="text-6-6-1">
 <p>
-At LinkedIn, we are running ZooKeeper 3.3.*. Version 3.3.3 has known serious issues regarding ephemeral node deletion and session expirations. After running into those issues in production, we upgraded to 3.3.4 and have been running that smoothly for over a year now. 
+At LinkedIn, we are running ZooKeeper 3.3.*. Version 3.3.3 has known serious issues regarding
+ephemeral node deletion and session expirations. After running into those issues in production, we
+upgraded to 3.3.4 and have been running that smoothly for over a year now.
 </p>
 </div>
 </div>
@@ -9497,7 +9811,12 @@ Operationally, we do the following for a healthy ZooKeeper installation:
 </ul>
 
 <p>
-Overall, we try to keep the ZooKeeper system as small as will handle the load (plus standard growth capacity planning) and as simple as possible. We try not to do anything fancy with the configuration or application layout as compared to the official release as well as keep it as self contained as possible. For these reasons, we tend to skip the OS packaged versions, since it has a tendency to try to put things in the OS standard hierarchy, which can be 'messy', for want of a better way to word it.
+Overall, we try to keep the ZooKeeper system as small as will handle the load (plus standard growth
+capacity planning) and as simple as possible. We try not to do anything fancy with the configuration
+or application layout as compared to the official release as well as keep it as self contained as
+possible. For these reasons, we tend to skip the OS packaged versions, since it has a tendency to
+try to put things in the OS standard hierarchy, which can be 'messy', for want of a better way to
+word it.
 </p>
 
 
@@ -9531,22 +9850,24 @@ Overall, we try to keep the ZooKeeper system as small as will handle the load (p
 
 <div class="footdef"><sup><a id="fn.9" name="fn.9" class="footnum" href="#fnr.9">9</a></sup> <p>(訳注) <a href="https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=34839465">Request Purgatory (0.8) - Apache Kafka - Apache Software Foundation</a></p></div>
 
-<div class="footdef"><sup><a id="fn.10" name="fn.10" class="footnum" href="#fnr.10">10</a></sup> <p>ここがそのトピック毎の設定なんだけど…。ブローカ設定と入れ違ったかな？</p></div>
+<div class="footdef"><sup><a id="fn.10" name="fn.10" class="footnum" href="#fnr.10">10</a></sup> <p>(訳注) ここがそのトピック毎の設定なんだけど…。ブローカ設定と入れ違ったかな？</p></div>
 
-<div class="footdef"><sup><a id="fn.11" name="fn.11" class="footnum" href="#fnr.11">11</a></sup> <p>ブローカ設定の項の説明と一字一句違わない</p></div>
+<div class="footdef"><sup><a id="fn.11" name="fn.11" class="footnum" href="#fnr.11">11</a></sup> <p>(訳注) ブローカ設定の項の説明と一字一句違わない</p></div>
 
-<div class="footdef"><sup><a id="fn.12" name="fn.12" class="footnum" href="#fnr.12">12</a></sup> <p>実際は、このプロパティに対応するサーバデフォルトプロパティは無い。その為、利用する際は必ずトピックレベルで設定すること。</p></div>
+<div class="footdef"><sup><a id="fn.12" name="fn.12" class="footnum" href="#fnr.12">12</a></sup> <p>(訳注) 実際は、このプロパティに対応するサーバデフォルトプロパティは無い。その為、利用する際は必ずトピックレベルで設定すること。</p></div>
 
 <div class="footdef"><sup><a id="fn.13" name="fn.13" class="footnum" href="#fnr.13">13</a></sup> <p>(訳注) この記述は古いそうです。参考スレッド <a href="http://mail-archives.apache.org/mod_mbox/kafka-users/201507.mbox/<CAOeJiJgh=6n2t4h7-bZC83An99WDhjEKFENtu2J9WApz9f8xzw@mail.gmail.com>">Re: New producer in production</a></p></div>
 
 <div class="footdef"><sup><a id="fn.14" name="fn.14" class="footnum" href="#fnr.14">14</a></sup> <p>(訳注) New Producerの場合は <code>acks</code></p></div>
+
+<div class="footdef"><sup><a id="fn.15" name="fn.15" class="footnum" href="#fnr.15">15</a></sup> <p>(訳注) 関係ありそうなコード <a href="https://github.com/apache/kafka/blob/0.8.2.1/core/src/main/scala/kafka/log/LogManager.scala#L119-L127">https://github.com/apache/kafka/blob/0.8.2.1/core/src/main/scala/kafka/log/LogManager.scala#L119-L127</a> <a href="https://github.com/apache/kafka/blob/0.8.2.1/core/src/main/scala/kafka/log/Log.scala#L191-L219">https://github.com/apache/kafka/blob/0.8.2.1/core/src/main/scala/kafka/log/Log.scala#L191-L219</a> <a href="https://github.com/apache/kafka/blob/0.8.2.1/core/src/main/scala/kafka/message/Message.scala#L159">https://github.com/apache/kafka/blob/0.8.2.1/core/src/main/scala/kafka/message/Message.scala#L159</a></p></div>
 
 
 </div>
 </div></div>
 <div id="postamble" class="status">
 <p class="author">Author: yewton</p>
-<p class="date">Created: 2015-08-06 木 20:03</p>
+<p class="date">Created: 2015-08-07 金 16:58</p>
 <p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.4.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
