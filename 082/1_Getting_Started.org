@@ -46,7 +46,7 @@ Communication between the clients and the servers is done with a simple, high-pe
 {{{end_orig}}}
 
 クライアントとサーバ間の通信はシンプルかつ高性能で、言語に依存しない [[https://cwiki.apache.org/confluence/display/KAFKA/A+Guide+To+The+Kafka+Protocol][TCP protocol]] で行なわれます。
-提供されるのは Java の Kafka クライアントですが、 [[https://cwiki.apache.org/confluence/display/KAFKA/Clients][多くの言語で]] 利用することが出来ます。
+私たちは Kafka の Java クライアントを提供していますが、 [[https://cwiki.apache.org/confluence/display/KAFKA/Clients][多くの言語で]] 利用することが出来ます。
 
 ** トピックとログ
 
@@ -84,7 +84,7 @@ Kafka クラスタは、コンシュームされたかどうかに拘わらず�
 保持する期間は設定で変更可能です。
 例えばログ保存期間が2日間に設定されている場合、あるメッセージが発行されてから2日間はコンシューム可能ですが、
 それ以降は容量確保のために破棄されます。
-Kafkaの性能はデータサイズに関しては実質定数のため、大量のデータを保存することは問題ありません。
+Kafkaの性能はデータサイズによらずに一定のため、大量のデータを保存することは問題ありません。
 
 {{{begin_orig}}}
 In fact the only metadata retained on a per-consumer basis is the position of the consumer in the log, called the "offset". This offset is controlled by the consumer: normally a consumer will advance its offset linearly as it reads messages, but in fact the position is controlled by the consumer and it can consume messages in any order it likes. For example a consumer can reset to an older offset to reprocess.
